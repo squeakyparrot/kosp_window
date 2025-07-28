@@ -1,0 +1,78 @@
+{
+  "slidersByDrfName": {
+    "KOSP/master_vol_ratio_extrior": {
+      "displayName": "Exterior",
+      "drfName": "KOSP/master_vol_ratio_extrior",
+      "min": 0,
+      "max": 100,
+      "savedRatio": 0.8
+    },
+    "KOSP/master_vol_ratio_interior": {
+      "displayName": "Interior (Master)",
+      "drfName": "KOSP/master_vol_ratio_interior",
+      "min": 0,
+      "max": 100,
+      "savedRatio": 0.7
+    },
+    "KOSP/engine_vol_ratio_interior": {
+      "displayName": "Engines Interior",
+      "drfName": "KOSP/engine_vol_ratio_interior",
+      "min": 0,
+      "max": 100,
+      "savedRatio": 0.5
+    },
+    "KOSP/wind_vol_ratio_interior": {
+      "displayName": "Winds & Environment",
+      "drfName": "KOSP/wind_vol_ratio_interior",
+      "min": 0,
+      "max": 100,
+      "savedRatio": 1
+    },
+    "KOSP/ground_vol_ratio_interior": {
+      "displayName": "Ground Contacts",
+      "drfName": "KOSP/ground_vol_ratio_interior",
+      "min": 0,
+      "max": 100,
+      "savedRatio": 1
+    },
+    "KOSP/blower_vol_ratio_interior": {
+      "displayName": "Blower & Extract",
+      "drfName": "KOSP/blower_vol_ratio_interior",
+      "min": 0,
+      "max": 100,
+      "savedRatio": 1
+    }
+  },
+  "switchesByDrfName": {
+    "KOSP/settings_play_2000ra_callout": {
+      "displayName": "Play 2000ft RA Callout",
+      "drfName": "KOSP/settings_play_2000ra_callout",
+      "saved_value": 1
+    },
+    "KOSP/settings_korries_are_new": {
+      "displayName": "Newer Korry Switches",
+      "drfName": "KOSP/settings_korries_are_new",
+      "saved_value": 1
+    },
+    "KOSP/settings_ir_switch_is_smaller_type": {
+      "displayName": "Alternative IR Switch",
+      "drfName": "KOSP/settings_ir_switch_is_smaller_type",
+      "saved_value": 1
+    },
+    "KOSP/settings_ra_is_bitcrushed": {
+      "displayName": "Bitcrush RA Callouts",
+      "drfName": "KOSP/settings_ra_is_bitcrushed",
+      "saved_value": 1
+    },
+    "KOSP/settings_autobrake_off_callout": {
+      "displayName": "Autobrake Off Callout",
+      "drfName": "KOSP/settings_autobrake_off_callout",
+      "saved_value": 1
+    },
+    "KOSP/pw_howl_mute_in_air": {
+      "displayName": "Inhibit PW Howl Midair",
+      "drfName": "KOSP/pw_howl_mute_in_air",
+      "saved_value": 1
+    }
+  }
+}

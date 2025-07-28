@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+shorten_middle() {
+    local path="$1"
+    local max=60
+    local len=${#path}
+    if (( len <= max )); then
+        echo "$path"
+    else
+        echo "${path:0:25}...${path: -25}"
+    fi
+}

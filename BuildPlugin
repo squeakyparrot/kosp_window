@@ -1,0 +1,115 @@
+#!/bin/bash
+set -e
+
+OUTPUT_DIR="kosp"
+BUILD_DIR="${SCRIPT_DIR}/build"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+echo "Sourcing Environment Variables..."
+[ -f .env ] && source .env
+
+echo "Removing all contents from previous builds..."
+rm -rf "${BUILD_DIR:?}"/*
+
+echo "Deleting Previous Plugin Binaries..."
+rm -rf ${OUTPUT_DIR}
+
+echo "Creating folder for a new build..."
+mkdir ${OUTPUT_DIR}
+
+echo "Copying Resources to '${BUILD_DIR}'..."
+cp -r res/* ${OUTPUT_DIR}
+# ----------------------------------------------------- #
+
+function my_realpath() {
+	[[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+}
+
+OS="$(uname)"
+case "$OS" in
+Darwin)
+	INSTALL="install -m 644"
+	REALPATH=my_realpath
+	;;
+*)
+	INSTALL="install -D -m 644"
+	REALPATH=realpath
+	;;
+esac
+
+LIBACFUTILS="$(${REALPATH} "lib/libacfutils")"
+WIN_ONLY=0
+
+while getopts "wh" option; do
+	case "${option}" in
+	w)
+		echo "Build for Windows only."
+		WIN_ONLY=1
+		;;
+	h)
+		cat << EOF
+    Usage: $0 [-wh] [-t <eis type>]
+	-w : Build Windows plugin only.
+EOF
+		exit
+		;;
+	*)
+		"Unknown argument $opt. Try $0 -h for help." >&2
+		exit 1
+		;;
+	esac
+done
+
+
+if [[ "${WIN_ONLY}" = 1 ]]; then
+	NCPUS=$(( $(grep 'processor[[:space:]]\+:' /proc/cpuinfo  | wc -l) + \
+			1 ))
+	( cd build && rm -f CMakeCache.txt && \
+		cmake ../src -DLIBACFUTILS="${LIBACFUTILS}" \
+				-DCMAKE_TOOLCHAIN_FILE=XCompile.cmake -DHOST=x86_64-w64-mingw32 && \
+		make -j "${NCPUS}" ) || exit 1
+else
+	NCPUS=$(( $(grep 'processor[[:space:]]\+:' /proc/cpuinfo  | wc -l) + \
+			1 ))
+	if [[ "$OS" = "Darwin" ]]; then
+		NCPUS=$(( $(sysctl -n hw.ncpu) + 1 ))
+		( cd build && cmake ../src -DLIBACFUTILS="${LIBACFUTILS}" \
+							-DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" && \
+			make -j "$NCPUS" ) || exit 1
+		if [ -n "${NOTARIZE}" ]; then
+			make -f notarize/notarize.make notarize
+		fi
+	else
+		NCPUS=$(( $(grep 'processor[[:space:]]\+:' /proc/cpuinfo  | wc -l) + \
+				1 ))
+		( cd build && rm -f CMakeCache.txt && \
+			cmake ../src -DLIBACFUTILS="${LIBACFUTILS}" && \
+			make -j "${NCPUS}" ) || exit 1
+		( cd build && rm -f CMakeCache.txt && \
+			cmake ../src -DLIBACFUTILS="${LIBACFUTILS}" \
+					-DCMAKE_TOOLCHAIN_FILE=XCompile.cmake -DHOST=x86_64-w64-mingw32 && \
+			make -j "${NCPUS}" ) || exit 1
+	fi
+fi
+
+
+# if [[ $(uname) = "Linux" ]]; then
+# 	"$LIBACFUTILS/tools/mksyms" "$OUTPUT_DIR/win_x64/kosp.xpl" > \
+# 	    "$OUTPUT_DIR/win_x64/syms.txt"
+# else
+# 	mkdir -p "$OUTPUT_DIR/mac_x64" \
+# 	mkdir -p "$OUTPUT_DIR/fonts" \
+# 	mkdir -p "$OUTPUT_DIR/images"
+# fi
+
+echo
+echo $(date +%c)
+echo "┌──────────────────────────────────┐"
+echo "│          Build complete          │"
+echo "└──────────────────────────────────┘"
+
+./scripts/MovePluginToFolder $OUTPUT_DIR
+
+echo "┌──────────────────────────────────┐"
+echo "│          Move complete           │"
+echo "└──────────────────────────────────┘"

@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+[ -f .env ] && source .env
+
+if [ -z "${X_PLANE_LOG_DIRECTORY}" ]; then
+    echo "Export X_PLANE_LOG_DIRECTORY to the path to your X-Plane Log.txt."
+    exit 1
+fi
+
+less +F "${X_PLANE_LOG_DIRECTORY}"

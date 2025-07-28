@@ -1,0 +1,24 @@
+#!/bin/bash
+set -e
+
+[ -f .env ] && source .env
+
+if [ -z "${PLUGIN_OUTPUT_DIRECTORY}" ]; then
+    echo "Export PLUGIN_OUTPUT_DIRECTORY to the path you want the build scirpt
+          to copy the plugin folder (including binaries and assets) into."
+    exit 1
+fi
+
+source scripts/Utils
+
+PLUGIN_FOLDER_NAME="$1"
+
+EXISTING_PLUGIN_FOLDER_PATH=${PLUGIN_OUTPUT_DIRECTORY}${PLUGIN_FOLDER_NAME}
+
+# Delete the old plugin already in the x plane plugins folder.
+rm -rf "${EXISTING_PLUGIN_FOLDER_PATH}"
+echo Removed $(shorten_middle "${EXISTING_PLUGIN_FOLDER_PATH}")
+
+# Rsync the new one over.
+rsync -r "${PLUGIN_FOLDER_NAME}" "${PLUGIN_OUTPUT_DIRECTORY}"
+echo "Copied $(shorten_middle "${PLUGIN_FOLDER_NAME}") to $(shorten_middle "${PLUGIN_OUTPUT_DIRECTORY}")."
