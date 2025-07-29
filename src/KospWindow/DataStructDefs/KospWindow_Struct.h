@@ -136,6 +136,46 @@ typedef struct KospWindow_Struct {
   cairo_font_face_t *montserratRegularCairoFontFace;
 
   /**
+   * @details     A pointer to the uploader of the surface above.
+   *              For more details see mt_cairo_render.c
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  FT_Face robotoRegularFtFace;
+
+  /**
+   * @details     A pointer to the uploader of the surface above.
+   *              For more details see mt_cairo_render.c
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  cairo_font_face_t *robotoRegularCairoFontFace;
+
+  /**
+   * @details     A pointer to the uploader of the surface above.
+   *              For more details see mt_cairo_render.c
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  FT_Face robotoSemiboldFtFace;
+
+  /**
+   * @details     A pointer to the uploader of the surface above.
+   *              For more details see mt_cairo_render.c
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  cairo_font_face_t *robotoSemiboldCairoFontFace;
+
+  /**
    * @details     A pointer to the cJSON object
    *
    * @unit        N/A

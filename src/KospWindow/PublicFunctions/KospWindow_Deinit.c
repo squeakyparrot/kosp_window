@@ -60,6 +60,19 @@ int32_t KospWindow_Deinit(KospWindow *p_kosp_window_inout) {
   if (p_kosp_window_inout->montserratRegularCairoFontFace != NULL) {
     lacf_free(p_kosp_window_inout->montserratRegularCairoFontFace);
   }
+  if (p_kosp_window_inout->robotoRegularFtFace != NULL) {
+    lacf_free(p_kosp_window_inout->robotoRegularFtFace);
+  }
+  if (p_kosp_window_inout->robotoRegularCairoFontFace != NULL) {
+    lacf_free(p_kosp_window_inout->robotoRegularCairoFontFace);
+  }
+  if (p_kosp_window_inout->robotoSemiboldFtFace != NULL) {
+    lacf_free(p_kosp_window_inout->robotoSemiboldFtFace);
+  }
+  if (p_kosp_window_inout->robotoSemiboldCairoFontFace != NULL) {
+    lacf_free(p_kosp_window_inout->robotoSemiboldCairoFontFace);
+  }
+
   XPLMDestroyWindow(p_kosp_window_inout->windowId);
 
   /* Free the loaded json config */

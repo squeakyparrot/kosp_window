@@ -92,6 +92,16 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout) {
       fs_access.ftLibrary,
       &(p_kosp_window_inout->montserratRegularFtFace),
       &(p_kosp_window_inout->montserratRegularCairoFontFace));
+  font_utils_try_load_font(font_dir,
+                           KOSPWINDOW_FONTS_ROBOTO_REGULAR_NAME,
+                           fs_access.ftLibrary,
+                           &(p_kosp_window_inout->robotoRegularFtFace),
+                           &(p_kosp_window_inout->robotoRegularCairoFontFace));
+  font_utils_try_load_font(font_dir,
+                           KOSPWINDOW_FONTS_ROBOTO_SEMIBOLD_NAME,
+                           fs_access.ftLibrary,
+                           &(p_kosp_window_inout->robotoSemiboldFtFace),
+                           &(p_kosp_window_inout->robotoSemiboldCairoFontFace));
 
   lacf_free(font_dir);
 

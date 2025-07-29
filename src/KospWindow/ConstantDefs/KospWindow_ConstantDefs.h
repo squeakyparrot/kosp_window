@@ -22,6 +22,8 @@ extern "C" {
 #define KOSPWINDOW_FONTS_MONTSERATT_LIGHT_NAME "Montserrat-Light.ttf"
 #define KOSPWINDOW_FONTS_MONTSERATT_MEDIUM_NAME "Montserrat-Medium.ttf"
 #define KOSPWINDOW_FONTS_MONTSERATT_REGULAR_NAME "Montserrat-Regular.ttf"
+#define KOSPWINDOW_FONTS_ROBOTO_REGULAR_NAME "Roboto_Condensed-Regular.ttf"
+#define KOSPWINDOW_FONTS_ROBOTO_SEMIBOLD_NAME "Roboto_Condensed-SemiBold.ttf"
 
 #define KOSPWINDOW_CONFIG_DIR "config"
 #define KOSPWINDOW_USER_CONFIG_FILE_NAME "userconfig.json"

@@ -20,7 +20,9 @@
 /* Acfutils includes */
 #include "acfutils/assert.h"
 #include "acfutils/cairo_utils.h"
+#include "acfutils/geom.h"
 #include "acfutils/log.h"
+#include "acfutils/math.h"
 #include "acfutils/mt_cairo_render.h"
 
 /* Custom Includes */
@@ -148,6 +150,7 @@ void KospWindow_RenderCallback(cairo_t *cr,
                            KOSPWINDOW_MENU_ROUNDED_CORNER_OUTER_RADIUS - 4);
   cairo_set_source(cr, pat);
   cairo_fill(cr);
+  cairo_pattern_destroy(pat);
 
   /* Button separator */
   for (int32_t i = 1; i < KOSPWINDOW_NUM_PAGES; i++) {
@@ -168,10 +171,14 @@ void KospWindow_RenderCallback(cairo_t *cr,
   cairo_set_source_rgb(cr, CAIRO_COLOUR_XPLANE_WHITE);
   cairo_set_font_face(cr, p_kosp_window->montserratMediumCairoFontFace);
   cairo_set_font_size(cr, 21.0);
+  int32_t textOffset = 0;
   for (int32_t i = 0; i < KOSPWINDOW_NUM_PAGES; i++) {
+    if (i == 1) {
+      textOffset = -3;
+    }
     cairo_text_extents(cr, buttons_text[i], &extents);
     cairo_move_to(cr,
-                  i * button_width + 10.0,
+                  i * button_width + 10.0 + textOffset,
                   (double)(KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y +
                            KOSPWINDOW_MENU_BAR_TOP_EDGE_Y_GAPPED) /
                           2.0 +
@@ -239,6 +246,18 @@ void KospWindow_RenderCallback(cairo_t *cr,
   }
 
   if (pageNum == KOSPWINDOW_PAGE_1) {
+
+    /* Clip region with the sliders */
+    cairo_rectangle(cr,
+                    0,
+                    KOSPWINDOW_SLIDER_START_Y -
+                        KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS,
+                    KOSPWINDOW_WINDOW_WIDTH,
+                    KOSPWINDOW_SLIDER_MAX_NUM_DISPLAYABLE_SLIDERS *
+                            KOSPWINDOW_SLIDER_Y_SPACING +
+                        KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS);
+    cairo_clip(cr);
+
     int32_t startY =
         KOSPWINDOW_SLIDER_START_Y -
         (p_kosp_window->page1.sliderScrollSmooth) * KOSPWINDOW_SLIDER_Y_SPACING;
@@ -249,7 +268,10 @@ void KospWindow_RenderCallback(cairo_t *cr,
     int32_t numDrfs = cJSON_GetArraySize(p_sliders);
 
     for (int32_t sliderIdx = 0; sliderIdx < numDrfs; sliderIdx++) {
-      p_thisDrf = cJSON_GetArrayItem(p_sliders, sliderIdx);
+      p_thisDrf           = cJSON_GetArrayItem(p_sliders, sliderIdx);
+
+      int32_t sliderTextY = startY + KOSPWINDOW_SLIDER_TEXT_Y_OFFSET;
+      int32_t sliderBarY  = startY + KOSPWINDOW_SLIDER_BAR_Y_OFFSET;
 
       /* Lookup name by drf name */
       cJSON *p_min         = cJSON_GetObjectItem(p_thisDrf, "min");
@@ -258,9 +280,10 @@ void KospWindow_RenderCallback(cairo_t *cr,
       cJSON *p_displayName = cJSON_GetObjectItem(p_thisDrf, "displayName");
 
       double barRatio      = p_savedRatio->valuedouble;
-      double barKnobX =
+      double barRatioIncreaseX =
           (KOSPWINDOW_SLIDER_END_X - KOSPWINDOW_SLIDER_START_X) * barRatio;
-      char ratioString[10];
+      double barKnobX = barRatioIncreaseX + KOSPWINDOW_SLIDER_START_X;
+      char   ratioString[10];
       snprintf(ratioString,
                10,
                "%d",
@@ -272,23 +295,19 @@ void KospWindow_RenderCallback(cairo_t *cr,
       cairo_set_font_face(cr, p_kosp_window->montserratMediumCairoFontFace);
       cairo_set_font_size(cr, 21.0);
       cairo_text_extents(cr, p_displayName->valuestring, &extents);
-      cairo_move_to(cr,
-                    KOSPWINDOW_SLIDER_START_X,
-                    startY + KOSPWINDOW_SLIDER_TEXT_Y_OFFSET);
+      cairo_move_to(cr, KOSPWINDOW_SLIDER_START_X, sliderTextY);
       cairo_show_text(cr, p_displayName->valuestring);
 
       /* Ratio Text */
       cairo_text_extents(cr, ratioString, &extents);
-      cairo_move_to(cr,
-                    KOSPWINDOW_SLIDER_END_X - extents.width,
-                    startY + KOSPWINDOW_SLIDER_TEXT_Y_OFFSET);
+      cairo_move_to(cr, KOSPWINDOW_SLIDER_END_X - extents.width, sliderTextY);
       cairo_show_text(cr, ratioString);
 
       /* Slider Bar */
       cairo_utils_rounded_rect(cr,
                                KOSPWINDOW_SLIDER_START_X,
-                               startY + KOSPWINDOW_SLIDER_BAR_Y_OFFSET,
-                               barKnobX,
+                               sliderBarY,
+                               barRatioIncreaseX,
                                KOSPWINDOW_SLIDER_BAR_THICKNESS,
                                KOSPWINDOW_SLIDER_BAR_THICKNESS / 2);
       cairo_set_source_rgb(cr, CAIRO_COLOUR_SLIDER_BAR_GREY);
@@ -297,21 +316,19 @@ void KospWindow_RenderCallback(cairo_t *cr,
       cairo_move_to(cr,
                     KOSPWINDOW_SLIDER_START_X +
                         KOSPWINDOW_SLIDER_BAR_THICKNESS / 2,
-                    startY + KOSPWINDOW_SLIDER_BAR_Y_OFFSET +
-                        KOSPWINDOW_SLIDER_BAR_THICKNESS / 2);
+                    sliderBarY + KOSPWINDOW_SLIDER_BAR_THICKNESS / 2);
       cairo_line_to(cr,
-                    KOSPWINDOW_SLIDER_START_X + barKnobX -
+                    KOSPWINDOW_SLIDER_START_X + barRatioIncreaseX -
                         KOSPWINDOW_SLIDER_BAR_THICKNESS / 2,
-                    startY + KOSPWINDOW_SLIDER_BAR_Y_OFFSET +
-                        KOSPWINDOW_SLIDER_BAR_THICKNESS / 2);
+                    sliderBarY + KOSPWINDOW_SLIDER_BAR_THICKNESS / 2);
       cairo_set_line_width(cr, 1);
       cairo_set_source_rgb(cr, CAIRO_COLOUR_XPLANE_MENU_FRAME);
       cairo_stroke(cr);
 
       cairo_utils_rounded_rect(
           cr,
-          KOSPWINDOW_SLIDER_START_X + barKnobX,
-          startY + KOSPWINDOW_SLIDER_BAR_Y_OFFSET,
+          KOSPWINDOW_SLIDER_START_X + barRatioIncreaseX,
+          sliderBarY,
           (KOSPWINDOW_SLIDER_END_X - KOSPWINDOW_SLIDER_START_X) *
               (1 - barRatio),
           KOSPWINDOW_SLIDER_BAR_THICKNESS,
@@ -320,21 +337,395 @@ void KospWindow_RenderCallback(cairo_t *cr,
       cairo_fill(cr);
 
       cairo_move_to(cr,
-                    KOSPWINDOW_SLIDER_START_X + barKnobX +
+                    KOSPWINDOW_SLIDER_START_X + barRatioIncreaseX +
                         KOSPWINDOW_SLIDER_BAR_THICKNESS / 2,
-                    startY + KOSPWINDOW_SLIDER_BAR_Y_OFFSET +
-                        KOSPWINDOW_SLIDER_BAR_THICKNESS / 2);
+                    sliderBarY + KOSPWINDOW_SLIDER_BAR_THICKNESS / 2);
       cairo_line_to(cr,
                     KOSPWINDOW_SLIDER_END_X -
                         KOSPWINDOW_SLIDER_BAR_THICKNESS / 2,
-                    startY + KOSPWINDOW_SLIDER_BAR_Y_OFFSET +
-                        KOSPWINDOW_SLIDER_BAR_THICKNESS / 2);
+                    sliderBarY + KOSPWINDOW_SLIDER_BAR_THICKNESS / 2);
       cairo_set_line_width(cr, 1);
       cairo_set_source_rgb(cr, CAIRO_COLOUR_MENU_BACKGROUND);
       cairo_stroke(cr);
 
+      /* Slider Ball */
+      pat = cairo_pattern_create_radial(barKnobX,
+                                        sliderBarY,
+                                        KOSPWINDOW_SLIDER_BALL_RADIUS,
+                                        barKnobX,
+                                        sliderBarY,
+                                        KOSPWINDOW_SLIDER_BALL_RADIUS +
+                                            KOSPWINDOW_SLIDER_BALL_SHADOW_SIZE);
+      cairo_pattern_add_color_stop_rgba(
+          pat, 0, CAIRO_COLOUR_MENU_BUTTON_BACKGROUND_GLOW, 1);
+      cairo_pattern_add_color_stop_rgba(pat, 1, CAIRO_COLOUR_XPLANE_BLACK, 0);
+      cairo_set_source(cr, pat);
+      cairo_arc(cr,
+                barKnobX,
+                sliderBarY,
+                KOSPWINDOW_SLIDER_BALL_RADIUS +
+                    KOSPWINDOW_SLIDER_BALL_SHADOW_SIZE,
+                0,
+                2 * M_PI);
+      cairo_fill(cr);
+      cairo_pattern_destroy(pat);
+
+      cairo_set_source_rgb(cr, CAIRO_COLOUR_XPLANE_WHITE);
+      cairo_arc(cr,
+                barKnobX,
+                sliderBarY,
+                KOSPWINDOW_SLIDER_BALL_INNER_RING_RADIUS,
+                0,
+                2 * M_PI);
+      cairo_fill(cr);
+
+      cairo_set_source_rgb(cr, CAIRO_COLOUR_MENU_BUTTON_BACKGROUND_GLOW);
+      cairo_arc(cr,
+                barKnobX,
+                sliderBarY,
+                KOSPWINDOW_SLIDER_BALL_INNER_RING_RADIUS - 2,
+                0,
+                2 * M_PI);
+      cairo_fill(cr);
+
       /* Move downwards to next slider */
       startY += KOSPWINDOW_SLIDER_Y_SPACING;
+    }
+
+    cairo_reset_clip(cr);
+
+    /* Top Slider Fading Strip */
+    pat = cairo_pattern_create_linear(
+        0.0,
+        KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y,
+        0.0,
+        KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y +
+            KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS);
+    cairo_pattern_add_color_stop_rgba(pat, 0, CAIRO_COLOUR_MENU_BACKGROUND, 1);
+    cairo_pattern_add_color_stop_rgba(
+        pat, 0.2, CAIRO_COLOUR_MENU_BACKGROUND, 1);
+    cairo_pattern_add_color_stop_rgba(pat, 1, CAIRO_COLOUR_MENU_BACKGROUND, 0);
+    cairo_rectangle(cr,
+                    0,
+                    KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y,
+                    KOSPWINDOW_WINDOW_WIDTH,
+                    KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS);
+    cairo_set_source(cr, pat);
+    cairo_fill(cr);
+    cairo_pattern_destroy(pat);
+
+    /* Bottom Slider Fading Strip */
+    pat = cairo_pattern_create_linear(
+        0.0,
+        KOSPWINDOW_SLIDER_START_Y +
+            KOSPWINDOW_SLIDER_MAX_NUM_DISPLAYABLE_SLIDERS *
+                KOSPWINDOW_SLIDER_Y_SPACING,
+        0.0,
+        KOSPWINDOW_SLIDER_START_Y +
+            KOSPWINDOW_SLIDER_MAX_NUM_DISPLAYABLE_SLIDERS *
+                KOSPWINDOW_SLIDER_Y_SPACING -
+            KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS);
+    cairo_pattern_add_color_stop_rgba(pat, 0, CAIRO_COLOUR_MENU_BACKGROUND, 1);
+    cairo_pattern_add_color_stop_rgba(pat, 1, CAIRO_COLOUR_MENU_BACKGROUND, 0);
+    cairo_rectangle(cr,
+                    0,
+                    KOSPWINDOW_SLIDER_START_Y +
+                        KOSPWINDOW_SLIDER_MAX_NUM_DISPLAYABLE_SLIDERS *
+                            KOSPWINDOW_SLIDER_Y_SPACING -
+                        KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS,
+                    KOSPWINDOW_WINDOW_WIDTH,
+                    KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS);
+    cairo_set_source(cr, pat);
+    cairo_fill(cr);
+    cairo_pattern_destroy(pat);
+
+    /* Bottom separator of the sliders */
+    cairo_utils_rounded_rect(cr,
+                             KOSPWINDOW_BOTTOM_SEPARATOR_X_MARGIN,
+                             KOSPWINDOW_BOTTOM_SEPARATOR_Y,
+                             KOSPWINDOW_WINDOW_WIDTH -
+                                 KOSPWINDOW_BOTTOM_SEPARATOR_X_MARGIN * 2,
+                             2,
+                             1);
+    cairo_set_source_rgb(cr, CAIRO_COLOUR_MENU_BUTTON_BACKGROUND_GLOW);
+    cairo_fill(cr);
+
+    /* Scroll bar */
+    double scrollBarRatio =
+        (p_kosp_window->page1.sliderScrollSmooth) /
+        ((double)(numDrfs) + (double)KOSPWINDOW_SLIDER_BOTTOM_BUFFER_SPACE -
+         (double)KOSPWINDOW_SLIDER_MAX_NUM_DISPLAYABLE_SLIDERS);
+
+    cairo_utils_rounded_rect(cr,
+                             KOSPWINDOW_SLIDER_SCROLL_BAR_X,
+                             KOSPWINDOW_SLIDER_SCROLL_BAR_START_Y,
+                             4,
+                             KOSPWINDOW_SLIDER_SCROLL_BAR_END_Y -
+                                 KOSPWINDOW_SLIDER_SCROLL_BAR_START_Y,
+                             2);
+    cairo_set_source_rgb(cr, CAIRO_COLOUR_MENU_BUTTON_BACKGROUND_GLOW);
+    cairo_fill(cr);
+
+    cairo_utils_rounded_rect(
+        cr,
+        KOSPWINDOW_SLIDER_SCROLL_BAR_X,
+        KOSPWINDOW_SLIDER_SCROLL_BAR_START_Y +
+            fx_lin(scrollBarRatio,
+                   0,
+                   0,
+                   1,
+                   (KOSPWINDOW_SLIDER_SCROLL_BAR_END_Y -
+                    KOSPWINDOW_SLIDER_SCROLL_BAR_START_Y) -
+                       KOSPWINDOW_SLIDER_SCROLL_BAR_LENGTH),
+        4,
+        KOSPWINDOW_SLIDER_SCROLL_BAR_LENGTH,
+        2);
+    cairo_set_source_rgb(cr, CAIRO_COLOUR_SLIDER_BAR_GREY);
+    cairo_fill(cr);
+
+    /* Bottom Text */
+    cairo_set_source_rgb(cr, CAIRO_COLOUR_XPLANE_WHITE);
+    cairo_set_font_face(cr, p_kosp_window->montserratMediumCairoFontFace);
+    cairo_set_font_size(cr, 21.0);
+    cairo_move_to(cr, KOSPWINDOW_SLIDER_START_X, KOSPWINDOW_BOTTOM_TEXT_Y);
+    cairo_show_text(cr, "Use these over the ISCS.");
+
+    cairo_set_source_rgb(cr, CAIRO_COLOUR_XPLANE_WHITE);
+    cairo_set_font_face(cr, p_kosp_window->montserratMediumCairoFontFace);
+    cairo_set_font_size(cr, 21.0);
+    cairo_move_to(
+        cr, KOSPWINDOW_SLIDER_START_X, KOSPWINDOW_BOTTOM_TEXT_Y + 30.0);
+    cairo_show_text(cr, "Scroll down for more sliders.");
+  } else if (pageNum == KOSPWINDOW_PAGE_2) {
+
+    for (int barIdx = 0; barIdx < 3; barIdx++) {
+
+      int32_t middleOfTheMixerBar =
+          KOSPWINDOW_WINDOW_WIDTH / 2 +
+          CAIRO_COLOUR_X_DIST_BTWN_BARS * (barIdx - 1);
+
+      /* Rheostat Bar */
+      cairo_utils_rounded_rect(
+          cr,
+          middleOfTheMixerBar - KOSPWINDOW_MIXER_SLIDER_WIDTH / 2 - 1,
+          KOSPWINDOW_MIXER_SLIDER_START_Y - 1,
+          KOSPWINDOW_MIXER_SLIDER_WIDTH + 2,
+          KOSPWINDOW_MIXER_SLIDER_END_Y - KOSPWINDOW_MIXER_SLIDER_START_Y + 1,
+          KOSPWINDOW_MIXER_SLIDER_WIDTH / 2);
+      cairo_set_source_rgb(cr, CAIRO_COLOUR_XPLANE_BLACK);
+      cairo_fill(cr);
+
+      cairo_utils_rounded_rect(
+          cr,
+          middleOfTheMixerBar - KOSPWINDOW_MIXER_SLIDER_WIDTH / 2,
+          KOSPWINDOW_MIXER_SLIDER_START_Y,
+          KOSPWINDOW_MIXER_SLIDER_WIDTH,
+          KOSPWINDOW_MIXER_SLIDER_END_Y - KOSPWINDOW_MIXER_SLIDER_START_Y,
+          KOSPWINDOW_MIXER_SLIDER_WIDTH / 2);
+      cairo_set_source_rgb(cr, CAIRO_COLOUR_MENU_BUTTON_BACKGROUND_GLOW);
+      cairo_fill(cr);
+
+      pat = cairo_pattern_create_linear(
+          middleOfTheMixerBar - KOSPWINDOW_MIXER_SLIDER_WIDTH / 2,
+          0.0,
+          middleOfTheMixerBar + KOSPWINDOW_MIXER_SLIDER_WIDTH / 2,
+          0.0);
+
+      switch (barIdx) {
+      case 0:
+        cairo_pattern_add_color_stop_rgba(
+            pat, 0, CAIRO_COLOUR_SLIDER_ACCENT_RED, 0);
+        cairo_pattern_add_color_stop_rgba(
+            pat, 0.3, CAIRO_COLOUR_SLIDER_ACCENT_RED, 0);
+        cairo_pattern_add_color_stop_rgba(
+            pat, 1, CAIRO_COLOUR_SLIDER_ACCENT_RED, 1);
+        break;
+      case 1:
+        cairo_pattern_add_color_stop_rgba(
+            pat, 0, CAIRO_COLOUR_SLIDER_ACCENT_YELLOW, 0);
+        cairo_pattern_add_color_stop_rgba(
+            pat, 0.3, CAIRO_COLOUR_SLIDER_ACCENT_YELLOW, 0);
+        cairo_pattern_add_color_stop_rgba(
+            pat, 1, CAIRO_COLOUR_SLIDER_ACCENT_YELLOW, 1);
+        break;
+      case 2:
+        cairo_pattern_add_color_stop_rgba(
+            pat, 0, CAIRO_COLOUR_SLIDER_ACCENT_GREEN, 0);
+        cairo_pattern_add_color_stop_rgba(
+            pat, 0.3, CAIRO_COLOUR_SLIDER_ACCENT_GREEN, 0);
+        cairo_pattern_add_color_stop_rgba(
+            pat, 1, CAIRO_COLOUR_SLIDER_ACCENT_GREEN, 1);
+        break;
+      }
+
+      cairo_utils_rounded_rect(
+          cr,
+          middleOfTheMixerBar - KOSPWINDOW_MIXER_SLIDER_WIDTH / 2,
+          KOSPWINDOW_MIXER_SLIDER_START_Y,
+          KOSPWINDOW_MIXER_SLIDER_WIDTH,
+          KOSPWINDOW_MIXER_SLIDER_END_Y - KOSPWINDOW_MIXER_SLIDER_START_Y,
+          KOSPWINDOW_MIXER_SLIDER_WIDTH / 2);
+      cairo_set_source(cr, pat);
+      cairo_fill(cr);
+      cairo_pattern_destroy(pat);
+
+      int32_t bigMarkersYList[] = {284, 322, 419, 455, 626};
+      int32_t bigMarkersYListCount =
+          sizeof(bigMarkersYList) / sizeof(bigMarkersYList[0]);
+      int32_t smallMarkersYList[] = {
+          306, 370, 434, 476, 498, 517, 536, 556, 575, 593, 611};
+      int32_t smallMarkersYListCount =
+          sizeof(smallMarkersYList) / sizeof(smallMarkersYList[0]);
+
+      cairo_set_source_rgb(cr, CAIRO_COLOUR_SLIDER_BAR_GREY);
+      cairo_set_line_width(cr, 2);
+      for (int side = -1; side <= 1; side += 2) {
+        for (int i = 0; i < bigMarkersYListCount; i++) {
+          cairo_move_to(cr,
+                        middleOfTheMixerBar +
+                            KOSPWINDOW_MIXER_BIG_MARKER_OFFSET_START_X * side,
+                        bigMarkersYList[i]);
+          cairo_line_to(cr,
+                        middleOfTheMixerBar +
+                            KOSPWINDOW_MIXER_BIG_MARKER_OFFSET_END_X * side,
+                        bigMarkersYList[i]);
+          cairo_stroke(cr);
+        }
+        for (int i = 0; i < smallMarkersYListCount; i++) {
+          cairo_move_to(cr,
+                        middleOfTheMixerBar +
+                            KOSPWINDOW_MIXER_SMALL_MARKER_OFFSET_START_X * side,
+                        smallMarkersYList[i]);
+          cairo_line_to(cr,
+                        middleOfTheMixerBar +
+                            KOSPWINDOW_MIXER_SMALL_MARKER_OFFSET_END_X * side,
+                        smallMarkersYList[i]);
+          cairo_stroke(cr);
+        }
+
+        cairo_move_to(cr,
+                      middleOfTheMixerBar +
+                          KOSPWINDOW_MIXER_BIG_MARKER_OFFSET_START_X * side,
+                      322);
+        cairo_line_to(cr,
+                      middleOfTheMixerBar +
+                          KOSPWINDOW_MIXER_BIG_MARKER_OFFSET_START_X * side,
+                      419);
+        cairo_stroke(cr);
+
+        cairo_move_to(cr,
+                      middleOfTheMixerBar +
+                          KOSPWINDOW_MIXER_BIG_MARKER_OFFSET_END_X * side,
+                      322);
+        cairo_line_to(cr,
+                      middleOfTheMixerBar +
+                          KOSPWINDOW_MIXER_BIG_MARKER_OFFSET_END_X * side,
+                      419);
+        cairo_stroke(cr);
+      }
+
+      vect2_t numberYPosAndNumber[] = {
+          { .x = 10, .y = 284},
+          {  .x = 5, .y = 322},
+          {  .x = 0, .y = 370},
+          { .x = -5, .y = 419},
+          {.x = -10, .y = 455},
+          {.x = -20, .y = 498},
+          {.x = -30, .y = 536},
+          {.x = -40, .y = 575},
+          {.x = -50, .y = 593},
+          {.x = -60, .y = 611},
+          {.x = -80, .y = 626},
+          NULL_VECT2
+      };
+      int32_t numNumbers =
+          sizeof(numberYPosAndNumber) / sizeof(numberYPosAndNumber[0]);
+
+      cairo_set_font_face(cr, p_kosp_window->robotoSemiboldCairoFontFace);
+      cairo_set_font_size(cr, 18.0);
+      cairo_set_source_rgb(cr, CAIRO_COLOUR_SLIDER_BAR_GREY);
+      char bufferString[10];
+      for (int i = 0; i < numNumbers; i++) {
+        int32_t markingNumber = numberYPosAndNumber[i].x;
+        if (markingNumber > -80) {
+          snprintf(bufferString, 10, "%d", (int32_t)(abs(markingNumber)));
+        } else {
+          snprintf(bufferString, 10, "∞");
+        }
+        cairo_move_to(
+            cr,
+            middleOfTheMixerBar + KOSPWINDOW_MIXER_LABEL_TEXT_OFFSET_X,
+            (numberYPosAndNumber[i]).y + KOSPWINDOW_MIXER_LABEL_TEXT_OFFSET_Y);
+        cairo_show_text(cr, bufferString);
+      }
+      cairo_move_to(
+          cr, middleOfTheMixerBar + KOSPWINDOW_MIXER_LABEL_TEXT_OFFSET_X, 250);
+      cairo_show_text(cr, "dB");
+
+      cairo_set_source_rgb(cr, CAIRO_COLOUR_SLIDER_BAR_GREY);
+      cairo_utils_rounded_rect(cr,
+                               middleOfTheMixerBar -
+                                   KOSPWINDOW_MIXER_SURROUNDING_BOX_WIDTH / 2,
+                               KOSPWINDOW_MIXER_SURROUNDING_BOX_START_Y,
+                               KOSPWINDOW_MIXER_SURROUNDING_BOX_WIDTH,
+                               KOSPWINDOW_MIXER_SURROUNDING_BOX_END_Y -
+                                   KOSPWINDOW_MIXER_SURROUNDING_BOX_START_Y,
+                               KOSPWINDOW_MIXER_SURROUNDING_BOX_CORNER_RADIUS);
+      cairo_set_line_width(cr, 1);
+      cairo_stroke(cr);
+
+      cairo_set_font_size(cr, 21.0);
+      cairo_set_font_face(cr, p_kosp_window->montserratMediumCairoFontFace);
+      char *balanceBarTest[] = {"Lows", "Mids", "Highs"};
+      cairo_text_extents(cr, balanceBarTest[barIdx], &extents);
+      cairo_move_to(cr,
+                    middleOfTheMixerBar - extents.width / 2,
+                    CAIRO_COLOUR_MIXER_DESCRIPTION_TEXT_Y);
+      cairo_show_text(cr, balanceBarTest[barIdx]);
+
+      /* The slider knob */
+      int32_t sliderMiddleY = 410;
+      cairo_utils_rounded_rect(
+          cr,
+          middleOfTheMixerBar - KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH / 2,
+          sliderMiddleY - KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT,
+          KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH,
+          KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT,
+          KOSPWINDOW_MIXER_SLIDER_SWITCH_CORNER_RADIUS);
+      cairo_set_source_rgb(cr, CAIRO_COLOUR_MIXER_SLIDER_SWITCH_GREY1);
+      cairo_fill(cr);
+
+      cairo_rectangle(
+          cr,
+          middleOfTheMixerBar - KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH / 2,
+          sliderMiddleY - KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT +
+              KOSPWINDOW_MIXER_SLIDER_SWITCH_SOLID_RECTANGLE_FROM_EDGE,
+          KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH,
+          KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT / 2 -
+              KOSPWINDOW_MIXER_SLIDER_SWITCH_SOLID_RECTANGLE_FROM_EDGE);
+      cairo_set_source_rgb(cr, CAIRO_COLOUR_MIXER_SLIDER_SWITCH_GREY2);
+      cairo_fill(cr);
+
+      cairo_rectangle(
+          cr,
+          middleOfTheMixerBar - KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH / 2,
+          sliderMiddleY - KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT / 2,
+          KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH,
+          KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT / 2 -
+              KOSPWINDOW_MIXER_SLIDER_SWITCH_SOLID_RECTANGLE_FROM_EDGE);
+      cairo_set_source_rgb(cr, CAIRO_COLOUR_MIXER_SLIDER_SWITCH_GREY3);
+      cairo_fill(cr);
+
+      cairo_rectangle(
+          cr,
+          middleOfTheMixerBar - KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH / 2,
+          sliderMiddleY -
+              KOSPWINDOW_MIXER_SLIDER_SWITCH_MIDDLE_LINE_THICKNESS / 2 -
+              KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT / 2,
+          KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH,
+          KOSPWINDOW_MIXER_SLIDER_SWITCH_MIDDLE_LINE_THICKNESS);
+      cairo_set_source_rgb(cr, CAIRO_COLOUR_MIXER_SLIDER_SWITCH_GREY4);
+      cairo_fill(cr);
     }
   }
 }
