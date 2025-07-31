@@ -28,8 +28,11 @@ extern "C" {
 #define CAIRO_COLOUR_MENU_BUTTON_BACKGROUND (0.134), (0.157), (0.173)
 #define CAIRO_COLOUR_MENU_BUTTON_BACKGROUND_GLOW (0.181), (0.204), (0.224)
 
-/* Custom colour for slider bars. */
 #define CAIRO_COLOUR_SLIDER_BAR_GREY (0.787), (0.796), (0.804)
+
+/* Custom colour for slider bars. */
+#define CAIRO_COLOUR_ON_OFF_SWITCH_GREEN (0.165), (0.479), (0.234)
+#define CAIRO_COLOUR_ON_OFF_SWITCH_RED (0.750), (0.152), (0.163)
 
 /* Properties of the vertical placement of the title bar */
 #define KOSPWINDOW_TITLE_BIG_TEXT_Y (80)
@@ -127,6 +130,66 @@ extern "C" {
 #define CAIRO_COLOUR_MIXER_SLIDER_SWITCH_GREY2 (0.652), (0.679), (0.691)
 #define CAIRO_COLOUR_MIXER_SLIDER_SWITCH_GREY3 (0.743), (0.765), (0.773)
 #define CAIRO_COLOUR_MIXER_SLIDER_SWITCH_GREY4 (0.314), (0.338), (0.366)
+
+/**
+ * @brief Instance of the slider bar Y table.
+ *        Refer to the header for description.
+ *
+ */
+static const vect2_t numberYPosAndNumber[] = {
+    {.x = -80, .y = 626},
+    {.x = -60, .y = 611},
+    {.x = -50, .y = 593},
+    {.x = -40, .y = 575},
+    {.x = -30, .y = 536},
+    {.x = -20, .y = 498},
+    {.x = -10, .y = 455},
+    { .x = -5, .y = 419},
+    {  .x = 0, .y = 370},
+    {  .x = 5, .y = 322},
+    { .x = 10, .y = 284},
+    NULL_VECT2
+};
+
+static const vect2_t numberYPosAndNumberInv[] = {
+    {.x = 284,  .y = 10},
+    {.x = 322,   .y = 5},
+    {.x = 370,   .y = 0},
+    {.x = 419,  .y = -5},
+    {.x = 455, .y = -10},
+    {.x = 498, .y = -20},
+    {.x = 536, .y = -30},
+    {.x = 575, .y = -40},
+    {.x = 593, .y = -50},
+    {.x = 611, .y = -60},
+    {.x = 626, .y = -80},
+    NULL_VECT2
+};
+
+#define KOSPWINDOW_ON_OFF_SWITCH_START_Y (224)
+
+#define KOSPWINDOW_ON_OFF_SWITCH_START_X (283)
+#define KOSPWINDOW_ON_OFF_SWITCH_TEXT_START_X (28)
+#define KOSPWINDOW_ON_OFF_SWITCH_Y_OFFSET (0)
+#define KOSPWINDOW_ON_OFF_SWITCH_TEXT_Y_OFFSET (22)
+
+#define KOSPWINDOW_ON_OFF_SWITCH_Y_SPACING (60)
+
+#define KOSPWINDOW_ON_OFF_SWITCH_WIDTH (70)
+#define KOSPWINDOW_ON_OFF_SWITCH_HEIGHT (32)
+#define KOSPWINDOW_ON_OFF_SWITCH_CORNER_RADIUS (5)
+
+#define KOSPWINDOW_ON_OFF_SWITCH_MAX_NUM_DISPLAYABLE_SWITCHS (8)
+#define KOSPWINDOW_ON_OFF_SWITCH_BOTTOM_BUFFER_SPACE (1)
+
+#define KOSPWINDOW_CHANGELOG_TITLE_SPACING_ABOVE (40)
+#define KOSPWINDOW_CHANGELOG_TITLE_SPACING_BELOW (45)
+#define KOSPWINDOW_CHANGELOG_LINE_SPACING (30)
+#define KOSPWINDOW_CHANGELOG_TEXT_START_X (30)
+
+#define KOSPWINDOW_CHANGELOG_SCROLL_BOTTOM_BUFFER_PX (-800)
+
+#define KOSPWINDOW_CHANGELOG_SCROLL_PIXELS_PER_CLICK (150)
 
 #ifdef __cplusplus
 }

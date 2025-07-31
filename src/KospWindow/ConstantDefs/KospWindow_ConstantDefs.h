@@ -15,6 +15,10 @@
 extern "C" {
 #endif
 
+/* Acfutils includes */
+#include "acfutils/math.h"
+
+/* Custom includes */
 #include "KospWindow/ConstantDefs/KospWindow_GraphicsConstantDefs.h"
 
 #define KOSPWINDOW_ASSETS_DIR "assets"
@@ -27,6 +31,7 @@ extern "C" {
 
 #define KOSPWINDOW_CONFIG_DIR "config"
 #define KOSPWINDOW_USER_CONFIG_FILE_NAME "userconfig.json"
+#define KOSPWINDOW_CHANGELOG_FILE_NAME "changelog.json"
 
 #define KOSPWINDOW_RENDER_FPS (30)
 #define KOSPWINDOW_CLICKSPOT_MARGIN (30)

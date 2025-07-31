@@ -31,11 +31,13 @@
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
 void KospWindow_SetSliderRatio(KospWindow *p_kosp_window_in,
+                               char       *catagoryName,
                                char       *drfName,
+                               char       *propertyName,
                                double      ratio) {
   /* Descend into the big json list */
   cJSON *sliders =
-      cJSON_GetObjectItem(p_kosp_window_in->p_configJson, "slidersByDrfName");
+      cJSON_GetObjectItem(p_kosp_window_in->p_configJson, catagoryName);
 
   /* There is nothing in that json */
   VERIFY(sliders != NULL);
@@ -46,5 +48,5 @@ void KospWindow_SetSliderRatio(KospWindow *p_kosp_window_in,
   /* There is no such drf name */
   VERIFY_MSG(
       entry != NULL, "Cannot find Slider by Drf Name (JSON Key): %s", drfName);
-  cJSON_ReplaceItemInObject(entry, "savedRatio", cJSON_CreateNumber(ratio));
+  cJSON_ReplaceItemInObject(entry, propertyName, cJSON_CreateNumber(ratio));
 }

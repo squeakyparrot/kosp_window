@@ -170,7 +170,7 @@ void KospWindow_RenderCallback(cairo_t *cr,
   char *buttons_text[] = {"Volume", "Balance", "Options", "Version"};
   cairo_set_source_rgb(cr, CAIRO_COLOUR_XPLANE_WHITE);
   cairo_set_font_face(cr, p_kosp_window->montserratMediumCairoFontFace);
-  cairo_set_font_size(cr, 21.0);
+  cairo_set_font_size(cr, 20.0);
   int32_t textOffset = 0;
   for (int32_t i = 0; i < KOSPWINDOW_NUM_PAGES; i++) {
     if (i == 1) {
@@ -498,6 +498,10 @@ void KospWindow_RenderCallback(cairo_t *cr,
     cairo_show_text(cr, "Scroll down for more sliders.");
   } else if (pageNum == KOSPWINDOW_PAGE_2) {
 
+    int32_t mixerSliderBarY;
+    cJSON  *p_mixerSliders = cJSON_GetObjectItem(p_kosp_window->p_configJson,
+                                                "mixerSlidersByDrfName");
+
     for (int barIdx = 0; barIdx < 3; barIdx++) {
 
       int32_t middleOfTheMixerBar =
@@ -624,20 +628,6 @@ void KospWindow_RenderCallback(cairo_t *cr,
         cairo_stroke(cr);
       }
 
-      vect2_t numberYPosAndNumber[] = {
-          { .x = 10, .y = 284},
-          {  .x = 5, .y = 322},
-          {  .x = 0, .y = 370},
-          { .x = -5, .y = 419},
-          {.x = -10, .y = 455},
-          {.x = -20, .y = 498},
-          {.x = -30, .y = 536},
-          {.x = -40, .y = 575},
-          {.x = -50, .y = 593},
-          {.x = -60, .y = 611},
-          {.x = -80, .y = 626},
-          NULL_VECT2
-      };
       int32_t numNumbers =
           sizeof(numberYPosAndNumber) / sizeof(numberYPosAndNumber[0]);
 
@@ -684,11 +674,17 @@ void KospWindow_RenderCallback(cairo_t *cr,
       cairo_show_text(cr, balanceBarTest[barIdx]);
 
       /* The slider knob */
-      int32_t sliderMiddleY = 410;
+
+      cJSON *p_thisDrf = cJSON_GetArrayItem(p_mixerSliders, barIdx);
+      VERIFY(p_thisDrf != NULL);
+      cJSON *p_savedValue = cJSON_GetObjectItem(p_thisDrf, "savedValue");
+      VERIFY(p_savedValue != NULL);
+      int32_t sliderMiddleY =
+          fx_lin_multi(p_savedValue->valuedouble, numberYPosAndNumber, B_TRUE);
       cairo_utils_rounded_rect(
           cr,
           middleOfTheMixerBar - KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH / 2,
-          sliderMiddleY - KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT,
+          sliderMiddleY - KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT / 2,
           KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH,
           KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT,
           KOSPWINDOW_MIXER_SLIDER_SWITCH_CORNER_RADIUS);
@@ -698,7 +694,7 @@ void KospWindow_RenderCallback(cairo_t *cr,
       cairo_rectangle(
           cr,
           middleOfTheMixerBar - KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH / 2,
-          sliderMiddleY - KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT +
+          sliderMiddleY - KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT / 2 +
               KOSPWINDOW_MIXER_SLIDER_SWITCH_SOLID_RECTANGLE_FROM_EDGE,
           KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH,
           KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT / 2 -
@@ -709,7 +705,7 @@ void KospWindow_RenderCallback(cairo_t *cr,
       cairo_rectangle(
           cr,
           middleOfTheMixerBar - KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH / 2,
-          sliderMiddleY - KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT / 2,
+          sliderMiddleY,
           KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH,
           KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT / 2 -
               KOSPWINDOW_MIXER_SLIDER_SWITCH_SOLID_RECTANGLE_FROM_EDGE);
@@ -720,12 +716,322 @@ void KospWindow_RenderCallback(cairo_t *cr,
           cr,
           middleOfTheMixerBar - KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH / 2,
           sliderMiddleY -
-              KOSPWINDOW_MIXER_SLIDER_SWITCH_MIDDLE_LINE_THICKNESS / 2 -
-              KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT / 2,
+              KOSPWINDOW_MIXER_SLIDER_SWITCH_MIDDLE_LINE_THICKNESS / 2,
           KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH,
           KOSPWINDOW_MIXER_SLIDER_SWITCH_MIDDLE_LINE_THICKNESS);
       cairo_set_source_rgb(cr, CAIRO_COLOUR_MIXER_SLIDER_SWITCH_GREY4);
       cairo_fill(cr);
     }
+  } else if (pageNum == KOSPWINDOW_PAGE_3) {
+
+    /* Clip region with the sliders */
+    cairo_rectangle(cr,
+                    0,
+                    KOSPWINDOW_SLIDER_START_Y -
+                        KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS,
+                    KOSPWINDOW_WINDOW_WIDTH,
+                    KOSPWINDOW_ON_OFF_SWITCH_MAX_NUM_DISPLAYABLE_SWITCHS *
+                            KOSPWINDOW_ON_OFF_SWITCH_Y_SPACING +
+                        KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS);
+    cairo_clip(cr);
+
+    int32_t switchRowY;
+    cJSON  *p_thisDrf;
+    cJSON  *p_switches =
+        cJSON_GetObjectItem(p_kosp_window->p_configJson, "switchesByDrfName");
+    int32_t numDrfs = cJSON_GetArraySize(p_switches);
+
+    for (int32_t switchIdx = 0; switchIdx < numDrfs; switchIdx++) {
+      /* Description Text */
+      cairo_set_source_rgb(cr, CAIRO_COLOUR_XPLANE_WHITE);
+      cairo_set_font_face(cr, p_kosp_window->montserratMediumCairoFontFace);
+      cairo_set_font_size(cr, 21.0);
+      p_thisDrf            = cJSON_GetArrayItem(p_switches, switchIdx);
+      cJSON *p_displayName = cJSON_GetObjectItem(p_thisDrf, "displayName");
+      cJSON *p_savedValue  = cJSON_GetObjectItem(p_thisDrf, "saved_value");
+
+      switchRowY           = KOSPWINDOW_ON_OFF_SWITCH_START_Y +
+                   KOSPWINDOW_ON_OFF_SWITCH_Y_SPACING *
+                       (switchIdx - p_kosp_window->page3.sliderScrollSmooth);
+      cairo_move_to(cr,
+                    KOSPWINDOW_ON_OFF_SWITCH_TEXT_START_X,
+                    switchRowY + KOSPWINDOW_ON_OFF_SWITCH_TEXT_Y_OFFSET);
+      cairo_show_text(cr, p_displayName->valuestring);
+
+      /* Switch body */
+      cairo_set_source_rgb(cr, CAIRO_COLOUR_XPLANE_BLACK);
+      cairo_utils_rounded_rect(cr,
+                               KOSPWINDOW_ON_OFF_SWITCH_START_X,
+                               switchRowY + KOSPWINDOW_ON_OFF_SWITCH_Y_OFFSET,
+                               KOSPWINDOW_ON_OFF_SWITCH_WIDTH,
+                               KOSPWINDOW_ON_OFF_SWITCH_HEIGHT,
+                               KOSPWINDOW_ON_OFF_SWITCH_CORNER_RADIUS);
+      cairo_set_line_width(cr, 3);
+      cairo_stroke(cr);
+      cairo_set_source_rgb(cr, CAIRO_COLOUR_SLIDER_BAR_GREY);
+      cairo_utils_rounded_rect(cr,
+                               KOSPWINDOW_ON_OFF_SWITCH_START_X,
+                               switchRowY + KOSPWINDOW_ON_OFF_SWITCH_Y_OFFSET,
+                               KOSPWINDOW_ON_OFF_SWITCH_WIDTH,
+                               KOSPWINDOW_ON_OFF_SWITCH_HEIGHT,
+                               KOSPWINDOW_ON_OFF_SWITCH_CORNER_RADIUS);
+      cairo_set_line_width(cr, 2);
+      cairo_stroke(cr);
+
+      /* On off state */
+      if (p_savedValue->valueint == B_TRUE) {
+        cairo_set_source_rgb(cr, CAIRO_COLOUR_ON_OFF_SWITCH_GREEN);
+        cairo_utils_rounded_rect(cr,
+                                 KOSPWINDOW_ON_OFF_SWITCH_START_X +
+                                     KOSPWINDOW_ON_OFF_SWITCH_WIDTH / 2,
+                                 switchRowY +
+                                     KOSPWINDOW_ON_OFF_SWITCH_Y_OFFSET + 2,
+                                 KOSPWINDOW_ON_OFF_SWITCH_WIDTH / 2 - 2,
+                                 KOSPWINDOW_ON_OFF_SWITCH_HEIGHT - 4,
+                                 KOSPWINDOW_ON_OFF_SWITCH_CORNER_RADIUS / 2);
+        cairo_set_line_width(cr, 2);
+        cairo_fill(cr);
+        cairo_set_font_face(cr, p_kosp_window->robotoSemiboldCairoFontFace);
+        cairo_set_font_size(cr, 15.0);
+        cairo_set_source_rgb(cr, CAIRO_COLOUR_XPLANE_WHITE);
+        cairo_move_to(cr,
+                      KOSPWINDOW_ON_OFF_SWITCH_START_X +
+                          KOSPWINDOW_ON_OFF_SWITCH_WIDTH / 2 + 8,
+                      switchRowY + KOSPWINDOW_ON_OFF_SWITCH_TEXT_Y_OFFSET);
+        cairo_show_text(cr, "On");
+      } else {
+        cairo_set_source_rgb(cr, CAIRO_COLOUR_ON_OFF_SWITCH_RED);
+        cairo_utils_rounded_rect(cr,
+                                 KOSPWINDOW_ON_OFF_SWITCH_START_X + 2,
+                                 switchRowY +
+                                     KOSPWINDOW_ON_OFF_SWITCH_Y_OFFSET + 2,
+                                 KOSPWINDOW_ON_OFF_SWITCH_WIDTH / 2 - 2,
+                                 KOSPWINDOW_ON_OFF_SWITCH_HEIGHT - 4,
+                                 KOSPWINDOW_ON_OFF_SWITCH_CORNER_RADIUS / 2);
+        cairo_set_line_width(cr, 2);
+        cairo_fill(cr);
+
+        /* On off text */
+        cairo_set_font_face(cr, p_kosp_window->robotoSemiboldCairoFontFace);
+        cairo_set_font_size(cr, 15.0);
+        cairo_set_source_rgb(cr, CAIRO_COLOUR_XPLANE_WHITE);
+        cairo_move_to(cr,
+                      KOSPWINDOW_ON_OFF_SWITCH_START_X + 9,
+                      switchRowY + KOSPWINDOW_ON_OFF_SWITCH_TEXT_Y_OFFSET);
+        cairo_show_text(cr, "Off");
+      }
+    }
+
+    cairo_reset_clip(cr);
+
+    /* Scroll bar */
+    double scrollBarRatio =
+        (p_kosp_window->page3.sliderScrollSmooth) /
+        ((double)(numDrfs) +
+         (double)KOSPWINDOW_ON_OFF_SWITCH_BOTTOM_BUFFER_SPACE -
+         (double)KOSPWINDOW_ON_OFF_SWITCH_MAX_NUM_DISPLAYABLE_SWITCHS);
+
+    cairo_utils_rounded_rect(cr,
+                             KOSPWINDOW_SLIDER_SCROLL_BAR_X,
+                             KOSPWINDOW_SLIDER_SCROLL_BAR_START_Y,
+                             4,
+                             KOSPWINDOW_SLIDER_SCROLL_BAR_END_Y -
+                                 KOSPWINDOW_SLIDER_SCROLL_BAR_START_Y,
+                             2);
+    cairo_set_source_rgb(cr, CAIRO_COLOUR_MENU_BUTTON_BACKGROUND_GLOW);
+    cairo_fill(cr);
+
+    cairo_utils_rounded_rect(
+        cr,
+        KOSPWINDOW_SLIDER_SCROLL_BAR_X,
+        KOSPWINDOW_SLIDER_SCROLL_BAR_START_Y +
+            fx_lin(scrollBarRatio,
+                   0,
+                   0,
+                   1,
+                   (KOSPWINDOW_SLIDER_SCROLL_BAR_END_Y -
+                    KOSPWINDOW_SLIDER_SCROLL_BAR_START_Y) -
+                       KOSPWINDOW_SLIDER_SCROLL_BAR_LENGTH),
+        4,
+        KOSPWINDOW_SLIDER_SCROLL_BAR_LENGTH,
+        2);
+    cairo_set_source_rgb(cr, CAIRO_COLOUR_SLIDER_BAR_GREY);
+    cairo_fill(cr);
+
+    /* Top Slider Fading Strip */
+    pat = cairo_pattern_create_linear(
+        0.0,
+        KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y,
+        0.0,
+        KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y +
+            KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS);
+    cairo_pattern_add_color_stop_rgba(pat, 0, CAIRO_COLOUR_MENU_BACKGROUND, 1);
+    cairo_pattern_add_color_stop_rgba(
+        pat, 0.2, CAIRO_COLOUR_MENU_BACKGROUND, 1);
+    cairo_pattern_add_color_stop_rgba(pat, 1, CAIRO_COLOUR_MENU_BACKGROUND, 0);
+    cairo_rectangle(cr,
+                    0,
+                    KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y,
+                    KOSPWINDOW_WINDOW_WIDTH,
+                    KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS);
+    cairo_set_source(cr, pat);
+    cairo_fill(cr);
+    cairo_pattern_destroy(pat);
+
+    /* Bottom Slider Fading Strip */
+    pat = cairo_pattern_create_linear(
+        0.0,
+        KOSPWINDOW_SLIDER_START_Y +
+            KOSPWINDOW_ON_OFF_SWITCH_MAX_NUM_DISPLAYABLE_SWITCHS *
+                KOSPWINDOW_ON_OFF_SWITCH_Y_SPACING,
+        0.0,
+        KOSPWINDOW_SLIDER_START_Y +
+            KOSPWINDOW_ON_OFF_SWITCH_MAX_NUM_DISPLAYABLE_SWITCHS *
+                KOSPWINDOW_ON_OFF_SWITCH_Y_SPACING -
+            KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS);
+    cairo_pattern_add_color_stop_rgba(pat, 0, CAIRO_COLOUR_MENU_BACKGROUND, 1);
+    cairo_pattern_add_color_stop_rgba(pat, 1, CAIRO_COLOUR_MENU_BACKGROUND, 0);
+    cairo_rectangle(cr,
+                    0,
+                    KOSPWINDOW_SLIDER_START_Y +
+                        KOSPWINDOW_ON_OFF_SWITCH_MAX_NUM_DISPLAYABLE_SWITCHS *
+                            KOSPWINDOW_ON_OFF_SWITCH_Y_SPACING -
+                        KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS,
+                    KOSPWINDOW_WINDOW_WIDTH,
+                    KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS);
+    cairo_set_source(cr, pat);
+    cairo_fill(cr);
+    cairo_pattern_destroy(pat);
+  } else if (pageNum == KOSPWINDOW_PAGE_4) {
+    /* Clip region */
+    cairo_rectangle(cr,
+                    0,
+                    KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y,
+                    KOSPWINDOW_WINDOW_WIDTH,
+                    KOSPWINDOW_WINDOW_HEIGHT -
+                        KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y);
+    cairo_clip(cr);
+    cJSON *p_changeLog =
+        cJSON_GetObjectItem(p_kosp_window->p_changeLogJson, "changeLog");
+    int32_t numChangeLogs = cJSON_GetArraySize(p_changeLog);
+
+    int32_t currentY      = KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y;
+
+    currentY -= p_kosp_window->page4.sliderScrollSmoothPx;
+
+    currentY += KOSPWINDOW_CHANGELOG_TITLE_SPACING_ABOVE;
+
+    cairo_set_source_rgb(cr, CAIRO_COLOUR_XPLANE_WHITE);
+
+    for (int32_t changeLogIdx = 0; changeLogIdx < numChangeLogs;
+         changeLogIdx++) {
+
+      cJSON *p_thisChangelog = cJSON_GetArrayItem(p_changeLog, changeLogIdx);
+
+      /* Title */
+
+      currentY += KOSPWINDOW_CHANGELOG_TITLE_SPACING_ABOVE;
+      cairo_set_font_size(cr, 26.0);
+      cairo_text_extents(cr, p_thisChangelog->string, &extents);
+      cairo_move_to(
+          cr, KOSPWINDOW_WINDOW_WIDTH / 2 - extents.width / 2, currentY);
+      cairo_show_text(cr, p_thisChangelog->string);
+      currentY += KOSPWINDOW_CHANGELOG_TITLE_SPACING_BELOW;
+
+      int numChangeLogEntries = cJSON_GetArraySize(p_thisChangelog);
+      // Access individual elements
+      for (int changeLogEntryIdx = 0; changeLogEntryIdx < numChangeLogEntries;
+           changeLogEntryIdx++) {
+        cJSON *p_thisLine =
+            cJSON_GetArrayItem(p_thisChangelog, changeLogEntryIdx);
+
+        cairo_set_font_size(cr, 21.0);
+        cairo_text_extents(cr, p_thisLine->valuestring, &extents);
+        cairo_move_to(cr, KOSPWINDOW_CHANGELOG_TEXT_START_X, currentY);
+        cairo_show_text(cr, p_thisLine->valuestring);
+        currentY += KOSPWINDOW_CHANGELOG_LINE_SPACING;
+      }
+    }
+
+    /* current Y is now at the bottom of the changelog */
+    currentY += KOSPWINDOW_CHANGELOG_SCROLL_BOTTOM_BUFFER_PX;
+
+    /* Undo what we did at the start, to get the raw offset */
+    currentY -= KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y;
+
+    currentY -= KOSPWINDOW_CHANGELOG_TITLE_SPACING_ABOVE;
+    currentY += p_kosp_window->page4.sliderScrollSmoothPx;
+
+    /* This is the maximum, store it */
+    p_kosp_window->page4.sliderMaxScrollPx = currentY;
+
+    /* Scroll bar */
+    double scrollBarRatio = (p_kosp_window->page4.sliderScrollSmoothPx) /
+                            (double)(p_kosp_window->page4.sliderMaxScrollPx);
+
+    cairo_utils_rounded_rect(cr,
+                             KOSPWINDOW_SLIDER_SCROLL_BAR_X,
+                             KOSPWINDOW_SLIDER_SCROLL_BAR_START_Y,
+                             4,
+                             KOSPWINDOW_SLIDER_SCROLL_BAR_END_Y -
+                                 KOSPWINDOW_SLIDER_SCROLL_BAR_START_Y,
+                             2);
+    cairo_set_source_rgb(cr, CAIRO_COLOUR_MENU_BUTTON_BACKGROUND_GLOW);
+    cairo_fill(cr);
+
+    cairo_utils_rounded_rect(
+        cr,
+        KOSPWINDOW_SLIDER_SCROLL_BAR_X,
+        KOSPWINDOW_SLIDER_SCROLL_BAR_START_Y +
+            fx_lin(scrollBarRatio,
+                   0,
+                   0,
+                   1,
+                   (KOSPWINDOW_SLIDER_SCROLL_BAR_END_Y -
+                    KOSPWINDOW_SLIDER_SCROLL_BAR_START_Y) -
+                       KOSPWINDOW_SLIDER_SCROLL_BAR_LENGTH),
+        4,
+        KOSPWINDOW_SLIDER_SCROLL_BAR_LENGTH,
+        2);
+    cairo_set_source_rgb(cr, CAIRO_COLOUR_SLIDER_BAR_GREY);
+    cairo_fill(cr);
+
+    cairo_reset_clip(cr);
+
+    /* Top Fading Strip */
+    pat = cairo_pattern_create_linear(
+        0.0,
+        KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y,
+        0.0,
+        KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y +
+            KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS);
+    cairo_pattern_add_color_stop_rgba(pat, 0, CAIRO_COLOUR_MENU_BACKGROUND, 1);
+    cairo_pattern_add_color_stop_rgba(pat, 1, CAIRO_COLOUR_MENU_BACKGROUND, 0);
+    cairo_rectangle(cr,
+                    0,
+                    KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y,
+                    KOSPWINDOW_WINDOW_WIDTH,
+                    KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS);
+    cairo_set_source(cr, pat);
+    cairo_fill(cr);
+    cairo_pattern_destroy(pat);
+
+    /* Bottom Fading Strip */
+    pat = cairo_pattern_create_linear(
+        0.0,
+        KOSPWINDOW_WINDOW_HEIGHT - KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS * 2,
+        0.0,
+        KOSPWINDOW_WINDOW_HEIGHT - KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS);
+    cairo_pattern_add_color_stop_rgba(pat, 0, CAIRO_COLOUR_MENU_BACKGROUND, 0);
+    cairo_pattern_add_color_stop_rgba(pat, 1, CAIRO_COLOUR_MENU_BACKGROUND, 1);
+    cairo_rectangle(cr,
+                    0,
+                    KOSPWINDOW_WINDOW_HEIGHT -
+                        KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS * 2,
+                    KOSPWINDOW_WINDOW_WIDTH,
+                    KOSPWINDOW_SLIDER_FADING_STRIP_THICKNESS * 2);
+    cairo_set_source(cr, pat);
+    cairo_fill(cr);
+    cairo_pattern_destroy(pat);
   }
 }

@@ -1,0 +1,67 @@
+{
+  "changeLog": {
+    "Version 1.6": [
+      "- Wrote this C Plugin"
+    ],
+    "Version 1.5": [
+      "- TLS Newest Compatibility",
+      "- Reduced Blade Crackle Range",
+      "- Replaced Old Korry Switches",
+      "- Clarified Menu Slider Name",
+      "- Reduced Fan Crackle Range",
+      "- Fixed Transformer Power Off",
+      "- Fixed APU Shutdown Sequence",
+      "- Eliminated All Voice Stealing",
+      "- Added Predictive W/S",
+      "- Blower Final Edits",
+      "- Fixed Econ Flow Switch",
+      "- Tuned IAE Cruise Fade"
+    ],
+    "Version 1.42": [
+      "- TLS Newest Compatibility",
+      "- Reduced Blade Crackle Range",
+      "- Replaced Old Korry Switches",
+      "- Clarified Menu Slider Name",
+      "- Reduced Fan Crackle Range",
+      "- Fixed Transformer Power Off",
+      "- Fixed APU Shutdown Sequence",
+      "- Eliminated All Voice Stealing",
+      "- Added Predictive W/S",
+      "- Blower Final Edits"
+    ],
+    "Version 1.4": [
+      "- Blowers Override Edit",
+      "- Bootup Sequence Edit",
+      "- New Korry Switches",
+      "- New RA Callout Options",
+      "- Takeover Button Fix",
+      "- Ground Roll Edit",
+      "- PW Too Annoying Fix",
+      "- New Battery Relays",
+      "- Touchdown Sound Debounce",
+      "- Flap Stress Effects",
+      "- Improved CFM Buzzsaw",
+      "- A321 ACT Switch Fix",
+      "- Autobrake Off Callout",
+      "- Progressive Cabin Wind",
+      "- PW Howl Midair Option"
+    ],
+    "Version 1.3": [
+      "- DoNothing Cmnd Clicking Fix",
+      "- New Gear Doors in Cabin",
+      "- New Power Swap in Cabin",
+      "- AT and AP Disco Buttons",
+      "- Adapted for New C-Chord"
+    ],
+    "Version 1.2": [
+      "- 100% Surroundsound",
+      "- Wrote this plugin",
+      "- IAE pitch changes",
+      "- Edits to Mixer Knobs",
+      "- Fixed CFM Distortion in V12",
+      "- APU Distance Gain Fix",
+      "- APU Spool down fix",
+      "- PTU Distance and Bus Assign"
+    ]
+  }
+}

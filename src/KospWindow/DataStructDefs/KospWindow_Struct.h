@@ -30,6 +30,9 @@
 
 /* Custom Includes */
 #include "KospWindow/DataStructDefs/KospWindow_Page1Struct.h"
+#include "KospWindow/DataStructDefs/KospWindow_Page2Struct.h"
+#include "KospWindow/DataStructDefs/KospWindow_Page3Struct.h"
+#include "KospWindow/DataStructDefs/KospWindow_Page4Struct.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -185,6 +188,15 @@ typedef struct KospWindow_Struct {
   cJSON *p_configJson;
 
   /**
+   * @details     A pointer to the cJSON object
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  cJSON *p_changeLogJson;
+
+  /**
    * @details     A buffer storing the path to the config json file.
    *
    * @unit        N/A
@@ -194,6 +206,15 @@ typedef struct KospWindow_Struct {
   char configPath[256];
 
   /**
+   * @details     A buffer storing the path to the changelog json file.
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  char changeLogPath[256];
+
+  /**
    * @details     A struct containing properties that only belongs to page 1.
    *
    * @unit        N/A
@@ -201,6 +222,33 @@ typedef struct KospWindow_Struct {
    * @sense       N/A
    */
   KospWindow_Page1 page1;
+
+  /**
+   * @details     A struct containing properties that only belongs to page 2.
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  KospWindow_Page2 page2;
+
+  /**
+   * @details     A struct containing properties that only belongs to page 2.
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  KospWindow_Page3 page3;
+
+  /**
+   * @details     A struct containing properties that only belongs to page 2.
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  KospWindow_Page4 page4;
 
 } KospWindow;
 

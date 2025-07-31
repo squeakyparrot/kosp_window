@@ -111,17 +111,27 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout) {
                                      KOSPWINDOW_CONFIG_DIR,
                                      KOSPWINDOW_USER_CONFIG_FILE_NAME,
                                      NULL);
-
   strlcpy(p_kosp_window_inout->configPath,
           config_path_tmp,
           sizeof(p_kosp_window_inout->configPath));
   lacf_free(config_path_tmp);
 
-  KospWindow_LoadConfJson(p_kosp_window_inout, p_kosp_window_inout->configPath);
+  KospWindow_LoadJson(&(p_kosp_window_inout->p_configJson),
+                      p_kosp_window_inout->configPath);
 
-  /* Dummy test to write to it */
-  KospWindow_SetSliderRatio(
-      p_kosp_window_inout, "KOSP/master_vol_ratio_extrior", 0);
+  /* Load Changelog */
+  /* Fetch the font file. mkpathname returns a heap allocated string. */
+  char *changelog_path_tmp = mkpathname(fs_access.pluginFilePath,
+                                        KOSPWINDOW_CONFIG_DIR,
+                                        KOSPWINDOW_CHANGELOG_FILE_NAME,
+                                        NULL);
+  strlcpy(p_kosp_window_inout->changeLogPath,
+          changelog_path_tmp,
+          sizeof(p_kosp_window_inout->changeLogPath));
+  lacf_free(changelog_path_tmp);
+
+  KospWindow_LoadJson(&(p_kosp_window_inout->p_changeLogJson),
+                      p_kosp_window_inout->changeLogPath);
 
   return B_TRUE;
 }

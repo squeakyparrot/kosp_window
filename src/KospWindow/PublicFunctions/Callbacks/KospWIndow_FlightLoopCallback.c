@@ -41,6 +41,16 @@ int32_t KospWindow_FlightLoopCallback(float inElapsedSinceLastCall,
                                   p_kosp_window->page1.sliderScroll,
                                   KOSPWINDOW_SLIDER_SCROLL_ANIM_SPEED,
                                   inElapsedSinceLastCall);
+  p_kosp_window->page3.sliderScrollSmooth =
+      AnimUtils_SetAnimValueNoLim(p_kosp_window->page3.sliderScrollSmooth,
+                                  p_kosp_window->page3.sliderScroll,
+                                  KOSPWINDOW_SLIDER_SCROLL_ANIM_SPEED,
+                                  inElapsedSinceLastCall);
+  p_kosp_window->page4.sliderScrollSmoothPx =
+      AnimUtils_SetAnimValueNoLim(p_kosp_window->page4.sliderScrollSmoothPx,
+                                  p_kosp_window->page4.sliderScrollPx,
+                                  KOSPWINDOW_SLIDER_SCROLL_ANIM_SPEED,
+                                  inElapsedSinceLastCall);
 
   return B_TRUE;
 }

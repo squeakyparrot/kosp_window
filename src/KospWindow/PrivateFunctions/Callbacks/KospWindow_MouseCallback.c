@@ -68,18 +68,21 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
     for (int32_t sliderIdx = 0; sliderIdx < numDrfs; sliderIdx++) {
       if (p_kosp_window->page1.isSliderAttached == B_TRUE &&
           p_kosp_window->page1.attachedSlider == sliderIdx) {
-        cJSON *p_thisDrf    = cJSON_GetArrayItem(p_sliders, sliderIdx);
-        cJSON *p_drfName    = cJSON_GetObjectItem(p_thisDrf, "drfName");
-        cJSON *p_savedRatio = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
+        cJSON *p_thisDrf  = cJSON_GetArrayItem(p_sliders, sliderIdx);
+        cJSON *p_drfName  = cJSON_GetObjectItem(p_thisDrf, "drfName");
+        double valueToSet = clamp(fx_lin(x,
+                                         KOSPWINDOW_SLIDER_START_X,
+                                         0.0,
+                                         KOSPWINDOW_SLIDER_END_X,
+                                         1.0),
+                                  0.0,
+                                  1.0);
+
         KospWindow_SetSliderRatio(p_kosp_window,
+                                  "slidersByDrfName",
                                   p_drfName->valuestring,
-                                  clamp(fx_lin(x,
-                                               KOSPWINDOW_SLIDER_START_X,
-                                               0.0,
-                                               KOSPWINDOW_SLIDER_END_X,
-                                               1.0),
-                                        0.0,
-                                        1.0));
+                                  "savedRatio",
+                                  valueToSet);
       }
     }
 
@@ -103,7 +106,6 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
             /* Mark it as attached*/
             p_kosp_window->page1.isSliderAttached = B_TRUE;
             p_kosp_window->page1.attachedSlider   = sliderIdx;
-            logMsg("Slider attached to %d", sliderIdx);
           }
 
           /* Move downwards to next slider */
@@ -112,11 +114,115 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
       }
     } else if (inMouse == xplm_MouseUp) {
       /* Volume page */
-      if (p_kosp_window->pageNum == KOSPWINDOW_PAGE_1) {
-        p_kosp_window->page1.isSliderAttached = B_FALSE;
-        logMsg("Slider detached");
+      p_kosp_window->page1.isSliderAttached = B_FALSE;
+    }
+  }
+
+  /* On Mixing Page */
+  else if (p_kosp_window->pageNum == KOSPWINDOW_PAGE_2) {
+
+    int32_t mixerSliderBarY;
+    cJSON  *p_mixerSliders = cJSON_GetObjectItem(p_kosp_window->p_configJson,
+                                                "mixerSlidersByDrfName");
+    VERIFY(p_mixerSliders != NULL);
+
+    for (int barIdx = 0; barIdx < 3; barIdx++) {
+      if (p_kosp_window->page2.isSliderAttached == B_TRUE &&
+          p_kosp_window->page2.attachedSlider == barIdx) {
+        cJSON *p_thisDrf = cJSON_GetArrayItem(p_mixerSliders, barIdx);
+        VERIFY(p_thisDrf != NULL);
+        cJSON *p_drfName = cJSON_GetObjectItem(p_thisDrf, "drfName");
+        VERIFY(p_drfName != NULL);
+        cJSON *p_savedValue = cJSON_GetObjectItem(p_thisDrf, "savedValue");
+        VERIFY(p_savedValue != NULL);
+
+        double valueToSet =
+            clamp(fx_lin_multi(y, numberYPosAndNumberInv, B_TRUE), -80, 10);
+        /* Snapping */
+        if (fabs(valueToSet) < 2.0) {
+          valueToSet = 0;
+        }
+
+        KospWindow_SetSliderRatio(p_kosp_window,
+                                  "mixerSlidersByDrfName",
+                                  p_drfName->valuestring,
+                                  "savedValue",
+                                  valueToSet);
+
+        logMsg("Set Value is %f", p_savedValue->valuedouble);
       }
     }
+
+    if (inMouse == xplm_MouseDown) {
+      /* Clicking on the content*/
+      if (y > KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y &&
+          y < KOSPWINDOW_SLIDER_END_Y) {
+        for (int barIdx = 0; barIdx < 3; barIdx++) {
+          cJSON *p_thisDrf = cJSON_GetArrayItem(p_mixerSliders, barIdx);
+          VERIFY(p_thisDrf != NULL);
+          cJSON *p_savedValue = cJSON_GetObjectItem(p_thisDrf, "savedValue");
+          VERIFY(p_savedValue != NULL);
+          int32_t sliderMiddleY = fx_lin_multi(
+              p_savedValue->valuedouble, numberYPosAndNumber, B_FALSE);
+
+          int32_t middleOfTheMixerBar =
+              KOSPWINDOW_WINDOW_WIDTH / 2 +
+              CAIRO_COLOUR_X_DIST_BTWN_BARS * (barIdx - 1);
+          if ((x > middleOfTheMixerBar -
+                       KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH / 2) &&
+              (x < middleOfTheMixerBar +
+                       KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH / 2) &&
+              (y > sliderMiddleY - KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT / 2 &&
+               y < sliderMiddleY + KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT / 2)) {
+            p_kosp_window->page2.isSliderAttached = B_TRUE;
+            p_kosp_window->page2.attachedSlider   = barIdx;
+          }
+        }
+      }
+    } else if (inMouse == xplm_MouseUp) {
+      /* Mixing page */
+      p_kosp_window->page2.isSliderAttached = B_FALSE;
+    }
+  }
+
+  else if (p_kosp_window->pageNum == KOSPWINDOW_PAGE_3) {
+
+    if (inMouse == xplm_MouseDown) {
+      int32_t switchRowY;
+      cJSON  *p_thisDrf;
+      cJSON  *p_switches =
+          cJSON_GetObjectItem(p_kosp_window->p_configJson, "switchesByDrfName");
+      int32_t numDrfs = cJSON_GetArraySize(p_switches);
+
+      for (int32_t switchIdx = 0; switchIdx < numDrfs; switchIdx++) {
+        p_thisDrf           = cJSON_GetArrayItem(p_switches, switchIdx);
+        cJSON *p_savedValue = cJSON_GetObjectItem(p_thisDrf, "saved_value");
+        cJSON *p_drfName    = cJSON_GetObjectItem(p_thisDrf, "drfName");
+
+        switchRowY          = KOSPWINDOW_ON_OFF_SWITCH_START_Y +
+                     KOSPWINDOW_ON_OFF_SWITCH_Y_SPACING *
+                         (switchIdx - p_kosp_window->page3.sliderScrollSmooth);
+
+        if ((x > KOSPWINDOW_ON_OFF_SWITCH_START_X) &&
+            (x < KOSPWINDOW_ON_OFF_SWITCH_START_X +
+                     KOSPWINDOW_ON_OFF_SWITCH_WIDTH)) {
+          if ((y > switchRowY + KOSPWINDOW_ON_OFF_SWITCH_Y_OFFSET) &&
+              (y < switchRowY + KOSPWINDOW_ON_OFF_SWITCH_Y_OFFSET +
+                       KOSPWINDOW_ON_OFF_SWITCH_HEIGHT)) {
+            KospWindow_SetSliderRatio(p_kosp_window,
+                                      "switchesByDrfName",
+                                      p_drfName->valuestring,
+                                      "saved_value",
+                                      !(p_savedValue->valueint));
+          }
+        }
+      }
+    }
+  }
+
+  /* Write Json on Mouse Up */
+  if (inMouse == xplm_MouseUp) {
+    KospWindow_WriteConfJson(p_kosp_window, p_kosp_window->configPath);
   }
 
   return B_TRUE;

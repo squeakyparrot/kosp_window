@@ -51,8 +51,26 @@ int KospWindow_ScrollWheelCallback(XPLMWindowID inWindowID,
       p_kosp_window->page1.sliderScroll =
           clampi(p_kosp_window->page1.sliderScroll - clicks,
                  0,
-                 numDrfs - KOSPWINDOW_SLIDER_MAX_NUM_DISPLAYABLE_SLIDERS +
-                     KOSPWINDOW_SLIDER_BOTTOM_BUFFER_SPACE);
+                 fmax(numDrfs - KOSPWINDOW_SLIDER_MAX_NUM_DISPLAYABLE_SLIDERS +
+                          KOSPWINDOW_SLIDER_BOTTOM_BUFFER_SPACE,
+                      0));
+    } else if (p_kosp_window->pageNum == KOSPWINDOW_PAGE_3) {
+      cJSON *p_switches =
+          cJSON_GetObjectItem(p_kosp_window->p_configJson, "switchesByDrfName");
+      int32_t numDrfs                   = cJSON_GetArraySize(p_switches);
+
+      p_kosp_window->page3.sliderScroll = clampi(
+          p_kosp_window->page3.sliderScroll - clicks,
+          0,
+          fmax(numDrfs - KOSPWINDOW_ON_OFF_SWITCH_MAX_NUM_DISPLAYABLE_SWITCHS +
+                   KOSPWINDOW_ON_OFF_SWITCH_BOTTOM_BUFFER_SPACE,
+               0));
+    } else if (p_kosp_window->pageNum == KOSPWINDOW_PAGE_4) {
+      p_kosp_window->page4.sliderScrollPx =
+          clampi(p_kosp_window->page4.sliderScrollPx -
+                     clicks * KOSPWINDOW_CHANGELOG_SCROLL_PIXELS_PER_CLICK,
+                 0,
+                 p_kosp_window->page4.sliderMaxScrollPx);
     }
   }
 

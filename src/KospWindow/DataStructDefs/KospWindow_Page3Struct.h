@@ -1,0 +1,65 @@
+/**
+ * @file KospWindow_Page3Struct.h
+ *
+ * @brief
+ *
+ * @date 2025-07-27
+ *
+ * @copyright KOSP Project 2025
+ */
+
+#ifndef H_KOSPWINDOW_PAGE3STRUCT_H_
+#define H_KOSPWINDOW_PAGE3STRUCT_H_
+
+/* C Library Includes */
+#include <math.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* XPLM Includes */
+#include "XPLMDisplay.h"
+
+/* Acfutils includes */
+#include "acfutils/mt_cairo_render.h"
+
+/* cJSON Includes */
+#include "cJSON.h"
+
+/* Custom Includes */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef struct KospWindow_Page3Struct {
+
+  /**
+   * @details     How much the slider has scrolled down. 0 is at the top, N+1
+   *              is at the bottom (1 empty margin) when the page is at the
+   *              bottom.
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  int32_t sliderScroll;
+
+  /**
+   * @details     The smoothed out value of the above, automatically computed
+   *              in the flight loop.
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  double sliderScrollSmooth;
+
+} KospWindow_Page3;
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* H_KOSPWINDOW_PAGE3STRUCT_H_ */

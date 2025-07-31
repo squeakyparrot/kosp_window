@@ -50,14 +50,15 @@ extern int KospWindow_ScrollWheelCallback(XPLMWindowID inWindowID,
                                           int          clicks,
                                           void        *inRefcon);
 
-extern void KospWindow_LoadConfJson(KospWindow *p_kosp_window_in,
-                                    char        config_path[256]);
+extern void KospWindow_LoadJson(cJSON **pp_destPtr, char config_path[256]);
 
 extern void KospWindow_WriteConfJson(KospWindow *p_kosp_window_in,
                                      char        config_path[256]);
 
 extern void KospWindow_SetSliderRatio(KospWindow *p_kosp_window_in,
+                                      char       *catagoryName,
                                       char       *drfName,
+                                      char       *propertyName,
                                       double      ratio);
 
 #ifdef __cplusplus

@@ -30,8 +30,7 @@
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
-void KospWindow_LoadConfJson(KospWindow *p_kosp_window_in,
-                             char        config_path[256]) {
+void KospWindow_LoadJson(cJSON **pp_destPtr, char config_path[256]) {
   VERIFY(config_path != NULL);
   logMsg("Loading Config Json from %s", config_path);
 
@@ -43,8 +42,8 @@ void KospWindow_LoadConfJson(KospWindow *p_kosp_window_in,
   logMsg("%s", loadedJsonString);
 
   /* Parse the string and store it in our own struct */
-  p_kosp_window_in->p_configJson = cJSON_Parse(loadedJsonString);
-  VERIFY(p_kosp_window_in->p_configJson != NULL);
+  *pp_destPtr = cJSON_Parse(loadedJsonString);
+  VERIFY(pp_destPtr != NULL);
 
   free(loadedJsonString);
 }

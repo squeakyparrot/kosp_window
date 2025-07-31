@@ -28,10 +28,6 @@
 
 int32_t KospWindow_Deinit(KospWindow *p_kosp_window_inout) {
 
-  /* Write the config file */
-  KospWindow_WriteConfJson(p_kosp_window_inout,
-                           p_kosp_window_inout->configPath);
-
   if (p_kosp_window_inout->p_mtCairoRender != NULL) {
     mt_cairo_render_fini(p_kosp_window_inout->p_mtCairoRender);
   }

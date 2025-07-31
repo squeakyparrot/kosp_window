@@ -43,6 +43,20 @@
       "savedRatio": 1
     }
   },
+  "mixerSlidersByDrfName": {
+    "KOSP/equaliser_lows": {
+      "drfName": "KOSP/equaliser_lows",
+      "savedValue": 0
+    },
+    "KOSP/equaliser_mids": {
+      "drfName": "KOSP/equaliser_mids",
+      "savedValue": 0
+    },
+    "KOSP/equaliser_highs": {
+      "drfName": "KOSP/equaliser_highs",
+      "savedValue": 0
+    }
+  },
   "switchesByDrfName": {
     "KOSP/settings_play_2000ra_callout": {
       "displayName": "Play 2000ft RA Callout",
@@ -69,9 +83,59 @@
       "drfName": "KOSP/settings_autobrake_off_callout",
       "saved_value": 1
     },
-    "KOSP/pw_howl_mute_in_air": {
-      "displayName": "Inhibit PW Howl Midair",
-      "drfName": "KOSP/pw_howl_mute_in_air",
+    "KOSP/a": {
+      "displayName": "a",
+      "drfName": "KOSP/a",
+      "saved_value": 1
+    },
+    "KOSP/b": {
+      "displayName": "b",
+      "drfName": "KOSP/b",
+      "saved_value": 1
+    },
+    "KOSP/c": {
+      "displayName": "c",
+      "drfName": "KOSP/c",
+      "saved_value": 1
+    },
+    "KOSP/d": {
+      "displayName": "d",
+      "drfName": "KOSP/d",
+      "saved_value": 1
+    },
+    "KOSP/e": {
+      "displayName": "e",
+      "drfName": "KOSP/e",
+      "saved_value": 1
+    },
+    "KOSP/f": {
+      "displayName": "f",
+      "drfName": "KOSP/f",
+      "saved_value": 1
+    },
+    "KOSP/g": {
+      "displayName": "g",
+      "drfName": "KOSP/g",
+      "saved_value": 1
+    },
+    "KOSP/h": {
+      "displayName": "h",
+      "drfName": "KOSP/h",
+      "saved_value": 1
+    },
+    "KOSP/i": {
+      "displayName": "i",
+      "drfName": "KOSP/i",
+      "saved_value": 1
+    },
+    "KOSP/j": {
+      "displayName": "j",
+      "drfName": "KOSP/j",
+      "saved_value": 1
+    },
+    "KOSP/k": {
+      "displayName": "k",
+      "drfName": "KOSP/k",
       "saved_value": 1
     }
   }
