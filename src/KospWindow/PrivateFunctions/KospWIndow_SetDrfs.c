@@ -44,3 +44,18 @@ void KospWindow_SetDrfs(cJSON *pp_groupArrayPtr, float *p_floatArray) {
     p_floatArray[idx] = p_savedRatio->valuedouble;
   }
 }
+
+void KospWindow_SetDrfsInt(cJSON *pp_groupArrayPtr, int32_t *p_intArray) {
+  int32_t numDrfs = cJSON_GetArraySize(pp_groupArrayPtr);
+
+  for (int32_t idx = 0; idx < numDrfs; idx++) {
+    cJSON *p_thisDrf = cJSON_GetArrayItem(pp_groupArrayPtr, idx);
+    VERIFY(p_thisDrf != NULL);
+    cJSON *p_drfName = cJSON_GetObjectItem(p_thisDrf, "drfName");
+    VERIFY(p_drfName != NULL);
+    cJSON *p_savedRatio = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
+    VERIFY(p_savedRatio != NULL);
+
+    p_intArray[idx] = p_savedRatio->valuedouble;
+  }
+}

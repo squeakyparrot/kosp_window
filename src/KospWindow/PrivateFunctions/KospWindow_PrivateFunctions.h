@@ -65,9 +65,15 @@ extern void KospWindow_CreateDrfs(cJSON *pp_groupArrayPtr,
                                   dr_t  *destDrArray,
                                   float *p_floatArray);
 
+extern void KospWindow_CreateDrfsInt(cJSON   *pp_groupArrayPtr,
+                                     dr_t    *destDrArray,
+                                     int32_t *p_intArray);
+
 extern void KospWindow_DeleteDrfs(cJSON *pp_groupArrayPtr, dr_t *destDrArray);
 
 extern void KospWindow_SetDrfs(cJSON *pp_groupArrayPtr, float *p_floatArray);
+
+extern void KospWindow_SetDrfsInt(cJSON *pp_groupArrayPtr, int32_t *p_intArray);
 
 #ifdef __cplusplus
 }

@@ -29,7 +29,7 @@
       "drfName": "KOSP/wind_vol_ratio_interior",
       "min": 0,
       "max": 1.5,
-      "savedRatio": 0,
+      "savedRatio": 1,
       "displayMultiplier": 100
     },
     "KOSP/ground_vol_ratio_interior": {
@@ -52,97 +52,42 @@
   "mixerSlidersByDrfName": {
     "KOSP/equaliser_lows": {
       "drfName": "KOSP/equaliser_lows",
-      "savedValue": 0
+      "savedRatio": 0
     },
     "KOSP/equaliser_mids": {
       "drfName": "KOSP/equaliser_mids",
-      "savedValue": 0
+      "savedRatio": 0
     },
     "KOSP/equaliser_highs": {
       "drfName": "KOSP/equaliser_highs",
-      "savedValue": 0
+      "savedRatio": 0
     }
   },
   "switchesByDrfName": {
     "KOSP/settings_play_2000ra_callout": {
       "displayName": "Play 2000ft RA Callout",
       "drfName": "KOSP/settings_play_2000ra_callout",
-      "saved_value": 1
+      "savedRatio": 1
     },
     "KOSP/settings_korries_are_new": {
       "displayName": "Newer Korry Switches",
       "drfName": "KOSP/settings_korries_are_new",
-      "saved_value": 1
+      "savedRatio": 1
     },
     "KOSP/settings_ir_switch_is_smaller_type": {
       "displayName": "Alternative IR Switch",
       "drfName": "KOSP/settings_ir_switch_is_smaller_type",
-      "saved_value": 1
+      "savedRatio": 1
     },
     "KOSP/settings_ra_is_bitcrushed": {
       "displayName": "Bitcrush RA Callouts",
       "drfName": "KOSP/settings_ra_is_bitcrushed",
-      "saved_value": 1
+      "savedRatio": 1
     },
     "KOSP/settings_autobrake_off_callout": {
       "displayName": "Autobrake Off Callout",
       "drfName": "KOSP/settings_autobrake_off_callout",
-      "saved_value": 1
-    },
-    "KOSP/a": {
-      "displayName": "a",
-      "drfName": "KOSP/a",
-      "saved_value": 1
-    },
-    "KOSP/b": {
-      "displayName": "b",
-      "drfName": "KOSP/b",
-      "saved_value": 1
-    },
-    "KOSP/c": {
-      "displayName": "c",
-      "drfName": "KOSP/c",
-      "saved_value": 1
-    },
-    "KOSP/d": {
-      "displayName": "d",
-      "drfName": "KOSP/d",
-      "saved_value": 1
-    },
-    "KOSP/e": {
-      "displayName": "e",
-      "drfName": "KOSP/e",
-      "saved_value": 1
-    },
-    "KOSP/f": {
-      "displayName": "f",
-      "drfName": "KOSP/f",
-      "saved_value": 1
-    },
-    "KOSP/g": {
-      "displayName": "g",
-      "drfName": "KOSP/g",
-      "saved_value": 1
-    },
-    "KOSP/h": {
-      "displayName": "h",
-      "drfName": "KOSP/h",
-      "saved_value": 1
-    },
-    "KOSP/i": {
-      "displayName": "i",
-      "drfName": "KOSP/i",
-      "saved_value": 1
-    },
-    "KOSP/j": {
-      "displayName": "j",
-      "drfName": "KOSP/j",
-      "saved_value": 1
-    },
-    "KOSP/k": {
-      "displayName": "k",
-      "drfName": "KOSP/k",
-      "saved_value": 1
+      "savedRatio": 1
     }
   }
 }

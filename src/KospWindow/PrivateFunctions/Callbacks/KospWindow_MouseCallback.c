@@ -137,8 +137,8 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
         VERIFY(p_thisDrf != NULL);
         cJSON *p_drfName = cJSON_GetObjectItem(p_thisDrf, "drfName");
         VERIFY(p_drfName != NULL);
-        cJSON *p_savedValue = cJSON_GetObjectItem(p_thisDrf, "savedValue");
-        VERIFY(p_savedValue != NULL);
+        cJSON *p_savedRatio = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
+        VERIFY(p_savedRatio != NULL);
 
         double valueToSet =
             clamp(fx_lin_multi(y, numberYPosAndNumberInv, B_TRUE), -80, 10);
@@ -150,12 +150,14 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
         KospWindow_SetSliderRatio(p_kosp_window,
                                   "mixerSlidersByDrfName",
                                   p_drfName->valuestring,
-                                  "savedValue",
+                                  "savedRatio",
                                   valueToSet);
 
-        logMsg("Set Value is %f", p_savedValue->valuedouble);
+        logMsg("Set Value is %f", p_savedRatio->valuedouble);
       }
     }
+
+    KospWindow_SetDrfs(p_mixerSliders, p_kosp_window->mixerRatioDrfsData);
 
     if (inMouse == xplm_MouseDown) {
       /* Clicking on the content*/
@@ -164,10 +166,10 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
         for (int barIdx = 0; barIdx < 3; barIdx++) {
           cJSON *p_thisDrf = cJSON_GetArrayItem(p_mixerSliders, barIdx);
           VERIFY(p_thisDrf != NULL);
-          cJSON *p_savedValue = cJSON_GetObjectItem(p_thisDrf, "savedValue");
-          VERIFY(p_savedValue != NULL);
+          cJSON *p_savedRatio = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
+          VERIFY(p_savedRatio != NULL);
           int32_t sliderMiddleY = fx_lin_multi(
-              p_savedValue->valuedouble, numberYPosAndNumber, B_FALSE);
+              p_savedRatio->valuedouble, numberYPosAndNumber, B_FALSE);
 
           int32_t middleOfTheMixerBar =
               KOSPWINDOW_WINDOW_WIDTH / 2 +
@@ -200,7 +202,7 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
 
       for (int32_t switchIdx = 0; switchIdx < numDrfs; switchIdx++) {
         p_thisDrf           = cJSON_GetArrayItem(p_switches, switchIdx);
-        cJSON *p_savedValue = cJSON_GetObjectItem(p_thisDrf, "saved_value");
+        cJSON *p_savedRatio = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
         cJSON *p_drfName    = cJSON_GetObjectItem(p_thisDrf, "drfName");
 
         switchRowY          = KOSPWINDOW_ON_OFF_SWITCH_START_Y +
@@ -216,11 +218,13 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
             KospWindow_SetSliderRatio(p_kosp_window,
                                       "switchesByDrfName",
                                       p_drfName->valuestring,
-                                      "saved_value",
-                                      !(p_savedValue->valueint));
+                                      "savedRatio",
+                                      !(p_savedRatio->valueint));
           }
         }
       }
+
+      KospWindow_SetDrfsInt(p_switches, p_kosp_window->switchesRatioDrfsData);
     }
   }
 

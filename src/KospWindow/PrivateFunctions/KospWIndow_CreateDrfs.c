@@ -47,3 +47,21 @@ void KospWindow_CreateDrfs(cJSON *pp_groupArrayPtr,
                 p_drfName->valuestring);
   }
 }
+
+void KospWindow_CreateDrfsInt(cJSON   *pp_groupArrayPtr,
+                              dr_t    *destDrArray,
+                              int32_t *p_intArray) {
+  int32_t numDrfs = cJSON_GetArraySize(pp_groupArrayPtr);
+
+  for (int32_t idx = 0; idx < numDrfs; idx++) {
+    cJSON *p_thisDrf = cJSON_GetArrayItem(pp_groupArrayPtr, idx);
+    VERIFY(p_thisDrf != NULL);
+    cJSON *p_drfName = cJSON_GetObjectItem(p_thisDrf, "drfName");
+    VERIFY(p_drfName != NULL);
+    dr_create_i(&(destDrArray[idx]),
+                &(p_intArray[idx]),
+                B_TRUE,
+                "%s",
+                p_drfName->valuestring);
+  }
+}

@@ -28,9 +28,15 @@
 
 int32_t KospWindow_Deinit(KospWindow *p_kosp_window_inout) {
 
-  cJSON *p_slidersJson = cJSON_GetObjectItem(p_kosp_window_inout->p_configJson,
-                                             "slidersByDrfName");
-  KospWindow_DeleteDrfs(p_slidersJson, p_kosp_window_inout->volumeRatioDrfs);
+  cJSON *p_sliders = cJSON_GetObjectItem(p_kosp_window_inout->p_configJson,
+                                         "slidersByDrfName");
+  KospWindow_DeleteDrfs(p_sliders, p_kosp_window_inout->volumeRatioDrfs);
+  cJSON *p_mixers = cJSON_GetObjectItem(p_kosp_window_inout->p_configJson,
+                                        "mixerSlidersByDrfName");
+  KospWindow_DeleteDrfs(p_mixers, p_kosp_window_inout->mixerRatioDrfs);
+  cJSON *p_switches = cJSON_GetObjectItem(p_kosp_window_inout->p_configJson,
+                                          "switchesByDrfName");
+  KospWindow_DeleteDrfs(p_switches, p_kosp_window_inout->switchesRatioDrfs);
 
   if (p_kosp_window_inout->p_mtCairoRender != NULL) {
     mt_cairo_render_fini(p_kosp_window_inout->p_mtCairoRender);

@@ -459,8 +459,9 @@ void KospWindow_RenderCallback(cairo_t *cr,
     /* Scroll bar */
     double scrollBarRatio =
         (p_kosp_window->page1.sliderScrollSmooth) /
-        ((double)(numDrfs) + (double)KOSPWINDOW_SLIDER_BOTTOM_BUFFER_SPACE -
-         (double)KOSPWINDOW_SLIDER_MAX_NUM_DISPLAYABLE_SLIDERS);
+        fmax((double)(numDrfs) + (double)KOSPWINDOW_SLIDER_BOTTOM_BUFFER_SPACE -
+                 (double)KOSPWINDOW_SLIDER_MAX_NUM_DISPLAYABLE_SLIDERS,
+             1.0);
 
     cairo_utils_rounded_rect(cr,
                              KOSPWINDOW_SLIDER_SCROLL_BAR_X,
@@ -683,10 +684,10 @@ void KospWindow_RenderCallback(cairo_t *cr,
 
       cJSON *p_thisDrf = cJSON_GetArrayItem(p_mixerSliders, barIdx);
       VERIFY(p_thisDrf != NULL);
-      cJSON *p_savedValue = cJSON_GetObjectItem(p_thisDrf, "savedValue");
-      VERIFY(p_savedValue != NULL);
+      cJSON *p_savedRatio = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
+      VERIFY(p_savedRatio != NULL);
       int32_t sliderMiddleY =
-          fx_lin_multi(p_savedValue->valuedouble, numberYPosAndNumber, B_TRUE);
+          fx_lin_multi(p_savedRatio->valuedouble, numberYPosAndNumber, B_TRUE);
       cairo_utils_rounded_rect(
           cr,
           middleOfTheMixerBar - KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH / 2,
@@ -754,7 +755,7 @@ void KospWindow_RenderCallback(cairo_t *cr,
       cairo_set_font_size(cr, 21.0);
       p_thisDrf            = cJSON_GetArrayItem(p_switches, switchIdx);
       cJSON *p_displayName = cJSON_GetObjectItem(p_thisDrf, "displayName");
-      cJSON *p_savedValue  = cJSON_GetObjectItem(p_thisDrf, "saved_value");
+      cJSON *p_savedRatio  = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
 
       switchRowY           = KOSPWINDOW_ON_OFF_SWITCH_START_Y +
                    KOSPWINDOW_ON_OFF_SWITCH_Y_SPACING *
@@ -785,7 +786,7 @@ void KospWindow_RenderCallback(cairo_t *cr,
       cairo_stroke(cr);
 
       /* On off state */
-      if (p_savedValue->valueint == B_TRUE) {
+      if (p_savedRatio->valueint == B_TRUE) {
         cairo_set_source_rgb(cr, CAIRO_COLOUR_ON_OFF_SWITCH_GREEN);
         cairo_utils_rounded_rect(cr,
                                  KOSPWINDOW_ON_OFF_SWITCH_START_X +
@@ -833,9 +834,10 @@ void KospWindow_RenderCallback(cairo_t *cr,
     /* Scroll bar */
     double scrollBarRatio =
         (p_kosp_window->page3.sliderScrollSmooth) /
-        ((double)(numDrfs) +
-         (double)KOSPWINDOW_ON_OFF_SWITCH_BOTTOM_BUFFER_SPACE -
-         (double)KOSPWINDOW_ON_OFF_SWITCH_MAX_NUM_DISPLAYABLE_SWITCHS);
+        fmax((double)(numDrfs) +
+                 (double)KOSPWINDOW_ON_OFF_SWITCH_BOTTOM_BUFFER_SPACE -
+                 (double)KOSPWINDOW_ON_OFF_SWITCH_MAX_NUM_DISPLAYABLE_SWITCHS,
+             0);
 
     cairo_utils_rounded_rect(cr,
                              KOSPWINDOW_SLIDER_SCROLL_BAR_X,
