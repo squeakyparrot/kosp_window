@@ -278,8 +278,14 @@ void KospWindow_RenderCallback(cairo_t *cr,
       cJSON *p_max         = cJSON_GetObjectItem(p_thisDrf, "max");
       cJSON *p_savedRatio  = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
       cJSON *p_displayName = cJSON_GetObjectItem(p_thisDrf, "displayName");
+      cJSON *p_displayMultiplier =
+          cJSON_GetObjectItem(p_thisDrf, "displayMultiplier");
 
-      double barRatio      = p_savedRatio->valuedouble;
+      double barRatio = fx_lin(p_savedRatio->valuedouble,
+                               p_min->valuedouble,
+                               0.0,
+                               p_max->valuedouble,
+                               1.0);
       double barRatioIncreaseX =
           (KOSPWINDOW_SLIDER_END_X - KOSPWINDOW_SLIDER_START_X) * barRatio;
       double barKnobX = barRatioIncreaseX + KOSPWINDOW_SLIDER_START_X;
@@ -287,8 +293,8 @@ void KospWindow_RenderCallback(cairo_t *cr,
       snprintf(ratioString,
                10,
                "%d",
-               (int32_t)(barRatio * (p_max->valuedouble - p_min->valuedouble) +
-                         p_min->valuedouble));
+               (int32_t)(barRatio * (p_max->valuedouble - p_min->valuedouble) *
+                         (p_displayMultiplier->valuedouble)));
 
       /* Description Text */
       cairo_set_source_rgb(cr, CAIRO_COLOUR_XPLANE_WHITE);

@@ -23,12 +23,14 @@
 #include "XPLMDisplay.h"
 
 /* Acfutils includes */
+#include "acfutils/dr.h"
 #include "acfutils/mt_cairo_render.h"
 
 /* cJSON Includes */
 #include "cJSON.h"
 
 /* Custom Includes */
+#include "KospWindow/ConstantDefs/KospWindow_ConstantDefs.h"
 #include "KospWindow/DataStructDefs/KospWindow_Page1Struct.h"
 #include "KospWindow/DataStructDefs/KospWindow_Page2Struct.h"
 #include "KospWindow/DataStructDefs/KospWindow_Page3Struct.h"
@@ -213,6 +215,25 @@ typedef struct KospWindow_Struct {
    * @sense       N/A
    */
   char changeLogPath[256];
+
+  /**
+   * @details     An array of all the datarefs that could possibly be created
+   *              by the volume sliders on page 1.
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  dr_t volumeRatioDrfs[KOSPWINDOW_MAX_NUM_VOLUME_DRFS];
+
+  /**
+   * @details     An array of all the stored values of the above
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  float volumeRatioDrfsData[KOSPWINDOW_MAX_NUM_VOLUME_DRFS];
 
   /**
    * @details     A struct containing properties that only belongs to page 1.

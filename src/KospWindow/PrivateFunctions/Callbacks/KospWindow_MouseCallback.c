@@ -70,13 +70,15 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
           p_kosp_window->page1.attachedSlider == sliderIdx) {
         cJSON *p_thisDrf  = cJSON_GetArrayItem(p_sliders, sliderIdx);
         cJSON *p_drfName  = cJSON_GetObjectItem(p_thisDrf, "drfName");
+        cJSON *p_min      = cJSON_GetObjectItem(p_thisDrf, "min");
+        cJSON *p_max      = cJSON_GetObjectItem(p_thisDrf, "max");
         double valueToSet = clamp(fx_lin(x,
                                          KOSPWINDOW_SLIDER_START_X,
-                                         0.0,
+                                         p_min->valuedouble,
                                          KOSPWINDOW_SLIDER_END_X,
-                                         1.0),
-                                  0.0,
-                                  1.0);
+                                         p_max->valuedouble),
+                                  p_min->valuedouble,
+                                  p_max->valuedouble);
 
         KospWindow_SetSliderRatio(p_kosp_window,
                                   "slidersByDrfName",
@@ -85,6 +87,8 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
                                   valueToSet);
       }
     }
+
+    KospWindow_SetDrfs(p_sliders, p_kosp_window->volumeRatioDrfsData);
 
     /* Register on down click once */
     if (inMouse == xplm_MouseDown) {

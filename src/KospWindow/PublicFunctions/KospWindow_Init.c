@@ -133,5 +133,13 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout) {
   KospWindow_LoadJson(&(p_kosp_window_inout->p_changeLogJson),
                       p_kosp_window_inout->changeLogPath);
 
+  cJSON *p_sliders = cJSON_GetObjectItem(p_kosp_window_inout->p_configJson,
+                                         "slidersByDrfName");
+  KospWindow_CreateDrfs(p_sliders,
+                        p_kosp_window_inout->volumeRatioDrfs,
+                        p_kosp_window_inout->volumeRatioDrfsData);
+
+  KospWindow_SetDrfs(p_sliders, p_kosp_window_inout->volumeRatioDrfsData);
+
   return B_TRUE;
 }

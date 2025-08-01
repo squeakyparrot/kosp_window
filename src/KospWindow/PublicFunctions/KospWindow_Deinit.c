@@ -28,6 +28,10 @@
 
 int32_t KospWindow_Deinit(KospWindow *p_kosp_window_inout) {
 
+  cJSON *p_slidersJson = cJSON_GetObjectItem(p_kosp_window_inout->p_configJson,
+                                             "slidersByDrfName");
+  KospWindow_DeleteDrfs(p_slidersJson, p_kosp_window_inout->volumeRatioDrfs);
+
   if (p_kosp_window_inout->p_mtCairoRender != NULL) {
     mt_cairo_render_fini(p_kosp_window_inout->p_mtCairoRender);
   }
