@@ -23,6 +23,7 @@
 #include "acfutils/math.h"
 
 /* Custom Includes */
+#include "FsAccess/ComplexDataStructs/RefCon/DataStructDefs/RefCon_Struct.h"
 #include "KospWindow/ConstantDefs/KospWindow_ConstantDefs.h"
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
@@ -33,14 +34,17 @@ int KospWindow_ScrollWheelCallback(XPLMWindowID inWindowID,
                                    int          wheel,
                                    int          clicks,
                                    void        *inRefcon) {
+
+  /* Extract ptr to KospWindow */
+  VERIFY(inRefcon != NULL);
+  KospWindow *p_kosp_window = ((RefCon *)inRefcon)->p_kosp_window;
+  VERIFY(p_kosp_window != NULL);
+
   /* Get the x, y of the mouse action in Cairo (window) frame */
   int32_t left, top, right, bottom, window_w, window_h;
   XPLMGetWindowGeometry(inWindowID, &left, &top, &right, &bottom);
   x = x - left;
   y = top - y;
-
-  VERIFY(inRefcon != NULL);
-  KospWindow *p_kosp_window = inRefcon;
 
   if (y > KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y && y < KOSPWINDOW_SLIDER_END_Y) {
     if (p_kosp_window->pageNum == KOSPWINDOW_PAGE_1) {

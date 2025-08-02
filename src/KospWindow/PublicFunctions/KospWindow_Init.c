@@ -23,13 +23,14 @@
 #include "acfutils/log.h"
 
 /* Custom Includes */
+#include "FsAccess/ComplexDataStructs/RefCon/DataStructDefs/RefCon_Struct.h"
 #include "FsAccess/InternalData/FsAccess_InternalData.h"
 #include "KospWindow/ConstantDefs/KospWindow_ConstantDefs.h"
 #include "KospWindow/InternalData/KospWindow_InternalData.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 #include "KospWindow/PublicFunctions/KospWindow_PublicFunctions.h"
 
-int32_t KospWindow_Init(KospWindow *p_kosp_window_inout) {
+int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon) {
 
   VERIFY(p_kosp_window_inout != NULL);
 
@@ -43,7 +44,7 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout) {
       .drawWindowFunc           = KospWindow_DrawCallback,
       .handleMouseClickFunc     = KospWindow_MouseCallback,
       .handleMouseWheelFunc     = KospWindow_ScrollWheelCallback,
-      .refcon                   = &kosp_window,
+      .refcon                   = refcon,
       .decorateAsFloatingWindow = xplm_WindowDecorationRoundRectangle,
       .layer                    = xplm_WindowLayerFloatingWindows,
 

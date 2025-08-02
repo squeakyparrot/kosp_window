@@ -26,6 +26,7 @@
 #include "acfutils/mt_cairo_render.h"
 
 /* Custom Includes */
+#include "FsAccess/ComplexDataStructs/RefCon/DataStructDefs/RefCon_Struct.h"
 #include "KospWindow/ConstantDefs/KospWindow_ConstantDefs.h"
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
@@ -34,9 +35,10 @@ void KospWindow_RenderCallback(cairo_t *cr,
                                unsigned window_w,
                                unsigned window_h,
                                void    *userinfo) {
-  VERIFY(cr != NULL);
+  /* Extract ptr to KospWindow. Userinfo is the same as refcon */
   VERIFY(userinfo != NULL);
-  KospWindow *p_kosp_window = userinfo;
+  KospWindow *p_kosp_window = ((RefCon *)userinfo)->p_kosp_window;
+  VERIFY(p_kosp_window != NULL);
 
   cairo_text_extents_t extents;
   cairo_pattern_t     *pat;

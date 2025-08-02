@@ -28,9 +28,10 @@ extern "C" {
 /* Acfutils includes */
 
 /* Custom Includes */
+#include "FsAccess/ComplexDataStructs/RefCon/DataStructDefs/RefCon_Struct.h"
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 
-extern int32_t KospWindow_Init(KospWindow *p_kosp_window_inout);
+extern int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon);
 
 extern int32_t KospWindow_Deinit(KospWindow *p_kosp_window_inout);
 

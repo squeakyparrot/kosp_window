@@ -23,6 +23,7 @@
 #include "acfutils/math.h"
 
 /* Custom Includes */
+#include "FsAccess/ComplexDataStructs/RefCon/DataStructDefs/RefCon_Struct.h"
 #include "KospWindow/ConstantDefs/KospWindow_ConstantDefs.h"
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
@@ -33,8 +34,10 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
                              XPLMMouseStatus inMouse,
                              void           *inRefcon) {
 
+  /* Extract ptr to KospWindow */
   VERIFY(inRefcon != NULL);
-  KospWindow *p_kosp_window = inRefcon;
+  KospWindow *p_kosp_window = ((RefCon *)inRefcon)->p_kosp_window;
+  VERIFY(p_kosp_window != NULL);
 
   /* Get the x, y of the mouse action in Cairo (window) frame */
   int32_t left, top, right, bottom, window_w, window_h;

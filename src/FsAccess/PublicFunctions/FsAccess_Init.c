@@ -57,7 +57,7 @@ int32_t FsAccess_Init() {
   VERIFY(Datarefs_init(&datarefs));
 
   /* Init modules one by one */
-  VERIFY(KospWindow_Init(&kosp_window));
+  VERIFY(KospWindow_Init(&kosp_window, &refcon));
 
   return B_TRUE;
 }
