@@ -33,7 +33,6 @@
 void KospWindow_WriteConfJson(KospWindow *p_kosp_window_in,
                               char        config_path[256]) {
   VERIFY(config_path != NULL);
-  logMsg("Writing Config Json to %s", config_path);
 
   /* File handle */
   FILE *fp = fopen(config_path, "wb");
@@ -41,6 +40,7 @@ void KospWindow_WriteConfJson(KospWindow *p_kosp_window_in,
 
   /* cJSON object to string */
   char *json_string = cJSON_Print(p_kosp_window_in->p_configJson);
+  VERIFY(json_string != NULL);
 
   /* Write string to file */
   fwrite(json_string, 1, strlen(json_string), fp);

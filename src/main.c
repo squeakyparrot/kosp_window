@@ -18,6 +18,7 @@
 
 /* XPLM Includes */
 #include "XPLMDefs.h"
+#include "XPLMPlugin.h"
 #include "XPLMProcessing.h"
 
 /* Acfutils includes */
@@ -57,6 +58,11 @@ PLUGIN_API int XPluginStart(char *outName, char *outSig, char *outDesc) {
 #ifdef DEBUG
   /* Init the crash handler */
   except_init();
+#endif
+
+#if 0 /* Note: This needs further investigation into what it actually does */
+  /* Otherwise funny path separators will appear */
+  XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
 #endif
 
   /* Init the acfutils logger. */

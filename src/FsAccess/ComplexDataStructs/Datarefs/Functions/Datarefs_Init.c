@@ -26,14 +26,33 @@
 
 int32_t Datarefs_init(Datarefs *p_datarefs_inout) {
 
-  /**
-   * @brief Datarefs under the flightmodel/controls catagory.
-   *
-   */
-  dr_find(&(p_datarefs_inout->controls.pitch_ratio),
-          "sim/flightmodel2/controls/pitch_ratio");
-  dr_find(&(p_datarefs_inout->controls.roll_ratio),
-          "sim/flightmodel2/controls/roll_ratio");
+  /* ######################################################
+   * sim/flightmodel2
+   * ###################################################### */
+  fdr_find(&(p_datarefs_inout->sim.flightmodel2.controls.pitch_ratio),
+           "sim/flightmodel2/controls/pitch_ratio");
+  fdr_find(&(p_datarefs_inout->sim.flightmodel2.controls.roll_ratio),
+           "sim/flightmodel2/controls/roll_ratio");
+  fdr_find(&(p_datarefs_inout->sim.flightmodel2.gear.on_ground),
+           "sim/flightmodel2/gear/on_ground");
+
+  /* ######################################################
+   * sim/flightmodel
+   * ###################################################### */
+  fdr_find(&(p_datarefs_inout->sim.flightmodel.position.indicated_airspeed),
+           "sim/flightmodel/position/indicated_airspeed");
+
+  /* ######################################################
+   * sim/time
+   * ###################################################### */
+  fdr_find(&(p_datarefs_inout->sim.time.total_running_time_sec),
+           "sim/time/total_running_time_sec");
+
+  /* ######################################################
+   * sim/cockpit2
+   * ###################################################### */
+  fdr_find(&(p_datarefs_inout->sim.cockpit2.controls.flap_handle_deploy_ratio),
+           "sim/cockpit2/controls/flap_handle_deploy_ratio");
 
   return B_TRUE;
 }

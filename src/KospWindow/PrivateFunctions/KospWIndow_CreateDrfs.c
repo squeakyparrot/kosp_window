@@ -30,13 +30,13 @@
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
-void KospWindow_CreateDrfs(cJSON *pp_groupArrayPtr,
+void KospWindow_CreateDrfs(cJSON *p_groupArrayPtr,
                            dr_t  *destDrArray,
                            float *p_floatArray) {
-  int32_t numDrfs = cJSON_GetArraySize(pp_groupArrayPtr);
+  int32_t numDrfs = cJSON_GetArraySize(p_groupArrayPtr);
 
   for (int32_t idx = 0; idx < numDrfs; idx++) {
-    cJSON *p_thisDrf = cJSON_GetArrayItem(pp_groupArrayPtr, idx);
+    cJSON *p_thisDrf = cJSON_GetArrayItem(p_groupArrayPtr, idx);
     VERIFY(p_thisDrf != NULL);
     cJSON *p_drfName = cJSON_GetObjectItem(p_thisDrf, "drfName");
     VERIFY(p_drfName != NULL);
@@ -48,13 +48,13 @@ void KospWindow_CreateDrfs(cJSON *pp_groupArrayPtr,
   }
 }
 
-void KospWindow_CreateDrfsInt(cJSON   *pp_groupArrayPtr,
+void KospWindow_CreateDrfsInt(cJSON   *p_groupArrayPtr,
                               dr_t    *destDrArray,
                               int32_t *p_intArray) {
-  int32_t numDrfs = cJSON_GetArraySize(pp_groupArrayPtr);
+  int32_t numDrfs = cJSON_GetArraySize(p_groupArrayPtr);
 
   for (int32_t idx = 0; idx < numDrfs; idx++) {
-    cJSON *p_thisDrf = cJSON_GetArrayItem(pp_groupArrayPtr, idx);
+    cJSON *p_thisDrf = cJSON_GetArrayItem(p_groupArrayPtr, idx);
     VERIFY(p_thisDrf != NULL);
     cJSON *p_drfName = cJSON_GetObjectItem(p_thisDrf, "drfName");
     VERIFY(p_drfName != NULL);

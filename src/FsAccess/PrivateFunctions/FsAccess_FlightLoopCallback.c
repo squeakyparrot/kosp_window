@@ -24,6 +24,7 @@
 #include "FsAccess/InternalData/FsAccess_InternalData.h"
 #include "FsAccess/PrivateFunctions/FsAccess_PrivateFunctions.h"
 #include "KospWindow/PublicFunctions/KospWindow_PublicFunctions.h"
+#include "SoundLogic/PublicFunctions/SoundLogic_PublicFunctions.h"
 
 float FsAccess_FlightLoopCallback(float inElapsedSinceLastCall,
                                   float inElapsedTimeSinceLastFlightLoop,
@@ -36,6 +37,11 @@ float FsAccess_FlightLoopCallback(float inElapsedSinceLastCall,
          dr_getf(&(datarefs.controls.pitch_ratio)));
 #endif
   KospWindow_FlightLoopCallback(inElapsedSinceLastCall,
+                                inElapsedTimeSinceLastFlightLoop,
+                                inCounter,
+                                inRefcon);
+
+  SoundLogic_FlightLoopCallback(inElapsedSinceLastCall,
                                 inElapsedTimeSinceLastFlightLoop,
                                 inCounter,
                                 inRefcon);

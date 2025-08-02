@@ -22,6 +22,7 @@
 #include "acfutils/log.h"
 
 /* Custom Includes */
+#include "FsAccess/ComplexDataStructs/RefCon/DataStructDefs/RefCon_Struct.h"
 #include "KospWindow/ConstantDefs/KospWindow_ConstantDefs.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 #include "KospWindow/PublicFunctions/KospWindow_PublicFunctions.h"
@@ -31,9 +32,10 @@ int32_t KospWindow_FlightLoopCallback(float inElapsedSinceLastCall,
                                       float inElapsedTimeSinceLastFlightLoop,
                                       int   inCounter,
                                       void *inRefcon) {
-
+  /* Extract ptr to KospWindow */
   VERIFY(inRefcon != NULL);
-  KospWindow *p_kosp_window = inRefcon;
+  KospWindow *p_kosp_window = ((RefCon *)inRefcon)->p_kosp_window;
+  VERIFY(p_kosp_window != NULL);
 
   /* Update the smooth animation of the scroll. */
   p_kosp_window->page1.sliderScrollSmooth =

@@ -15,10 +15,6 @@
 extern "C" {
 #endif
 
-extern int32_t FsAccess_Init();
-
-extern int32_t FsAccess_Deinit();
-
 extern int32_t FsAccess_GetPluginRootDir(char buffer[256]);
 
 extern float FsAccess_FlightLoopCallback(float inElapsedSinceLastCall,

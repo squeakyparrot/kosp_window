@@ -28,30 +28,36 @@
 #include "FsAccess/PublicFunctions/FsAccess_PublicFunctions.h"
 #include "KospWindow/InternalData/KospWindow_InternalData.h"
 #include "KospWindow/PublicFunctions/KospWindow_PublicFunctions.h"
+#include "SoundLogic/InternalData/SoundLogic_InternalData.h"
+#include "SoundLogic/PublicFunctions/SoundLogic_PublicFunctions.h"
 
 int32_t FsAccess_Init() {
 
-  FsAccess_GetPluginRootDir(fs_access.pluginFilePath);
+  VERIFY(FsAccess_GetPluginRootDir(fs_access.pluginFilePath));
 
   /* Init Freetype */
   VERIFY0(FT_Init_FreeType(&(fs_access.ftLibrary)));
+
+  /* Construct Refcon */
+  refcon.p_kosp_window = &kosp_window;
+  refcon.p_sound_logic = &sound_logic;
 
   /* Init Flight Loop */
   fs_access.flightLoopParams =
       (XPLMCreateFlightLoop_t){.structSize = sizeof(XPLMCreateFlightLoop_t),
                                .phase = xplm_FlightLoop_Phase_AfterFlightModel,
                                .callbackFunc = FsAccess_FlightLoopCallback,
-                               .refcon       = &kosp_window};
+                               .refcon       = &refcon};
   fs_access.flightLoopId = XPLMCreateFlightLoop(&(fs_access.flightLoopParams));
 
   /* By default the flight loop is unscheduled. Schedule it. */
   XPLMScheduleFlightLoop(fs_access.flightLoopId, -1.0f, 0);
 
   /* Populate the datarefs struct by finding them. */
-  ASSERT(Datarefs_init(&datarefs));
+  VERIFY(Datarefs_init(&datarefs));
 
   /* Init modules one by one */
-  KospWindow_Init(&kosp_window);
+  VERIFY(KospWindow_Init(&kosp_window));
 
   return B_TRUE;
 }

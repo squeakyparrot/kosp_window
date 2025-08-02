@@ -32,23 +32,67 @@ extern "C" {
 
 typedef struct Datarefs_Struct {
 
-  /**
-   * @brief Datarefs under the flightmodel/controls catagory.
-   *
-   */
   struct {
-    /**
-     * @brief sim/flightmodel2/controls/pitch_ratio
-     *
-     */
-    dr_t pitch_ratio;
 
-    /**
-     * @brief sim/flightmodel2/controls/roll_ratio
-     *
-     */
-    dr_t roll_ratio;
-  } controls;
+    /* ######################################################
+     * sim/flightmodel2
+     * ###################################################### */
+
+    struct {
+
+      /* sim/flightmodel2/controls/... */
+      struct {
+        /* sim/flightmodel2/controls/pitch_ratio */
+        dr_t pitch_ratio;
+
+        /* sim/flightmodel2/controls/roll_ratio */
+        dr_t roll_ratio;
+      } controls;
+
+      /* sim/flightmodel2/gear/... */
+      struct {
+        /* int[10] sim/flightmodel2/gear/on_ground */
+        dr_t on_ground;
+      } gear;
+
+    } flightmodel2;
+
+    /* ######################################################
+     * sim/flightmodel
+     * ###################################################### */
+    struct {
+
+      /* sim/flightmodel/position/... */
+      struct {
+        /*float sim/flightmodel/position/indicated_airspeed */
+        dr_t indicated_airspeed;
+      } position;
+
+    } flightmodel;
+
+    /* ######################################################
+     * sim/time
+     * ###################################################### */
+    struct {
+
+      /* float sim/time/total_running_time_sec */
+      dr_t total_running_time_sec;
+
+    } time;
+
+    /* ######################################################
+     * sim/cockpit2
+     * ###################################################### */
+    struct {
+
+      /* sim/cockpit2/controls/... */
+      struct {
+        /* float sim/cockpit2/controls/flap_handle_deploy_ratio */
+        dr_t flap_handle_deploy_ratio;
+      } controls;
+
+    } cockpit2;
+  } sim;
 
 } Datarefs;
 

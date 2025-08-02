@@ -133,7 +133,7 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout) {
   KospWindow_LoadJson(&(p_kosp_window_inout->p_changeLogJson),
                       p_kosp_window_inout->changeLogPath);
 
-  /* Set Page 1 drfs */
+  /* Set Page 1 drfs on Startup */
   cJSON *p_sliders = cJSON_GetObjectItem(p_kosp_window_inout->p_configJson,
                                          "slidersByDrfName");
   KospWindow_CreateDrfs(p_sliders,
@@ -141,7 +141,7 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout) {
                         p_kosp_window_inout->volumeRatioDrfsData);
   KospWindow_SetDrfs(p_sliders, p_kosp_window_inout->volumeRatioDrfsData);
 
-  /* Set Page 2 drfs */
+  /* Set Page 2 drfs on Startup */
   cJSON *p_mixers = cJSON_GetObjectItem(p_kosp_window_inout->p_configJson,
                                         "mixerSlidersByDrfName");
   KospWindow_CreateDrfs(p_mixers,
@@ -149,7 +149,7 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout) {
                         p_kosp_window_inout->mixerRatioDrfsData);
   KospWindow_SetDrfs(p_mixers, p_kosp_window_inout->mixerRatioDrfsData);
 
-  /* Set Page 3 drfs */
+  /* Set Page 3 drfs on Startup */
   cJSON *p_switches = cJSON_GetObjectItem(p_kosp_window_inout->p_configJson,
                                           "switchesByDrfName");
   KospWindow_CreateDrfsInt(p_switches,
