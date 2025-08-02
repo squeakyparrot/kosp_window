@@ -23,6 +23,7 @@
 #include "acfutils/log.h"
 
 /* Custom Includes */
+#include "FsAccess/ComplexDataStructs/Datarefs/DataStructDefs/Datarefs_Struct.h"
 #include "FsAccess/ComplexDataStructs/RefCon/DataStructDefs/RefCon_Struct.h"
 #include "SoundLogic/ConstantDefs/SoundLogic_ConstantDefs.h"
 #include "SoundLogic/PrivateFunctions/SoundLogic_PrivateFunctions.h"
@@ -36,8 +37,11 @@ int32_t SoundLogic_FlightLoopCallback(float inElapsedSinceLastCall,
   VERIFY(inRefcon != NULL);
   SoundLogic *p_sound_logic = ((RefCon *)inRefcon)->p_sound_logic;
   VERIFY(p_sound_logic != NULL);
+  Datarefs *p_datarefs = ((RefCon *)inRefcon)->p_datarefs;
+  VERIFY(p_datarefs != NULL);
 
-  logMsg("SoundLogic_FlightLoopCallback is alive!");
+  logMsg("Dataref is %f",
+         dr_getf(&(p_datarefs->sim.flightmodel2.controls.pitch_ratio)));
 
   return B_TRUE;
 }

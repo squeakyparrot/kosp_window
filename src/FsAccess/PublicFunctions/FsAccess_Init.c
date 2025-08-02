@@ -41,6 +41,7 @@ int32_t FsAccess_Init() {
   /* Construct Refcon */
   refcon.p_kosp_window = &kosp_window;
   refcon.p_sound_logic = &sound_logic;
+  refcon.p_datarefs    = &datarefs;
 
   /* Init Flight Loop */
   fs_access.flightLoopParams =

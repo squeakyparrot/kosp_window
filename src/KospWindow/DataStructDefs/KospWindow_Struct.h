@@ -224,15 +224,7 @@ typedef struct KospWindow_Struct {
    * @frame       N/A
    * @sense       N/A
    */
-  dr_t volumeRatioDrfs[KOSPWINDOW_MAX_NUM_VOLUME_DRFS];
-
-  /**
-   * @details     An array of all the stored values of the above
-   *
-   * @unit        N/A
-   * @frame       N/A
-   * @sense       N/A
-   */
+  dr_t  volumeRatioDrfs[KOSPWINDOW_MAX_NUM_VOLUME_DRFS];
   float volumeRatioDrfsData[KOSPWINDOW_MAX_NUM_VOLUME_DRFS];
 
   /**
@@ -243,15 +235,7 @@ typedef struct KospWindow_Struct {
    * @frame       N/A
    * @sense       N/A
    */
-  dr_t mixerRatioDrfs[KOSPWINDOW_MAX_NUM_MIXER_DRFS];
-
-  /**
-   * @details     An array of all the stored values of the above
-   *
-   * @unit        N/A
-   * @frame       N/A
-   * @sense       N/A
-   */
+  dr_t  mixerRatioDrfs[KOSPWINDOW_MAX_NUM_MIXER_DRFS];
   float mixerRatioDrfsData[KOSPWINDOW_MAX_NUM_MIXER_DRFS];
 
   /**
@@ -262,15 +246,7 @@ typedef struct KospWindow_Struct {
    * @frame       N/A
    * @sense       N/A
    */
-  dr_t switchesRatioDrfs[KOSPWINDOW_MAX_NUM_SWITCHES_DRFS];
-
-  /**
-   * @details     An array of all the stored values of the above
-   *
-   * @unit        N/A
-   * @frame       N/A
-   * @sense       N/A
-   */
+  dr_t    switchesRatioDrfs[KOSPWINDOW_MAX_NUM_SWITCHES_DRFS];
   int32_t switchesRatioDrfsData[KOSPWINDOW_MAX_NUM_SWITCHES_DRFS];
 
   /**
