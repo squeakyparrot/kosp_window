@@ -22,6 +22,10 @@
 extern "C" {
 #endif
 
+extern int32_t SoundLogic_Init(SoundLogic *p_sound_logic, RefCon *refcon);
+
+extern int32_t SoundLogic_Deinit(SoundLogic *p_sound_logic);
+
 extern int32_t
 SoundLogic_FlightLoopCallback(float inElapsedSinceLastCall,
                               float inElapsedTimeSinceLastFlightLoop,

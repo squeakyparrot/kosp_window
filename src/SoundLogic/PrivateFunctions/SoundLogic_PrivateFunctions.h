@@ -22,7 +22,11 @@
 extern "C" {
 #endif
 
-extern int32_t SoundLogic_UpdateAirTimes();
+#include "FsAccess/ComplexDataStructs/Datarefs/DataStructDefs/Datarefs_Struct.h"
+
+extern int32_t SoundLogic_UpdateAirTimes(Datarefs *p_datarefs);
+
+extern int32_t SoundLogic_UpdateFlapStress(Datarefs *p_datarefs);
 
 #ifdef __cplusplus
 }

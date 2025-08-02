@@ -21,28 +21,24 @@
 #include "acfutils/assert.h"
 #include "acfutils/dr.h"
 #include "acfutils/log.h"
+#include "acfutils/time.h"
 
 /* Custom Includes */
 #include "FsAccess/ComplexDataStructs/Datarefs/DataStructDefs/Datarefs_Struct.h"
 #include "FsAccess/ComplexDataStructs/RefCon/DataStructDefs/RefCon_Struct.h"
 #include "SoundLogic/ConstantDefs/SoundLogic_ConstantDefs.h"
+#include "SoundLogic/InternalData/SoundLogic_InternalData.h"
 #include "SoundLogic/PrivateFunctions/SoundLogic_PrivateFunctions.h"
 #include "SoundLogic/PublicFunctions/SoundLogic_PublicFunctions.h"
 
-int32_t SoundLogic_FlightLoopCallback(float inElapsedSinceLastCall,
-                                      float inElapsedTimeSinceLastFlightLoop,
-                                      int   inCounter,
-                                      void *inRefcon) {
-  /* Extract ptr to SoundLogic */
-  VERIFY(inRefcon != NULL);
-  SoundLogic *p_sound_logic = ((RefCon *)inRefcon)->p_sound_logic;
-  VERIFY(p_sound_logic != NULL);
-  Datarefs *p_datarefs = ((RefCon *)inRefcon)->p_datarefs;
-  VERIFY(p_datarefs != NULL);
+int32_t SoundLogic_UpdateFlapStress(Datarefs *p_datarefs) {
 
-  /* Do needed stuff in this module */
-  SoundLogic_UpdateAirTimes(p_datarefs);
-  SoundLogic_UpdateFlapStress(p_datarefs);
+  float airspeedDrf =
+      dr_getf(&(p_datarefs->sim.flightmodel.position.indicated_airspeed));
 
+  float laminarFlapDrf =
+      dr_getf(&(p_datarefs->sim.cockpit2.controls.flap_handle_deploy_ratio));
+
+  sound_logic.d_flapStressFactorData = airspeedDrf * laminarFlapDrf;
   return B_TRUE;
 }

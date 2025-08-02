@@ -26,11 +26,14 @@
 #include "FsAccess/PublicFunctions/FsAccess_PublicFunctions.h"
 #include "KospWindow/InternalData/KospWindow_InternalData.h"
 #include "KospWindow/PublicFunctions/KospWindow_PublicFunctions.h"
+#include "SoundLogic/InternalData/SoundLogic_InternalData.h"
+#include "SoundLogic/PublicFunctions/SoundLogic_PublicFunctions.h"
 
 int32_t FsAccess_Deinit() {
 
-  /* Deinit Window */
+  /* Deinit Modules one by one */
   KospWindow_Deinit(&kosp_window);
+  SoundLogic_Deinit(&sound_logic);
 
   FT_Done_FreeType(fs_access.ftLibrary);
 

@@ -59,6 +59,7 @@ int32_t FsAccess_Init() {
 
   /* Init modules one by one */
   VERIFY(KospWindow_Init(&kosp_window, &refcon));
+  VERIFY(SoundLogic_Init(&sound_logic, &refcon));
 
   return B_TRUE;
 }
