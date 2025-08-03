@@ -54,10 +54,8 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID resvd) {
  */
 PLUGIN_API int XPluginStart(char *outName, char *outSig, char *outDesc) {
 
-#if 0 /* Note: This needs further investigation into what it actually does */
   /* Otherwise funny path separators will appear */
   XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
-#endif
 
   /* Init the acfutils logger. */
   log_init(log_xplm_cb, "kosp");

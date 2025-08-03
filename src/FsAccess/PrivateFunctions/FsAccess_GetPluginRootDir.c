@@ -19,6 +19,7 @@
 #include "XPLMPlugin.h"
 
 /* Acfutils includes */
+#include "acfutils/helpers.h"
 #include "acfutils/log.h"
 #include "acfutils/sysmacros.h"
 
@@ -28,6 +29,8 @@
 int32_t FsAccess_GetPluginRootDir(char buffer[256]) {
   /* Get the path to the .xpl */
   XPLMGetPluginInfo(XPLMGetMyID(), NULL, buffer, NULL, NULL);
+
+  fix_pathsep(buffer);
 
   /* Trim the trailing file separator */
   char *p = strrchr(buffer, DIRSEP);
