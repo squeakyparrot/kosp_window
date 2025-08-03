@@ -35,10 +35,8 @@ int32_t FsAccess_Deinit() {
   VERIFY(KospWindow_Deinit(&kosp_window));
   VERIFY(SoundLogic_Deinit(&sound_logic));
 
+  logMsg("FT_Done_FreeType()");
   VERIFY0(FT_Done_FreeType(fs_access.ftLibrary));
-
-  /* Deinit Logging */
-  log_fini();
 
   return B_TRUE;
 }

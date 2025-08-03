@@ -48,7 +48,6 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon) {
       .refcon                   = refcon,
       .decorateAsFloatingWindow = xplm_WindowDecorationRoundRectangle,
       .layer                    = xplm_WindowLayerFloatingWindows,
-
   };
 
   /* Create the window */
@@ -61,7 +60,10 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon) {
                               KOSPWINDOW_WINDOW_WIDTH,
                               KOSPWINDOW_WINDOW_HEIGHT);
   XPLMSetWindowTitle(p_kosp_window_inout->windowId, "KOSP Project");
+
+#if DEBUG
   XPLMSetWindowIsVisible(p_kosp_window_inout->windowId, B_TRUE);
+#endif
 
   KospWindow_CreateMenu(p_kosp_window_inout);
 

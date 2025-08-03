@@ -155,8 +155,6 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
                                   p_drfName->valuestring,
                                   "savedRatio",
                                   valueToSet);
-
-        logMsg("Set Value is %f", p_savedRatio->valuedouble);
       }
     }
 

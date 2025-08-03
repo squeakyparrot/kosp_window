@@ -22,6 +22,7 @@
 #include "XPLMProcessing.h"
 
 /* Acfutils includes */
+#include "acfutils/except.h"
 #include "acfutils/log.h"
 #include "acfutils/types.h"
 
@@ -53,6 +54,11 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID resvd) {
  * @return int True to indicate it was loaded successfully.
  */
 PLUGIN_API int XPluginStart(char *outName, char *outSig, char *outDesc) {
+
+#ifdef DEBUG
+  /* Init the crash handler */
+  except_init();
+#endif
 
   /* Otherwise funny path separators will appear */
   XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
@@ -94,6 +100,11 @@ PLUGIN_API void XPluginStop(void) {
 
   /* Call Logging finish. */
   log_fini();
+
+#ifdef DEBUG
+  /* Stop the crash handler */
+  except_fini();
+#endif
 }
 
 //---------------------------------------------------------------------------
