@@ -26,6 +26,7 @@
 #include "SoundLogic/DataStructDefs/SoundLogic_Struct.h"
 
 int32_t SoundLogic_Deinit(SoundLogic *p_sound_logic) {
+  logMsg("SoundLogic_Deinit()");
 
   dr_delete(&(p_sound_logic->d_liftoffTrigger));
   dr_delete(&(p_sound_logic->d_touchdownTrigger));

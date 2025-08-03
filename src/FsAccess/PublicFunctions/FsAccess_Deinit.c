@@ -32,10 +32,10 @@
 int32_t FsAccess_Deinit() {
 
   /* Deinit Modules one by one */
-  KospWindow_Deinit(&kosp_window);
-  SoundLogic_Deinit(&sound_logic);
+  VERIFY(KospWindow_Deinit(&kosp_window));
+  VERIFY(SoundLogic_Deinit(&sound_logic));
 
-  FT_Done_FreeType(fs_access.ftLibrary);
+  VERIFY0(FT_Done_FreeType(fs_access.ftLibrary));
 
   /* Deinit Logging */
   log_fini();

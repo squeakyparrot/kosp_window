@@ -22,7 +22,6 @@
 #include "XPLMProcessing.h"
 
 /* Acfutils includes */
-#include "acfutils/except.h"
 #include "acfutils/log.h"
 #include "acfutils/types.h"
 
@@ -55,11 +54,6 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID resvd) {
  */
 PLUGIN_API int XPluginStart(char *outName, char *outSig, char *outDesc) {
 
-#ifdef DEBUG
-  /* Init the crash handler */
-  except_init();
-#endif
-
 #if 0 /* Note: This needs further investigation into what it actually does */
   /* Otherwise funny path separators will appear */
   XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
@@ -67,6 +61,8 @@ PLUGIN_API int XPluginStart(char *outName, char *outSig, char *outDesc) {
 
   /* Init the acfutils logger. */
   log_init(log_xplm_cb, "kosp");
+
+  logMsg("KOSP Plugin Init");
 
   /* Give XPLM a plugin name and signature. */
   snprintf(outName, 256, "kosp_menu");
@@ -96,13 +92,10 @@ PLUGIN_API void XPluginStop(void) {
   /* Stop all modules */
   FsAccess_Deinit();
 
+  logMsg("KOSP Plugin Cleanup Complete");
+
   /* Call Logging finish. */
   log_fini();
-
-#ifdef DEBUG
-  /* Stop the crash handler */
-  except_fini();
-#endif
 }
 
 //---------------------------------------------------------------------------

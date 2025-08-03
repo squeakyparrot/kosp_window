@@ -19,6 +19,7 @@
 
 /* Acfutils includes */
 #include "acfutils/assert.h"
+#include "acfutils/font_utils.h"
 #include "acfutils/log.h"
 
 /* Custom Includes */
@@ -32,6 +33,8 @@
 #include "SoundLogic/PublicFunctions/SoundLogic_PublicFunctions.h"
 
 int32_t FsAccess_Init() {
+
+  logMsg("FsAccess_Init()");
 
   VERIFY(FsAccess_GetPluginRootDir(fs_access.pluginFilePath));
 

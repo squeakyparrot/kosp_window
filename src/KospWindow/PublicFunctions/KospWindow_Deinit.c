@@ -18,6 +18,7 @@
 /* XPLM Includes */
 
 /* Acfutils includes */
+#include "acfutils/font_utils.h"
 #include "acfutils/log.h"
 
 /* Custom Includes */
@@ -27,6 +28,7 @@
 #include "KospWindow/PublicFunctions/KospWindow_PublicFunctions.h"
 
 int32_t KospWindow_Deinit(KospWindow *p_kosp_window_inout) {
+  logMsg("KospWindow_Deinit()");
 
   cJSON *p_sliders = cJSON_GetObjectItem(p_kosp_window_inout->p_configJson,
                                          "slidersByDrfName");
@@ -48,45 +50,50 @@ int32_t KospWindow_Deinit(KospWindow *p_kosp_window_inout) {
 
   /* Release cr font before freetype font, details see
    * font_utils_try_load_font() */
-  if (p_kosp_window_inout->montserratLightFtFace != NULL) {
-    lacf_free(p_kosp_window_inout->montserratLightFtFace);
-  }
+
   if (p_kosp_window_inout->montserratLightCairoFontFace != NULL) {
-    lacf_free(p_kosp_window_inout->montserratLightCairoFontFace);
+    cairo_font_face_destroy(p_kosp_window_inout->montserratLightCairoFontFace);
   }
-  if (p_kosp_window_inout->montserratMediumFtFace != NULL) {
-    lacf_free(p_kosp_window_inout->montserratMediumFtFace);
-  }
-  if (p_kosp_window_inout->montserratMediumCairoFontFace != NULL) {
-    lacf_free(p_kosp_window_inout->montserratMediumCairoFontFace);
-  }
-  if (p_kosp_window_inout->montserratRegularFtFace != NULL) {
-    lacf_free(p_kosp_window_inout->montserratRegularFtFace);
-  }
-  if (p_kosp_window_inout->montserratRegularCairoFontFace != NULL) {
-    lacf_free(p_kosp_window_inout->montserratRegularCairoFontFace);
-  }
-  if (p_kosp_window_inout->robotoRegularFtFace != NULL) {
-    lacf_free(p_kosp_window_inout->robotoRegularFtFace);
-  }
-  if (p_kosp_window_inout->robotoRegularCairoFontFace != NULL) {
-    lacf_free(p_kosp_window_inout->robotoRegularCairoFontFace);
-  }
-  if (p_kosp_window_inout->robotoSemiboldFtFace != NULL) {
-    lacf_free(p_kosp_window_inout->robotoSemiboldFtFace);
-  }
-  if (p_kosp_window_inout->robotoSemiboldCairoFontFace != NULL) {
-    lacf_free(p_kosp_window_inout->robotoSemiboldCairoFontFace);
+  if (p_kosp_window_inout->montserratLightFtFace != NULL) {
+    FT_Done_Face(p_kosp_window_inout->montserratLightFtFace);
   }
 
-  KospWindow_DestroyMenu(p_kosp_window_inout);
+  if (p_kosp_window_inout->montserratMediumCairoFontFace != NULL) {
+    cairo_font_face_destroy(p_kosp_window_inout->montserratMediumCairoFontFace);
+  }
+  if (p_kosp_window_inout->montserratMediumFtFace != NULL) {
+    FT_Done_Face(p_kosp_window_inout->montserratMediumFtFace);
+  }
+
+  if (p_kosp_window_inout->montserratRegularCairoFontFace != NULL) {
+    cairo_font_face_destroy(
+        p_kosp_window_inout->montserratRegularCairoFontFace);
+  }
+  if (p_kosp_window_inout->montserratRegularFtFace != NULL) {
+    FT_Done_Face(p_kosp_window_inout->montserratRegularFtFace);
+  }
+
+  if (p_kosp_window_inout->robotoRegularCairoFontFace != NULL) {
+    cairo_font_face_destroy(p_kosp_window_inout->robotoRegularCairoFontFace);
+  }
+  if (p_kosp_window_inout->robotoRegularFtFace != NULL) {
+    FT_Done_Face(p_kosp_window_inout->robotoRegularFtFace);
+  }
+
+  if (p_kosp_window_inout->robotoSemiboldCairoFontFace != NULL) {
+    cairo_font_face_destroy(p_kosp_window_inout->robotoSemiboldCairoFontFace);
+  }
+  if (p_kosp_window_inout->robotoSemiboldFtFace != NULL) {
+    FT_Done_Face(p_kosp_window_inout->robotoSemiboldFtFace);
+  }
+
+  VERIFY(KospWindow_DestroyMenu(p_kosp_window_inout));
 
   XPLMDestroyWindow(p_kosp_window_inout->windowId);
 
   /* Free the loaded json config */
   cJSON_Delete(kosp_window.p_configJson);
-
-  logMsg("KOSP Window Destroyed");
+  cJSON_Delete(kosp_window.p_changeLogJson);
 
   return B_TRUE;
 }

@@ -27,6 +27,7 @@
 #include "SoundLogic/DataStructDefs/SoundLogic_Struct.h"
 
 int32_t SoundLogic_Init(SoundLogic *p_sound_logic, RefCon *refcon) {
+  logMsg("SoundLogic_Init()");
 
   dr_create_vi(&(p_sound_logic->d_liftoffTrigger),
                p_sound_logic->d_liftoffTriggerData,

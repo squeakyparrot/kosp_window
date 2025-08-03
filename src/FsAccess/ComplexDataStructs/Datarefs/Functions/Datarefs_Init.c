@@ -25,6 +25,7 @@
 #include "FsAccess/DataStructDefs/FsAccess_Struct.h"
 
 int32_t Datarefs_init(Datarefs *p_datarefs_inout) {
+  logMsg("Datarefs_init()");
 
   /* ######################################################
    * sim/flightmodel2

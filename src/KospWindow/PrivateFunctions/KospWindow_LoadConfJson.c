@@ -38,8 +38,8 @@ void KospWindow_LoadJson(cJSON **pp_destPtr, char config_path[256]) {
   long  len;
   char *loadedJsonString = file2str_name(&len, config_path);
   VERIFY_MSG(loadedJsonString != NULL, "Cannot find File %s", config_path);
-  logMsg("The Loaded String Is:");
-  logMsg("%s", loadedJsonString);
+  logMsg("The Loaded JSON String Is:");
+  logMsg("\n%s", loadedJsonString);
 
   /* Parse the string and store it in our own struct */
   *pp_destPtr = cJSON_Parse(loadedJsonString);

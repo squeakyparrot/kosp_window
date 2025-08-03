@@ -31,6 +31,7 @@
 #include "KospWindow/PublicFunctions/KospWindow_PublicFunctions.h"
 
 int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon) {
+  logMsg("KospWindow_Init()");
 
   VERIFY(p_kosp_window_inout != NULL);
 
