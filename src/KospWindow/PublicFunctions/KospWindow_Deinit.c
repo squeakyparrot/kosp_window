@@ -79,6 +79,8 @@ int32_t KospWindow_Deinit(KospWindow *p_kosp_window_inout) {
     lacf_free(p_kosp_window_inout->robotoSemiboldCairoFontFace);
   }
 
+  KospWindow_DestroyMenu(p_kosp_window_inout);
+
   XPLMDestroyWindow(p_kosp_window_inout->windowId);
 
   /* Free the loaded json config */

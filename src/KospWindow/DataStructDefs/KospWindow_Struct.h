@@ -21,6 +21,7 @@
 
 /* XPLM Includes */
 #include "XPLMDisplay.h"
+#include "XPLMMenus.h"
 
 /* Acfutils includes */
 #include "acfutils/dr.h"
@@ -50,6 +51,24 @@ typedef struct KospWindow_Struct {
    * @sense       N/A
    */
   XPLMWindowID windowId;
+
+  /**
+   * @details     The index of our KOSP Menu under the plugins list
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  int32_t menuContainerIdx;
+
+  /**
+   * @details     The index of our KOSP Menu under the plugins list
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  XPLMMenuID menuToggleWindowMenuId;
 
   /**
    * @details     A pointer to the surface of the mt_cairo_render

@@ -88,6 +88,11 @@
       "displayName": "Autobrake Off Callout",
       "drfName": "KOSP/settings_autobrake_off_callout",
       "savedRatio": 1
+    },
+    "KOSP/pw_howl_mute_in_air": {
+      "displayName": "Inhibit PW Howl Midair",
+      "drfName": "KOSP/pw_howl_mute_in_air",
+      "savedRatio": 1
     }
   }
 }

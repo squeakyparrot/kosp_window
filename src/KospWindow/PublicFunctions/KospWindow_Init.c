@@ -62,6 +62,8 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon) {
   XPLMSetWindowTitle(p_kosp_window_inout->windowId, "KOSP Project");
   XPLMSetWindowIsVisible(p_kosp_window_inout->windowId, B_TRUE);
 
+  KospWindow_CreateMenu(p_kosp_window_inout);
+
   logMsg("KOSP Window Created");
 
   /* Call this or font_utils_try_load_font will crash */

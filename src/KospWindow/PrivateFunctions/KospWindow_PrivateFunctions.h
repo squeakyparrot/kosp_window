@@ -75,6 +75,12 @@ extern void KospWindow_SetDrfs(cJSON *p_groupArrayPtr, float *p_floatArray);
 
 extern void KospWindow_SetDrfsInt(cJSON *p_groupArrayPtr, int32_t *p_intArray);
 
+extern int32_t KospWindow_CreateMenu(KospWindow *p_kosp_window);
+
+extern int32_t KospWindow_DestroyMenu(KospWindow *p_kosp_window);
+
+extern void KospWindow_ToggleIsVisible(void *inMenuRef, void *inItemRef);
+
 #ifdef __cplusplus
 }
 #endif
