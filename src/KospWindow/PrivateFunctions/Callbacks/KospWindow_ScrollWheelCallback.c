@@ -28,6 +28,7 @@
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
+/* Refer the header for description */
 int KospWindow_ScrollWheelCallback(XPLMWindowID inWindowID,
                                    int          x,
                                    int          y,
@@ -43,33 +44,59 @@ int KospWindow_ScrollWheelCallback(XPLMWindowID inWindowID,
   /* Get the x, y of the mouse action in Cairo (window) frame */
   int32_t left, top, right, bottom, window_w, window_h;
   XPLMGetWindowGeometry(inWindowID, &left, &top, &right, &bottom);
-  x = x - left;
+
+  /* Flip the coordinates to be the same as Cairo coordinates.
+   * We do not actually need x. */
+  // x = x - left;
   y = top - y;
 
+  /* If the user is clicking the content and not the menu bar */
   if (y > KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y && y < KOSPWINDOW_SLIDER_END_Y) {
+
+    /* Page 1 */
     if (p_kosp_window->pageNum == KOSPWINDOW_PAGE_1) {
+      /* get number of sliders */
       cJSON *p_sliders =
           cJSON_GetObjectItem(p_kosp_window->p_configJson, "slidersByDrfName");
       int32_t numDrfs = cJSON_GetArraySize(p_sliders);
 
+      /* Find the maximum number of notches the user is allowed to scroll,
+       * one notch corresponds to 1 slider */
+      double maxScroll =
+          fmax(numDrfs - KOSPWINDOW_SLIDER_MAX_NUM_DISPLAYABLE_SLIDERS +
+                   KOSPWINDOW_SLIDER_BOTTOM_BUFFER_SPACE,
+               0);
+
+      /* Set the scroll target notch */
       p_kosp_window->page1.sliderScroll =
-          clampi(p_kosp_window->page1.sliderScroll - clicks,
-                 0,
-                 fmax(numDrfs - KOSPWINDOW_SLIDER_MAX_NUM_DISPLAYABLE_SLIDERS +
-                          KOSPWINDOW_SLIDER_BOTTOM_BUFFER_SPACE,
-                      0));
-    } else if (p_kosp_window->pageNum == KOSPWINDOW_PAGE_3) {
+          clampi(p_kosp_window->page1.sliderScroll - clicks, 0, maxScroll);
+    }
+
+    /* Page 3 */
+    else if (p_kosp_window->pageNum == KOSPWINDOW_PAGE_3) {
+
+      /* get number of sliders */
       cJSON *p_switches =
           cJSON_GetObjectItem(p_kosp_window->p_configJson, "switchesByDrfName");
-      int32_t numDrfs                   = cJSON_GetArraySize(p_switches);
+      int32_t numDrfs = cJSON_GetArraySize(p_switches);
 
-      p_kosp_window->page3.sliderScroll = clampi(
-          p_kosp_window->page3.sliderScroll - clicks,
-          0,
+      /* Find the maximum number of notches the user is allowed to scroll,
+       * one notch corresponds to 1 switch  */
+      double maxScroll =
           fmax(numDrfs - KOSPWINDOW_ON_OFF_SWITCH_MAX_NUM_DISPLAYABLE_SWITCHS +
                    KOSPWINDOW_ON_OFF_SWITCH_BOTTOM_BUFFER_SPACE,
-               0));
-    } else if (p_kosp_window->pageNum == KOSPWINDOW_PAGE_4) {
+               0);
+
+      /* Set the scroll target notch */
+      p_kosp_window->page3.sliderScroll =
+          clampi(p_kosp_window->page3.sliderScroll - clicks, 0, maxScroll);
+    }
+
+    /* Page 4 */
+    else if (p_kosp_window->pageNum == KOSPWINDOW_PAGE_4) {
+
+      /* Set the scroll target notch, in the specific pixels per click specified
+       */
       p_kosp_window->page4.sliderScrollPx =
           clampi(p_kosp_window->page4.sliderScrollPx -
                      clicks * KOSPWINDOW_CHANGELOG_SCROLL_PIXELS_PER_CLICK,

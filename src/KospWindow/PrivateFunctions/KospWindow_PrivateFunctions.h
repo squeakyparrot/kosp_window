@@ -43,6 +43,20 @@ extern int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
                                     XPLMMouseStatus inMouse,
                                     void           *inRefcon);
 
+/**
+ * @brief Callback provided to XPLM to be called when a scroll event happens
+ *        on top of our window.
+ *        This function will then be used to manipulate the KospWindow struct
+ *        such that the UI responds.
+ *
+ * @param inWindowID The window ID of our window
+ * @param x The x coord of the event
+ * @param y The y coord of the event
+ * @param wheel 0 is vertical 1 is horizontal scroll
+ * @param clicks how far the wheel has turned since last callback
+ * @param inRefcon items passed into the callback
+ * @return int
+ */
 extern int KospWindow_ScrollWheelCallback(XPLMWindowID inWindowID,
                                           int          x,
                                           int          y,

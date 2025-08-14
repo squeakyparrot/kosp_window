@@ -30,60 +30,35 @@
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
-/* Refer the header for description */
-void KospWindow_CreateDrfsf(cJSON *p_groupArrayPtr,
-                            dr_t  *destDrArray,
-                            float *p_floatArray) {
-
-  /* Find how many datarefs we have in this catagory */
-  int32_t numDrfs = cJSON_GetArraySize(p_groupArrayPtr);
-
-  /* Check if json is empty */
-  VERIFY(numDrfs > 0);
-
-  /* Loop through the items (switches / sliders)*/
-  for (int32_t idx = 0; idx < numDrfs; idx++) {
-    cJSON *p_thisDrf = cJSON_GetArrayItem(p_groupArrayPtr, idx);
-    VERIFY(p_thisDrf != NULL);
-
-    /* Extract the field named drfName */
-    cJSON *p_drfName = cJSON_GetObjectItem(p_thisDrf, "drfName");
-    VERIFY_MSG(p_drfName != NULL, "%s", "No field named drfName");
-
-    /* For this switch / slider, create the drf and store it in the handles
-     * array in the struct */
-    dr_create_f(&(destDrArray[idx]),
-                &(p_floatArray[idx]),
-                B_TRUE,
-                "%s",
-                p_drfName->valuestring);
+/**
+ * @brief Internal. Do not use.
+ *
+ */
+#define DEFN_KOSPWINDOW_CREATEDRFS(name, type, dr_create_func_name)            \
+  void name(cJSON *p_groupArrayPtr, dr_t *destDrArray, type *p_floatArray) {   \
+    /* Find how many datarefs we have in this catagory */                      \
+    int32_t numDrfs = cJSON_GetArraySize(p_groupArrayPtr);                     \
+    /* Check if json is empty */                                               \
+    VERIFY(numDrfs > 0);                                                       \
+    /* Loop through the items (switches / sliders)*/                           \
+    for (int32_t idx = 0; idx < numDrfs; idx++) {                              \
+      cJSON *p_thisDrf = cJSON_GetArrayItem(p_groupArrayPtr, idx);             \
+      VERIFY(p_thisDrf != NULL);                                               \
+      /* Extract the field named drfName */                                    \
+      cJSON *p_drfName = cJSON_GetObjectItem(p_thisDrf, "drfName");            \
+      VERIFY_MSG(p_drfName != NULL, "%s", "No field named drfName");           \
+      /* For this switch / slider, create the drf and store it in the handles  \
+       * array in the struct */                                                \
+      dr_create_func_name(&(destDrArray[idx]),                                 \
+                          &(p_floatArray[idx]),                                \
+                          B_TRUE,                                              \
+                          "%s",                                                \
+                          p_drfName->valuestring);                             \
+    }                                                                          \
   }
-}
 
 /* Refer the header for description */
-void KospWindow_CreateDrfsi(cJSON   *p_groupArrayPtr,
-                            dr_t    *destDrArray,
-                            int32_t *p_intArray) {
-  int32_t numDrfs = cJSON_GetArraySize(p_groupArrayPtr);
+DEFN_KOSPWINDOW_CREATEDRFS(KospWindow_CreateDrfsf, float, dr_create_f)
+DEFN_KOSPWINDOW_CREATEDRFS(KospWindow_CreateDrfsi, int32_t, dr_create_i)
 
-  /* Check if json is empty */
-  VERIFY(numDrfs > 0);
-
-  /* Loop through the items (switches / sliders)*/
-  for (int32_t idx = 0; idx < numDrfs; idx++) {
-    cJSON *p_thisDrf = cJSON_GetArrayItem(p_groupArrayPtr, idx);
-    VERIFY(p_thisDrf != NULL);
-
-    /* Extract the field named drfName */
-    cJSON *p_drfName = cJSON_GetObjectItem(p_thisDrf, "drfName");
-    VERIFY_MSG(p_drfName != NULL, "%s", "No field named drfName");
-
-    /* For this switch / slider, create the drf and store it in the handles
-     * array in the struct */
-    dr_create_i(&(destDrArray[idx]),
-                &(p_intArray[idx]),
-                B_TRUE,
-                "%s",
-                p_drfName->valuestring);
-  }
-}
+#undef DEFN_KOSPWINDOW_CREATEDRFS

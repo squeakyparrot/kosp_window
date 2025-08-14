@@ -28,6 +28,7 @@
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
+/* Refer the header for description */
 int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
                              int             x,
                              int             y,
@@ -58,25 +59,32 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
   if (p_kosp_window->pageNum == KOSPWINDOW_PAGE_1) {
 
     /* Whenever there is mouse movement just move the slider */
-    /* Get the position of the bar */
     int32_t sliderBarY;
+
+    /* Get the y position of the this slider bar */
     int32_t startY =
         KOSPWINDOW_SLIDER_START_Y -
         (p_kosp_window->page1.sliderScrollSmooth) * KOSPWINDOW_SLIDER_Y_SPACING;
+
+    /* Pointer to cJSON group of sliders */
     cJSON *p_sliders =
         cJSON_GetObjectItem(p_kosp_window->p_configJson, "slidersByDrfName");
     int32_t numDrfs = cJSON_GetArraySize(p_sliders);
 
-    /* Set pos of slider */
+    /* Set position of slider */
     for (int32_t sliderIdx = 0; sliderIdx < numDrfs; sliderIdx++) {
       if (p_kosp_window->page1.isSliderAttached == B_TRUE &&
           p_kosp_window->page1.attachedSlider == sliderIdx) {
+
+        /* Extract the properties of this slider */
         cJSON *p_thisDrf    = cJSON_GetArrayItem(p_sliders, sliderIdx);
-        cJSON *p_drfName    = cJSON_GetObjectItem(p_thisDrf, "drfName");
         cJSON *p_min        = cJSON_GetObjectItem(p_thisDrf, "min");
         cJSON *p_max        = cJSON_GetObjectItem(p_thisDrf, "max");
         cJSON *p_savedRatio = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
-        double valueToSet   = clamp(fx_lin(x,
+
+        /* From its properties compute a value to be written to the drf / JSON
+         */
+        double valueToSet = clamp(fx_lin(x,
                                          KOSPWINDOW_SLIDER_START_X,
                                          p_min->valuedouble,
                                          KOSPWINDOW_SLIDER_END_X,
@@ -84,16 +92,19 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
                                   p_min->valuedouble,
                                   p_max->valuedouble);
 
+        /* Write to it */
         KospWindow_SetSliderRatio(p_savedRatio, valueToSet);
       }
     }
 
+    /* From the set JSON file, update the dataref's underlying arrays to reflect
+     * this */
     KospWindow_SetDrfsf(p_sliders, p_kosp_window->volumeRatioDrfsData);
 
-    /* Register on down click once */
+    /* On mouse down */
     if (inMouse == xplm_MouseDown) {
 
-      /* Clicking on the content*/
+      /* Check if clicking on the content*/
       if (y > KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y &&
           y < KOSPWINDOW_SLIDER_END_Y) {
 
@@ -219,7 +230,7 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
     }
   }
 
-  /* Write Json on Mouse Up */
+  /* Whatever the page is, write Json to disk on Mouse Up */
   if (inMouse == xplm_MouseUp) {
     KospWindow_WriteConfJson(p_kosp_window->p_configJson,
                              p_kosp_window->configPath);
