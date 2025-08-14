@@ -15,8 +15,20 @@
 extern "C" {
 #endif
 
+/**
+ * @brief Entry point of the plugin, calls all other modules' init functions.
+ *        Should be called on XPluginStart.
+ *
+ * @return int32_t True on success, false on fail.
+ */
 extern int32_t FsAccess_Init();
 
+/**
+ * @brief Exit point of the plugin, calls all other modules' deinit functions.
+ *        Should be called on XPluginStop.
+ *
+ * @return int32_t True on success, false on fail.
+ */
 extern int32_t FsAccess_Deinit();
 
 #ifdef __cplusplus

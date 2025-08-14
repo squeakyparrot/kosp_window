@@ -1,7 +1,7 @@
 /**
  * @file FsAccess_Init.c
  *
- * @brief
+ * @brief Init of the entry point of all other modules in the project
  *
  * @date 2025-07-27
  *
@@ -32,10 +32,12 @@
 #include "SoundLogic/InternalData/SoundLogic_InternalData.h"
 #include "SoundLogic/PublicFunctions/SoundLogic_PublicFunctions.h"
 
+/* Refer the header for description */
 int32_t FsAccess_Init() {
 
   logMsg("FsAccess_Init()");
 
+  /* Fill the buffer of the plugin's path */
   VERIFY(FsAccess_GetPluginRootDir(fs_access.pluginFilePath));
 
   /* Init Freetype */
@@ -46,7 +48,7 @@ int32_t FsAccess_Init() {
   refcon.p_sound_logic = &sound_logic;
   refcon.p_datarefs    = &datarefs;
 
-  /* Init Flight Loop */
+  /* Create Flight Loop */
   fs_access.flightLoopParams =
       (XPLMCreateFlightLoop_t){.structSize = sizeof(XPLMCreateFlightLoop_t),
                                .phase = xplm_FlightLoop_Phase_AfterFlightModel,

@@ -41,6 +41,12 @@
 extern "C" {
 #endif
 
+/**
+ * @brief A struct that contains all properties of the menu including individual
+ *        structs for each page's specific properties.
+ *        An instance of this struct is all data about a window.
+ *
+ */
 typedef struct KospWindow_Struct {
 
   /**
@@ -60,6 +66,16 @@ typedef struct KospWindow_Struct {
    * @sense       N/A
    */
   int32_t menuContainerIdx;
+
+  /**
+   * @details     A pointer to the uploader of the surface above.
+   *              For more details see mt_cairo_render.c
+   *
+   * @unit        N/A
+   * @frame       N/A
+   * @sense       N/A
+   */
+  int32_t pageNum;
 
   /**
    * @details     The index of our KOSP Menu under the plugins list
@@ -90,18 +106,7 @@ typedef struct KospWindow_Struct {
   mt_cairo_uploader_t *p_mtCairoUploader;
 
   /**
-   * @details     A pointer to the uploader of the surface above.
-   *              For more details see mt_cairo_render.c
-   *
-   * @unit        N/A
-   * @frame       N/A
-   * @sense       N/A
-   */
-  int32_t pageNum;
-
-  /**
-   * @details     A pointer to the uploader of the surface above.
-   *              For more details see mt_cairo_render.c
+   * @details     The FreeType FontFace for Montseratt Light
    *
    * @unit        N/A
    * @frame       N/A
@@ -110,8 +115,7 @@ typedef struct KospWindow_Struct {
   FT_Face montserratLightFtFace;
 
   /**
-   * @details     A pointer to the uploader of the surface above.
-   *              For more details see mt_cairo_render.c
+   * @details     A pointer to the Cairo FontFace for Montseratt Light
    *
    * @unit        N/A
    * @frame       N/A
@@ -120,8 +124,7 @@ typedef struct KospWindow_Struct {
   cairo_font_face_t *montserratLightCairoFontFace;
 
   /**
-   * @details     A pointer to the uploader of the surface above.
-   *              For more details see mt_cairo_render.c
+   * @details     The FreeType FontFace for Montseratt Medium
    *
    * @unit        N/A
    * @frame       N/A
@@ -130,8 +133,7 @@ typedef struct KospWindow_Struct {
   FT_Face montserratMediumFtFace;
 
   /**
-   * @details     A pointer to the uploader of the surface above.
-   *              For more details see mt_cairo_render.c
+   * @details     A pointer to the Cairo FontFace for Montseratt Medium
    *
    * @unit        N/A
    * @frame       N/A
@@ -140,8 +142,7 @@ typedef struct KospWindow_Struct {
   cairo_font_face_t *montserratMediumCairoFontFace;
 
   /**
-   * @details     A pointer to the uploader of the surface above.
-   *              For more details see mt_cairo_render.c
+   * @details     The FreeType FontFace for Montseratt Regular
    *
    * @unit        N/A
    * @frame       N/A
@@ -150,8 +151,7 @@ typedef struct KospWindow_Struct {
   FT_Face montserratRegularFtFace;
 
   /**
-   * @details     A pointer to the uploader of the surface above.
-   *              For more details see mt_cairo_render.c
+   * @details     A pointer to the Cairo FontFace for Montseratt Regular
    *
    * @unit        N/A
    * @frame       N/A
@@ -160,8 +160,7 @@ typedef struct KospWindow_Struct {
   cairo_font_face_t *montserratRegularCairoFontFace;
 
   /**
-   * @details     A pointer to the uploader of the surface above.
-   *              For more details see mt_cairo_render.c
+   * @details     The FreeType FontFace for Roboto Regular
    *
    * @unit        N/A
    * @frame       N/A
@@ -170,8 +169,7 @@ typedef struct KospWindow_Struct {
   FT_Face robotoRegularFtFace;
 
   /**
-   * @details     A pointer to the uploader of the surface above.
-   *              For more details see mt_cairo_render.c
+   * @details     A pointer to the Cairo FontFace for Roboto Regular
    *
    * @unit        N/A
    * @frame       N/A
@@ -180,8 +178,7 @@ typedef struct KospWindow_Struct {
   cairo_font_face_t *robotoRegularCairoFontFace;
 
   /**
-   * @details     A pointer to the uploader of the surface above.
-   *              For more details see mt_cairo_render.c
+   * @details     The FreeType FontFace for Roboto Semibold
    *
    * @unit        N/A
    * @frame       N/A
@@ -190,8 +187,7 @@ typedef struct KospWindow_Struct {
   FT_Face robotoSemiboldFtFace;
 
   /**
-   * @details     A pointer to the uploader of the surface above.
-   *              For more details see mt_cairo_render.c
+   * @details     A pointer to the Cairo FontFace for Roboto Semibold
    *
    * @unit        N/A
    * @frame       N/A
@@ -200,7 +196,7 @@ typedef struct KospWindow_Struct {
   cairo_font_face_t *robotoSemiboldCairoFontFace;
 
   /**
-   * @details     A pointer to the cJSON object
+   * @details     A pointer to the cJSON object that holds userconfig.json
    *
    * @unit        N/A
    * @frame       N/A
@@ -209,7 +205,7 @@ typedef struct KospWindow_Struct {
   cJSON *p_configJson;
 
   /**
-   * @details     A pointer to the cJSON object
+   * @details     A pointer to the cJSON object that holds changelog.json
    *
    * @unit        N/A
    * @frame       N/A
@@ -218,7 +214,7 @@ typedef struct KospWindow_Struct {
   cJSON *p_changeLogJson;
 
   /**
-   * @details     A buffer storing the path to the config json file.
+   * @details     A buffer storing the path to userconfig.json
    *
    * @unit        N/A
    * @frame       N/A
@@ -227,7 +223,7 @@ typedef struct KospWindow_Struct {
   char configPath[256];
 
   /**
-   * @details     A buffer storing the path to the changelog json file.
+   * @details     A buffer storing the path to changelog.json
    *
    * @unit        N/A
    * @frame       N/A
@@ -248,7 +244,7 @@ typedef struct KospWindow_Struct {
 
   /**
    * @details     An array of all the datarefs that could possibly be created
-   *              by the volume sliders on page 1.
+   *              by the mixer sliders on page 2.
    *
    * @unit        N/A
    * @frame       N/A
@@ -259,7 +255,7 @@ typedef struct KospWindow_Struct {
 
   /**
    * @details     An array of all the datarefs that could possibly be created
-   *              by the volume sliders on page 1.
+   *              by the switches on page 3.
    *
    * @unit        N/A
    * @frame       N/A

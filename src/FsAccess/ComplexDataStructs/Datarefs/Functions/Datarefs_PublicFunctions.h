@@ -31,6 +31,13 @@
 extern "C" {
 #endif
 
+/**
+ * @brief Fetches the datarefs from the simulator and fill the handles into the
+ *        Datarefs struct.
+ *
+ * @param p_datarefs_inout
+ * @return int32_t
+ */
 extern int32_t Datarefs_init(Datarefs *p_datarefs_inout);
 
 #ifdef __cplusplus

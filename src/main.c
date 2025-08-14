@@ -34,7 +34,7 @@
 //---------------------------------------------------------------------------
 // GLEW Mandatory Callbacks
 
-// Put this somewhere in your main file too:
+// Something will break on windows if this is not included
 #if IBM
 BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID resvd) {
   lacf_glew_dllmain_hook(reason);
@@ -80,7 +80,7 @@ PLUGIN_API int XPluginStart(char *outName, char *outSig, char *outDesc) {
   }
 
   /* Call init for our own part of the program*/
-  ASSERT(FsAccess_Init());
+  VERIFY(FsAccess_Init());
 
   return B_TRUE;
 }

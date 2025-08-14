@@ -24,6 +24,7 @@
 #include "FsAccess/ComplexDataStructs/Datarefs/DataStructDefs/Datarefs_Struct.h"
 #include "FsAccess/DataStructDefs/FsAccess_Struct.h"
 
+/* Refer the header for description */
 int32_t Datarefs_init(Datarefs *p_datarefs_inout) {
   logMsg("Datarefs_init()");
 

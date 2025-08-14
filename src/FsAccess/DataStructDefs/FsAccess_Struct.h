@@ -31,6 +31,12 @@
 extern "C" {
 #endif
 
+/**
+ * @brief This struct contains all data that should be persistent throughout
+ *        the runtime of the plugin, that has nothing to do with any of the
+ *        modules but rather properties of the plugin itself.
+ *
+ */
 typedef struct FsAccess_Struct {
 
   /**
@@ -52,7 +58,7 @@ typedef struct FsAccess_Struct {
    */
   XPLMFlightLoopID flightLoopId;
   /**
-   * @details     The path to the plugin.
+   * @details     A buffer string to the path to the plugin, to be filled.
    *
    * @unit        N/A
    * @frame       N/A

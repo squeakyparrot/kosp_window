@@ -26,6 +26,7 @@
 /* Custom Includes */
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
+/* Refer the header for description */
 int32_t KospWindow_CreateMenu(KospWindow *p_kosp_window) {
 
   p_kosp_window->menuContainerIdx =

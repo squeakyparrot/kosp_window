@@ -33,6 +33,10 @@
 extern "C" {
 #endif
 
+/**
+ * @brief A struct that contains all properties of page 3 of the menu.
+ *
+ */
 typedef struct KospWindow_Page3Struct {
 
   /**

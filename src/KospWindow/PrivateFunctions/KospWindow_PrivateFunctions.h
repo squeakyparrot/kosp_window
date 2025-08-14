@@ -61,13 +61,13 @@ extern void KospWindow_SetSliderRatio(KospWindow *p_kosp_window_in,
                                       char       *propertyName,
                                       double      ratio);
 
-extern void KospWindow_CreateDrfs(cJSON *p_groupArrayPtr,
-                                  dr_t  *destDrArray,
-                                  float *p_floatArray);
+extern void KospWindow_CreateDrfsf(cJSON *p_groupArrayPtr,
+                                   dr_t  *destDrArray,
+                                   float *p_floatArray);
 
-extern void KospWindow_CreateDrfsInt(cJSON   *p_groupArrayPtr,
-                                     dr_t    *destDrArray,
-                                     int32_t *p_intArray);
+extern void KospWindow_CreateDrfsi(cJSON   *p_groupArrayPtr,
+                                   dr_t    *destDrArray,
+                                   int32_t *p_intArray);
 
 extern void KospWindow_DeleteDrfs(cJSON *p_groupArrayPtr, dr_t *destDrArray);
 

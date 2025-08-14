@@ -15,6 +15,13 @@
 extern "C" {
 #endif
 
+/**
+ * @brief Simple function to compare 2 integers without using macros.
+ *
+ * @param a integer
+ * @param b integer
+ * @return int a or b, whichever is bigger or smaller
+ */
 static inline int min_int(int a, int b) { return a < b ? a : b; }
 static inline int max_int(int a, int b) { return a > b ? a : b; }
 

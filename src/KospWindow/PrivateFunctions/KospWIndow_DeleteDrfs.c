@@ -30,6 +30,7 @@
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
+/* Refer the header for description */
 void KospWindow_DeleteDrfs(cJSON *p_groupArrayPtr, dr_t *destDrArray) {
   int32_t numDrfs = cJSON_GetArraySize(p_groupArrayPtr);
 

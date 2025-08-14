@@ -30,10 +30,16 @@
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
-void KospWindow_CreateDrfs(cJSON *p_groupArrayPtr,
-                           dr_t  *destDrArray,
-                           float *p_floatArray) {
+/* Refer the header for description */
+void KospWindow_CreateDrfsf(cJSON *p_groupArrayPtr,
+                            dr_t  *destDrArray,
+                            float *p_floatArray) {
+
+  /* Find how many datarefs we have in this catagory */
   int32_t numDrfs = cJSON_GetArraySize(p_groupArrayPtr);
+
+  /* Check if json is empty */
+  VERIFY(numDrfs > 0);
 
   for (int32_t idx = 0; idx < numDrfs; idx++) {
     cJSON *p_thisDrf = cJSON_GetArrayItem(p_groupArrayPtr, idx);
@@ -48,10 +54,13 @@ void KospWindow_CreateDrfs(cJSON *p_groupArrayPtr,
   }
 }
 
-void KospWindow_CreateDrfsInt(cJSON   *p_groupArrayPtr,
-                              dr_t    *destDrArray,
-                              int32_t *p_intArray) {
+void KospWindow_CreateDrfsi(cJSON   *p_groupArrayPtr,
+                            dr_t    *destDrArray,
+                            int32_t *p_intArray) {
   int32_t numDrfs = cJSON_GetArraySize(p_groupArrayPtr);
+
+  /* Check if json is empty */
+  VERIFY(numDrfs > 0);
 
   for (int32_t idx = 0; idx < numDrfs; idx++) {
     cJSON *p_thisDrf = cJSON_GetArrayItem(p_groupArrayPtr, idx);

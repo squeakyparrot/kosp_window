@@ -1,5 +1,3 @@
-# Install script for directory: /home/ku_he/hud_project/src
-
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
   set(CMAKE_INSTALL_PREFIX "/usr/x86_64-w64-mingw32")
@@ -45,5 +43,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/ku_he/hud_project/src/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

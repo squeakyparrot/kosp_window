@@ -1,7 +1,8 @@
 /**
  * @file FsAccess_GetPluginRootDir.c
  *
- * @brief
+ * @brief This file contains a function that gets the root directory of an
+ *        X-Plane plugin.
  *
  * @date 2025-07-26
  *
@@ -26,29 +27,41 @@
 /* Custom Includes */
 #include "FsAccess/DataStructDefs/FsAccess_Struct.h"
 
-int32_t FsAccess_GetPluginRootDir(char buffer[256]) {
+/* Refer the header for description */
+int32_t FsAccess_GetPluginRootDir(char buffer_inout[256]) {
+
+  /* Safeguard */
+  if (!buffer_inout) {
+    return B_FALSE;
+  }
+
+  /* Pre-fill so we can detect "no write" */
+  buffer_inout[0] = '\0';
+
   /* Get the path to the .xpl */
-  XPLMGetPluginInfo(XPLMGetMyID(), NULL, buffer, NULL, NULL);
+  XPLMGetPluginInfo(XPLMGetMyID(), NULL, buffer_inout, NULL, NULL);
 
-  fix_pathsep(buffer);
+  /* Fix an issue where paths might appear with both unix and windows dirsep*/
+  fix_pathsep(buffer_inout);
 
-  /* Trim the trailing file separator */
-  char *p = strrchr(buffer, DIRSEP);
+  /* Trim the trailing dirsep */
+  char *p = strrchr(buffer_inout, DIRSEP);
   if (p != NULL) {
     *p = '\0';
   }
 
   /* Cut off the architecture specific fat names */
-  if ((p = strrchr(buffer, DIRSEP)) != NULL) {
+  if ((p = strrchr(buffer_inout, DIRSEP)) != NULL) {
     /* p+1 points to the fat directory because we placed a \0 after it */
     if (strcmp(p + 1, "64") == 0 || strcmp(p + 1, "32") == 0 ||
         strcmp(p + 1, "win_x64") == 0 || strcmp(p + 1, "mac_x64") == 0 ||
         strcmp(p + 1, "lin_x64") == 0) {
+      /* Place a new terminator on top of the dirsep */
       *p = '\0';
     }
   }
 
-  logMsg("Resolved Plugin Root Directory %s", buffer);
+  logMsg("Resolved Plugin Root Directory %s", buffer_inout);
 
   return B_TRUE;
 }

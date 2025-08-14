@@ -32,6 +32,13 @@
 extern "C" {
 #endif
 
+/**
+ * @brief A struct that acts as the only item to be passed into XPLM's RefCon as
+ *        arguments, this struct contains pointers to structs of other modules
+ *        such that callbacks of other modules have a clean way of accessing
+ *        their own struct.
+ *
+ */
 typedef struct RefCon_Struct {
 
   /**

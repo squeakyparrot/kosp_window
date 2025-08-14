@@ -26,21 +26,17 @@
 #include "KospWindow/PublicFunctions/KospWindow_PublicFunctions.h"
 #include "SoundLogic/PublicFunctions/SoundLogic_PublicFunctions.h"
 
+/* Refer the header for description */
 float FsAccess_FlightLoopCallback(float inElapsedSinceLastCall,
                                   float inElapsedTimeSinceLastFlightLoop,
                                   int   inCounter,
                                   void *inRefcon) {
 
-#if 0
-  /* Test of printing out a dataref */
-  logMsg("The value of sim/flightmodel2/controls/pitch_ratio is %f",
-         dr_getf(&(datarefs.controls.pitch_ratio)));
-#endif
+  /* Call callbacks in each module one by one */
   KospWindow_FlightLoopCallback(inElapsedSinceLastCall,
                                 inElapsedTimeSinceLastFlightLoop,
                                 inCounter,
                                 inRefcon);
-
   SoundLogic_FlightLoopCallback(inElapsedSinceLastCall,
                                 inElapsedTimeSinceLastFlightLoop,
                                 inCounter,

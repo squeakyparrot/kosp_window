@@ -30,6 +30,17 @@
 extern "C" {
 #endif
 
+/**
+ * @brief A struct in the exact folder structure of how Laminar Research shaped
+ *        their default datarefs.
+ *
+ *        The handles to the drfs are populated with its init function.
+ *
+ *        As an example sim/cockpit2/controls/flap_handle_deploy_ratio could be
+ *        obtained with
+ *        dr_getf(datarefs.sim.cockpit2.controls.flap_handle_deploy_ratio)
+ *
+ */
 typedef struct Datarefs_Struct {
 
   struct {

@@ -29,13 +29,14 @@
 #include "SoundLogic/InternalData/SoundLogic_InternalData.h"
 #include "SoundLogic/PublicFunctions/SoundLogic_PublicFunctions.h"
 
+/* Refer the header for description */
 int32_t FsAccess_Deinit() {
 
   /* Deinit Modules one by one */
   VERIFY(KospWindow_Deinit(&kosp_window));
   VERIFY(SoundLogic_Deinit(&sound_logic));
 
-  logMsg("FT_Done_FreeType()");
+  /* Deinit the freetype instance */
   VERIFY0(FT_Done_FreeType(fs_access.ftLibrary));
 
   return B_TRUE;
