@@ -31,6 +31,11 @@
 extern "C" {
 #endif
 
+/**
+ * @brief Structure that stores timestamps for each landing gear, and also the
+ *        arrays of trigger datarefs created by this module.
+ *
+ */
 typedef struct SoundLogic_Struct {
 
   /**

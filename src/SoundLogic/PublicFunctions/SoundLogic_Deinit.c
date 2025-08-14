@@ -25,6 +25,7 @@
 /* Custom Includes */
 #include "SoundLogic/DataStructDefs/SoundLogic_Struct.h"
 
+/* Refer the header for description */
 int32_t SoundLogic_Deinit(SoundLogic *p_sound_logic) {
   logMsg("SoundLogic_Deinit()");
 

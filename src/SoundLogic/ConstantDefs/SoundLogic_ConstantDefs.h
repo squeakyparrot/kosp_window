@@ -19,7 +19,7 @@ extern "C" {
 #define SOUNDLOGIC_MAX_NUM_LANDING_GEARS (10)
 
 /* How long does it take before it stops debounding, s*/
-#define SOUNDLOGIC_GEAR_DEBOUNCE_BUFFER_TIME (3)
+#define SOUNDLOGIC_GEAR_DEBOUNCE_BUFFER_TIME_S (3)
 
 #ifdef __cplusplus
 }

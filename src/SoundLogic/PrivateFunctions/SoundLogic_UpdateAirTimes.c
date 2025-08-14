@@ -31,6 +31,7 @@
 #include "SoundLogic/PrivateFunctions/SoundLogic_PrivateFunctions.h"
 #include "SoundLogic/PublicFunctions/SoundLogic_PublicFunctions.h"
 
+/* Refer the header for description */
 int32_t SoundLogic_UpdateAirTimes(Datarefs *p_datarefs) {
 
   /* Get current sim time */
@@ -55,20 +56,25 @@ int32_t SoundLogic_UpdateAirTimes(Datarefs *p_datarefs) {
       sound_logic.landing_gear[gearIdx].offGroundTime = timeDrf;
     }
 
+    /* If buffer time has elapsed and the gear now touches down */
     if ((sound_logic.landing_gear[gearIdx].timeSinceLiftoff >
-         SOUNDLOGIC_GEAR_DEBOUNCE_BUFFER_TIME) &&
+         SOUNDLOGIC_GEAR_DEBOUNCE_BUFFER_TIME_S) &&
         thisGearOnGround == 1) {
+      /* Cue the touchdown trigger */
       sound_logic.d_touchdownTriggerData[gearIdx] = 1;
       sound_logic.d_liftoffTriggerData[gearIdx]   = 0;
     }
 
+    /* If buffer time has elapsed and the gear now lifts off */
     if ((sound_logic.landing_gear[gearIdx].timeSinceTouchdown >
-         SOUNDLOGIC_GEAR_DEBOUNCE_BUFFER_TIME) &&
+         SOUNDLOGIC_GEAR_DEBOUNCE_BUFFER_TIME_S) &&
         thisGearOnGround == 0) {
+      /* Cue the liftoff trigger */
       sound_logic.d_liftoffTriggerData[gearIdx]   = 1;
       sound_logic.d_touchdownTriggerData[gearIdx] = 0;
     }
 
+    /* Update the time since touchdown or liftoff */
     sound_logic.landing_gear[gearIdx].timeSinceTouchdown =
         timeDrf - sound_logic.landing_gear[gearIdx].offGroundTime;
     sound_logic.landing_gear[gearIdx].timeSinceLiftoff =

@@ -3,6 +3,9 @@
  *
  * @brief
  *
+ * @warning THIS FILE IS INTENTIONALLY UNCOMMENTED AND NOT REFACTORED.
+ *          There is not much point refactoring drawing boilerplate.
+ *
  * @date 2025-07-26
  *
  * @copyright KOSP Project 2025
@@ -31,6 +34,12 @@
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
+/**
+ * @warning THIS FUNCTION IS INTENTIONALLY UNCOMMENTED AND NOT REFACTORED.
+ *          There is not much point refactoring drawing boilerplate.
+ *
+ *  Refer the header for description
+ */
 void KospWindow_RenderCallback(cairo_t *cr,
                                unsigned window_w,
                                unsigned window_h,

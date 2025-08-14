@@ -27,9 +27,11 @@
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 #include "KospWindow/PublicFunctions/KospWindow_PublicFunctions.h"
 
+/* Refer the header for description */
 int32_t KospWindow_Deinit(KospWindow *p_kosp_window_inout) {
   logMsg("KospWindow_Deinit()");
 
+  /* Delete all datarefs associated with buttons and sliders */
   cJSON *p_sliders = cJSON_GetObjectItem(p_kosp_window_inout->p_configJson,
                                          "slidersByDrfName");
   KospWindow_DeleteDrfs(p_sliders, p_kosp_window_inout->volumeRatioDrfs);
@@ -40,10 +42,10 @@ int32_t KospWindow_Deinit(KospWindow *p_kosp_window_inout) {
                                           "switchesByDrfName");
   KospWindow_DeleteDrfs(p_switches, p_kosp_window_inout->switchesRatioDrfs);
 
+  /* End both the cairo renderer and uploader */
   if (p_kosp_window_inout->p_mtCairoRender != NULL) {
     mt_cairo_render_fini(p_kosp_window_inout->p_mtCairoRender);
   }
-
   if (p_kosp_window_inout->p_mtCairoUploader != NULL) {
     mt_cairo_uploader_fini(p_kosp_window_inout->p_mtCairoUploader);
   }
@@ -51,6 +53,7 @@ int32_t KospWindow_Deinit(KospWindow *p_kosp_window_inout) {
   /* Release cr font before freetype font, details see
    * font_utils_try_load_font() */
 
+  /* Free all the fonts we loaded */
   if (p_kosp_window_inout->montserratLightCairoFontFace != NULL) {
     cairo_font_face_destroy(p_kosp_window_inout->montserratLightCairoFontFace);
   }
@@ -87,8 +90,10 @@ int32_t KospWindow_Deinit(KospWindow *p_kosp_window_inout) {
     FT_Done_Face(p_kosp_window_inout->robotoSemiboldFtFace);
   }
 
+  /* Erase our button from the plugin menu */
   KospWindow_DestroyMenu(p_kosp_window_inout);
 
+  /* Destroy the window that we drew on */
   XPLMDestroyWindow(p_kosp_window_inout->windowId);
 
   /* Free the loaded json config */

@@ -30,6 +30,7 @@
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 #include "KospWindow/PublicFunctions/KospWindow_PublicFunctions.h"
 
+/* Refer the header for description */
 int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon) {
   logMsg("KospWindow_Init()");
 
@@ -53,7 +54,7 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon) {
   /* Create the window */
   p_kosp_window_inout->windowId = XPLMCreateWindowEx(&window_params);
 
-  /* Set window looks */
+  /* Set window looks and title */
   XPLMSetWindowResizingLimits(p_kosp_window_inout->windowId,
                               KOSPWINDOW_WINDOW_WIDTH,
                               KOSPWINDOW_WINDOW_HEIGHT,
@@ -61,15 +62,16 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon) {
                               KOSPWINDOW_WINDOW_HEIGHT);
   XPLMSetWindowTitle(p_kosp_window_inout->windowId, "KOSP Project");
 
+  /* For debug mode, default window to show up without menu buttons */
 #if DEBUG
   XPLMSetWindowIsVisible(p_kosp_window_inout->windowId, B_TRUE);
 #endif
 
+  /* Create items on the XPLM Menu Bar */
   KospWindow_CreateMenu(p_kosp_window_inout);
-
   logMsg("KOSP Window Created");
 
-  /* Call this or font_utils_try_load_font will crash */
+  /* Call this or font_utils_try_load_font will crash on Windows */
   mt_cairo_render_glob_init(true);
 
   /* Fetch the font file. mkpathname returns a heap allocated string. */
@@ -77,9 +79,9 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon) {
                               KOSPWINDOW_ASSETS_DIR,
                               KOSPWINDOW_FONTS_DIR,
                               NULL);
-
   logMsg("Loading font from %s", font_dir);
 
+  /* Load all fonts we need and populate handles */
   font_utils_try_load_font(
       font_dir,
       KOSPWINDOW_FONTS_MONTSERATT_LIGHT_NAME,
@@ -109,33 +111,38 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon) {
                            &(p_kosp_window_inout->robotoSemiboldFtFace),
                            &(p_kosp_window_inout->robotoSemiboldCairoFontFace));
 
+  /* Free the heap allocated joint path to the font directory */
   lacf_free(font_dir);
 
   /* Load Config */
-  /* Fetch the font file. mkpathname returns a heap allocated string. */
+  /* Fetch the userconfig file. mkpathname returns a heap allocated string. */
   char *config_path_tmp = mkpathname(fs_access.pluginFilePath,
                                      KOSPWINDOW_CONFIG_DIR,
                                      KOSPWINDOW_USER_CONFIG_FILE_NAME,
                                      NULL);
+  /* Store the path to the userconfig permanently */
   strlcpy(p_kosp_window_inout->configPath,
           config_path_tmp,
           sizeof(p_kosp_window_inout->configPath));
+  /* Free the heap allocated one */
   lacf_free(config_path_tmp);
-
+  /* Load the userconfig file and store it in a cJSON handle */
   KospWindow_LoadJson(p_kosp_window_inout->configPath,
                       &(p_kosp_window_inout->p_configJson));
 
   /* Load Changelog */
-  /* Fetch the font file. mkpathname returns a heap allocated string. */
+  /* Fetch the changelog file. mkpathname returns a heap allocated string. */
   char *changelog_path_tmp = mkpathname(fs_access.pluginFilePath,
                                         KOSPWINDOW_CONFIG_DIR,
                                         KOSPWINDOW_CHANGELOG_FILE_NAME,
                                         NULL);
+  /* Store the path to the changelog permanently */
   strlcpy(p_kosp_window_inout->changeLogPath,
           changelog_path_tmp,
           sizeof(p_kosp_window_inout->changeLogPath));
+  /* Free the heap allocated one */
   lacf_free(changelog_path_tmp);
-
+  /* Load the userconfig file and store it in a cJSON handle */
   KospWindow_LoadJson(p_kosp_window_inout->changeLogPath,
                       &(p_kosp_window_inout->p_changeLogJson));
 

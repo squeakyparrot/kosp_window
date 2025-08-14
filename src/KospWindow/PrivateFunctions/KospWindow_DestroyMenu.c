@@ -26,8 +26,9 @@
 /* Custom Includes */
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
+/* Refer the header for description */
 void KospWindow_DestroyMenu(KospWindow *p_kosp_window) {
-
+  /* Remove ourselves */
   XPLMDestroyMenu(p_kosp_window->menuToggleWindowMenuId);
   XPLMRemoveMenuItem(XPLMFindPluginsMenu(), p_kosp_window->menuContainerIdx);
 }

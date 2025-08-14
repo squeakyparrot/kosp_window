@@ -31,14 +31,16 @@
 #include "SoundLogic/PrivateFunctions/SoundLogic_PrivateFunctions.h"
 #include "SoundLogic/PublicFunctions/SoundLogic_PublicFunctions.h"
 
+/* Refer the header for description */
 int32_t SoundLogic_UpdateFlapStress(Datarefs *p_datarefs) {
 
-  float airspeedDrf =
+  /* Get the airspeed and the flap 0-1 ratio */
+  float airspeedDrf_kt =
       dr_getf(&(p_datarefs->sim.flightmodel.position.indicated_airspeed));
-
   float laminarFlapDrf =
       dr_getf(&(p_datarefs->sim.cockpit2.controls.flap_handle_deploy_ratio));
 
-  sound_logic.d_flapStressFactorData = airspeedDrf * laminarFlapDrf;
+  /* Multiply them */
+  sound_logic.d_flapStressFactorData = airspeedDrf_kt * laminarFlapDrf;
   return B_TRUE;
 }

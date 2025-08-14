@@ -136,83 +136,112 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
   /* On Mixing Page */
   else if (p_kosp_window->pageNum == KOSPWINDOW_PAGE_2) {
 
+    /* Descend into the mixer sliders group */
     int32_t mixerSliderBarY;
     cJSON  *p_mixerSliders = cJSON_GetObjectItem(p_kosp_window->p_configJson,
                                                 "mixerSlidersByDrfName");
     VERIFY(p_mixerSliders != NULL);
 
+    /* For every slider */
     for (int barIdx = 0; barIdx < 3; barIdx++) {
+
+      /* If this bar is attached */
       if (p_kosp_window->page2.isSliderAttached == B_TRUE &&
           p_kosp_window->page2.attachedSlider == barIdx) {
+
+        /* Descend into savedRatio */
         cJSON *p_thisDrf = cJSON_GetArrayItem(p_mixerSliders, barIdx);
         VERIFY(p_thisDrf != NULL);
-        cJSON *p_drfName = cJSON_GetObjectItem(p_thisDrf, "drfName");
-        VERIFY(p_drfName != NULL);
         cJSON *p_savedRatio = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
         VERIFY(p_savedRatio != NULL);
 
+        /* Linearly interpolate from slider y to dataref value */
         double valueToSet =
             clamp(fx_lin_multi(y, numberYPosAndNumberInv, B_TRUE), -80, 10);
-        /* Snapping */
+
+        /* If the resultant mixer setting is close to 0, set it to 0 */
         if (fabs(valueToSet) < 2.0) {
           valueToSet = 0;
         }
 
+        /* Write the new number to the JSON */
         KospWindow_SetSliderRatio(p_savedRatio, valueToSet);
       }
     }
 
+    /* From the set JSON file, update the dataref's underlying arrays to reflect
+     * this */
     KospWindow_SetDrfsf(p_mixerSliders, p_kosp_window->mixerRatioDrfsData);
 
+    /* On mouse down */
     if (inMouse == xplm_MouseDown) {
       /* Clicking on the content*/
       if (y > KOSPWINDOW_MENU_BAR_BOTTOM_EDGE_Y &&
           y < KOSPWINDOW_SLIDER_END_Y) {
+
+        /* For every bar */
         for (int barIdx = 0; barIdx < 3; barIdx++) {
+
+          /* Descend into savedRatio */
           cJSON *p_thisDrf = cJSON_GetArrayItem(p_mixerSliders, barIdx);
           VERIFY(p_thisDrf != NULL);
           cJSON *p_savedRatio = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
           VERIFY(p_savedRatio != NULL);
+
+          /* The Y position of the middle of the slider knob icon */
           int32_t sliderMiddleY = fx_lin_multi(
               p_savedRatio->valuedouble, numberYPosAndNumber, B_FALSE);
 
-          int32_t middleOfTheMixerBar =
+          /* X Position of the guiderail of the slider */
+          int32_t middleOfTheMixerBarX =
               KOSPWINDOW_WINDOW_WIDTH / 2 +
               CAIRO_COLOUR_X_DIST_BTWN_BARS * (barIdx - 1);
-          if ((x > middleOfTheMixerBar -
+
+          /* If the user is clicking on anywhere within the knob icon */
+          if ((x > middleOfTheMixerBarX -
                        KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH / 2) &&
-              (x < middleOfTheMixerBar +
+              (x < middleOfTheMixerBarX +
                        KOSPWINDOW_MIXER_SLIDER_SWITCH_WIDTH / 2) &&
               (y > sliderMiddleY - KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT / 2 &&
                y < sliderMiddleY + KOSPWINDOW_MIXER_SLIDER_SWITCH_HEIGHT / 2)) {
+
+            /* Attach it */
             p_kosp_window->page2.isSliderAttached = B_TRUE;
             p_kosp_window->page2.attachedSlider   = barIdx;
           }
         }
       }
     } else if (inMouse == xplm_MouseUp) {
-      /* Mixing page */
+      /* Detach the slider on mouse up */
       p_kosp_window->page2.isSliderAttached = B_FALSE;
     }
   }
 
+  /* On Switches Page */
   else if (p_kosp_window->pageNum == KOSPWINDOW_PAGE_3) {
 
+    /* On mouse down */
     if (inMouse == xplm_MouseDown) {
-      int32_t switchRowY;
-      cJSON  *p_switches =
+
+      /* Find out how many switches we have */
+      cJSON *p_switches =
           cJSON_GetObjectItem(p_kosp_window->p_configJson, "switchesByDrfName");
       int32_t numDrfs = cJSON_GetArraySize(p_switches);
 
+      /* For every switch */
       for (int32_t switchIdx = 0; switchIdx < numDrfs; switchIdx++) {
+
+        /* Descend into savedRatio*/
         cJSON *p_thisDrf    = cJSON_GetArrayItem(p_switches, switchIdx);
         cJSON *p_savedRatio = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
-        cJSON *p_drfName    = cJSON_GetObjectItem(p_thisDrf, "drfName");
 
-        switchRowY          = KOSPWINDOW_ON_OFF_SWITCH_START_Y +
-                     KOSPWINDOW_ON_OFF_SWITCH_Y_SPACING *
-                         (switchIdx - p_kosp_window->page3.sliderScrollSmooth);
+        /* The y position of this switch */
+        int32_t switchRowY =
+            KOSPWINDOW_ON_OFF_SWITCH_START_Y +
+            KOSPWINDOW_ON_OFF_SWITCH_Y_SPACING *
+                (switchIdx - p_kosp_window->page3.sliderScrollSmooth);
 
+        /* If the user is clicking anywhere on the switch icon */
         if ((x > KOSPWINDOW_ON_OFF_SWITCH_START_X) &&
             (x < KOSPWINDOW_ON_OFF_SWITCH_START_X +
                      KOSPWINDOW_ON_OFF_SWITCH_WIDTH)) {
@@ -220,6 +249,7 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
               (y < switchRowY + KOSPWINDOW_ON_OFF_SWITCH_Y_OFFSET +
                        KOSPWINDOW_ON_OFF_SWITCH_HEIGHT)) {
 
+            /* Write to the JSON*/
             double valueToSet = !(p_savedRatio->valueint);
             KospWindow_SetSliderRatio(p_savedRatio, valueToSet);
           }

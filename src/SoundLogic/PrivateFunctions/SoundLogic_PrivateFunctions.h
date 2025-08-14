@@ -24,8 +24,22 @@ extern "C" {
 
 #include "FsAccess/ComplexDataStructs/Datarefs/DataStructDefs/Datarefs_Struct.h"
 
+/**
+ * @brief Using the default datarefs, update the debounced versions of our
+ *        own datarefs for cueing touchdown and liftoff sounds.
+ *
+ * @param p_datarefs Pointer to the default datarefs struct
+ * @return int32_t
+ */
 extern int32_t SoundLogic_UpdateAirTimes(Datarefs *p_datarefs);
 
+/**
+ * @brief Using the default datarefs, update our own flap stress dataref for
+ *        flaps sounds pitch.
+ *
+ * @param p_datarefs Pointer to the default datarefs struct
+ * @return int32_t
+ */
 extern int32_t SoundLogic_UpdateFlapStress(Datarefs *p_datarefs);
 
 #ifdef __cplusplus

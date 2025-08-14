@@ -30,13 +30,43 @@ extern "C" {
 /* Custom Includes */
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 
+/**
+ * @brief Draw callback passed to our window created by XPLM.
+ * @param inWindowID The XPLM window ID of our window
+ * @param inRefcon items passed into the callback
+ */
 extern void KospWindow_DrawCallback(XPLMWindowID inWindowID, void *inRefcon);
 
+/**
+ * @warning THIS FUNCTION IS INTENTIONALLY UNCOMMENTED AND NOT REFACTORED.
+ *          There is not much point refactoring drawing boilerplate.
+ *
+ * @brief File for all drawing boilerplate regarding drawing shapes, gradients.
+ *        This is to be called by mt_cairo_render_init when creating the
+ *        renderer and the multithreaded uploader.
+ *
+ * @param cr A cairo surface that is OpenGL binded, to be drawn on
+ * @param window_w width of the window
+ * @param window_h height of the window
+ * @param userinfo refcon / items passed into the callback
+ */
 extern void KospWindow_RenderCallback(cairo_t *cr,
                                       unsigned window_w,
                                       unsigned window_h,
                                       void    *userinfo);
 
+/**
+ * @brief Callback provided to XPLM to be called when a mouse click happens
+ *        on top of our window.
+ *        This function will then be used to manipulate the KospWindow struct
+ *        such that the UI responds.
+ * @param inWindowID The XPLM window ID of our window
+ * @param x The x coord of the event
+ * @param y The y coord of the event
+ * @param inMouse Which button, xplm_MouseDown etc. See XPLM docs
+ * @param inRefcon items passed into the callback
+ * @return int
+ */
 extern int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
                                     int             x,
                                     int             y,
@@ -49,7 +79,7 @@ extern int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
  *        This function will then be used to manipulate the KospWindow struct
  *        such that the UI responds.
  *
- * @param inWindowID The window ID of our window
+ * @param inWindowID The XPLM window ID of our window
  * @param x The x coord of the event
  * @param y The y coord of the event
  * @param wheel 0 is vertical 1 is horizontal scroll
@@ -109,8 +139,8 @@ extern void KospWindow_CreateDrfsi(cJSON   *p_groupArrayPtr,
                                    int32_t *p_intArray);
 
 /**
- * @brief Deletes datarefs given a cJSON pointer containing groups of buttons /
- *        switches so on.
+ * @brief Given a cJSON pointer containing groups of buttons / switches so on,
+ *        loop through it and delete the datarefs underneath.
  * @param p_groupArrayPtr cJSON ptr that contains childrens with the field
  *        "drfName"
  * @param destDrArray Array of dr_t handles to be deleted in order.

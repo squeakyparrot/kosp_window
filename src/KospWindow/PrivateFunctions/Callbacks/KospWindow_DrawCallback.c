@@ -28,6 +28,7 @@
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
+/* Refer the header for description */
 void KospWindow_DrawCallback(XPLMWindowID inWindowID, void *inRefcon) {
 
   /* Extract ptr to KospWindow */

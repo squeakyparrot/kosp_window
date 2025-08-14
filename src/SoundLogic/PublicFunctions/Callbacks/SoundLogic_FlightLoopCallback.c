@@ -29,6 +29,7 @@
 #include "SoundLogic/PrivateFunctions/SoundLogic_PrivateFunctions.h"
 #include "SoundLogic/PublicFunctions/SoundLogic_PublicFunctions.h"
 
+/* Refer the header for description */
 int32_t SoundLogic_FlightLoopCallback(float inElapsedSinceLastCall,
                                       float inElapsedTimeSinceLastFlightLoop,
                                       int   inCounter,

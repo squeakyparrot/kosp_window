@@ -28,39 +28,44 @@
 extern "C" {
 #endif
 
+/**
+ * @brief Structure that represents a single landing gear and its time since
+ *        various interactions.
+ *
+ */
 typedef struct LandingGear_Struct {
 
   /**
-   * @details     actual time since sim start in sec
+   * @details     Time in sim time of the last liftoff
    *
-   * @unit        N/A
+   * @unit        seconds
    * @frame       N/A
    * @sense       N/A
    */
   double offGroundTime;
 
   /**
-   * @details     actual time since sim start in sec
+   * @details     Time in sim time of the last touchdown
    *
-   * @unit        N/A
+   * @unit        seconds
    * @frame       N/A
    * @sense       N/A
    */
   double onGroundTime;
 
   /**
-   * @details     actual time since sim start in sec
+   * @details     Time elapsed since the last time the wheel lifted off
    *
-   * @unit        N/A
+   * @unit        seconds
    * @frame       N/A
    * @sense       N/A
    */
   double timeSinceLiftoff;
 
   /**
-   * @details     actual time since sim start in sec
+   * @details     Time elapsed since the last time the wheel touched down
    *
-   * @unit        N/A
+   * @unit        seconds
    * @frame       N/A
    * @sense       N/A
    */

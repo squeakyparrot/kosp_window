@@ -28,6 +28,7 @@
 #include "KospWindow/PublicFunctions/KospWindow_PublicFunctions.h"
 #include "Utils/Utils_AnimUtils.h"
 
+/* Refer the header for description */
 int32_t KospWindow_FlightLoopCallback(float inElapsedSinceLastCall,
                                       float inElapsedTimeSinceLastFlightLoop,
                                       int   inCounter,
@@ -37,7 +38,8 @@ int32_t KospWindow_FlightLoopCallback(float inElapsedSinceLastCall,
   KospWindow *p_kosp_window = ((RefCon *)inRefcon)->p_kosp_window;
   VERIFY(p_kosp_window != NULL);
 
-  /* Update the smooth animation of the scroll. */
+  /* Update the smooth animation of the scroll using a smoothing exponential
+   * function, for each page. */
   p_kosp_window->page1.sliderScrollSmooth =
       AnimUtils_SetAnimValueNoLim(p_kosp_window->page1.sliderScrollSmooth,
                                   p_kosp_window->page1.sliderScroll,
