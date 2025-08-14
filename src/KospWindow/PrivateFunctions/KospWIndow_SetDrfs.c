@@ -30,32 +30,46 @@
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
-void KospWindow_SetDrfs(cJSON *p_groupArrayPtr, float *p_floatArray) {
+/* Refer the header for description */
+void KospWindow_SetDrfsf(cJSON *p_groupArrayPtr, float *p_floatArray) {
+
+  /* Find how many datarefs we have in this catagory */
   int32_t numDrfs = cJSON_GetArraySize(p_groupArrayPtr);
 
+  /* Check if json is empty */
+  VERIFY(numDrfs > 0);
+
+  /* For all of the drfs */
   for (int32_t idx = 0; idx < numDrfs; idx++) {
+
+    /* Descend into the savedRatio field */
     cJSON *p_thisDrf = cJSON_GetArrayItem(p_groupArrayPtr, idx);
     VERIFY(p_thisDrf != NULL);
-    cJSON *p_drfName = cJSON_GetObjectItem(p_thisDrf, "drfName");
-    VERIFY(p_drfName != NULL);
     cJSON *p_savedRatio = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
     VERIFY(p_savedRatio != NULL);
 
+    /* Write to the drf underlying array using the json val */
     p_floatArray[idx] = p_savedRatio->valuedouble;
   }
 }
 
-void KospWindow_SetDrfsInt(cJSON *p_groupArrayPtr, int32_t *p_intArray) {
+/* Refer the header for description */
+void KospWindow_SetDrfsfi(cJSON *p_groupArrayPtr, int32_t *p_intArray) {
   int32_t numDrfs = cJSON_GetArraySize(p_groupArrayPtr);
 
+  /* Check if json is empty */
+  VERIFY(numDrfs > 0);
+
+  /* For all of the drfs */
   for (int32_t idx = 0; idx < numDrfs; idx++) {
+
+    /* Descend into the savedRatio field */
     cJSON *p_thisDrf = cJSON_GetArrayItem(p_groupArrayPtr, idx);
     VERIFY(p_thisDrf != NULL);
-    cJSON *p_drfName = cJSON_GetObjectItem(p_thisDrf, "drfName");
-    VERIFY(p_drfName != NULL);
     cJSON *p_savedRatio = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
     VERIFY(p_savedRatio != NULL);
 
+    /* Write to the drf underlying array using the json val */
     p_intArray[idx] = p_savedRatio->valuedouble;
   }
 }

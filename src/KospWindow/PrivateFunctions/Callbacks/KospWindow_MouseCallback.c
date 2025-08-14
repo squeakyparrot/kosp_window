@@ -71,11 +71,12 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
     for (int32_t sliderIdx = 0; sliderIdx < numDrfs; sliderIdx++) {
       if (p_kosp_window->page1.isSliderAttached == B_TRUE &&
           p_kosp_window->page1.attachedSlider == sliderIdx) {
-        cJSON *p_thisDrf  = cJSON_GetArrayItem(p_sliders, sliderIdx);
-        cJSON *p_drfName  = cJSON_GetObjectItem(p_thisDrf, "drfName");
-        cJSON *p_min      = cJSON_GetObjectItem(p_thisDrf, "min");
-        cJSON *p_max      = cJSON_GetObjectItem(p_thisDrf, "max");
-        double valueToSet = clamp(fx_lin(x,
+        cJSON *p_thisDrf    = cJSON_GetArrayItem(p_sliders, sliderIdx);
+        cJSON *p_drfName    = cJSON_GetObjectItem(p_thisDrf, "drfName");
+        cJSON *p_min        = cJSON_GetObjectItem(p_thisDrf, "min");
+        cJSON *p_max        = cJSON_GetObjectItem(p_thisDrf, "max");
+        cJSON *p_savedRatio = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
+        double valueToSet   = clamp(fx_lin(x,
                                          KOSPWINDOW_SLIDER_START_X,
                                          p_min->valuedouble,
                                          KOSPWINDOW_SLIDER_END_X,
@@ -83,15 +84,11 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
                                   p_min->valuedouble,
                                   p_max->valuedouble);
 
-        KospWindow_SetSliderRatio(p_kosp_window,
-                                  "slidersByDrfName",
-                                  p_drfName->valuestring,
-                                  "savedRatio",
-                                  valueToSet);
+        KospWindow_SetSliderRatio(p_savedRatio, valueToSet);
       }
     }
 
-    KospWindow_SetDrfs(p_sliders, p_kosp_window->volumeRatioDrfsData);
+    KospWindow_SetDrfsf(p_sliders, p_kosp_window->volumeRatioDrfsData);
 
     /* Register on down click once */
     if (inMouse == xplm_MouseDown) {
@@ -150,15 +147,11 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
           valueToSet = 0;
         }
 
-        KospWindow_SetSliderRatio(p_kosp_window,
-                                  "mixerSlidersByDrfName",
-                                  p_drfName->valuestring,
-                                  "savedRatio",
-                                  valueToSet);
+        KospWindow_SetSliderRatio(p_savedRatio, valueToSet);
       }
     }
 
-    KospWindow_SetDrfs(p_mixerSliders, p_kosp_window->mixerRatioDrfsData);
+    KospWindow_SetDrfsf(p_mixerSliders, p_kosp_window->mixerRatioDrfsData);
 
     if (inMouse == xplm_MouseDown) {
       /* Clicking on the content*/
@@ -196,13 +189,12 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
 
     if (inMouse == xplm_MouseDown) {
       int32_t switchRowY;
-      cJSON  *p_thisDrf;
       cJSON  *p_switches =
           cJSON_GetObjectItem(p_kosp_window->p_configJson, "switchesByDrfName");
       int32_t numDrfs = cJSON_GetArraySize(p_switches);
 
       for (int32_t switchIdx = 0; switchIdx < numDrfs; switchIdx++) {
-        p_thisDrf           = cJSON_GetArrayItem(p_switches, switchIdx);
+        cJSON *p_thisDrf    = cJSON_GetArrayItem(p_switches, switchIdx);
         cJSON *p_savedRatio = cJSON_GetObjectItem(p_thisDrf, "savedRatio");
         cJSON *p_drfName    = cJSON_GetObjectItem(p_thisDrf, "drfName");
 
@@ -216,16 +208,14 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
           if ((y > switchRowY + KOSPWINDOW_ON_OFF_SWITCH_Y_OFFSET) &&
               (y < switchRowY + KOSPWINDOW_ON_OFF_SWITCH_Y_OFFSET +
                        KOSPWINDOW_ON_OFF_SWITCH_HEIGHT)) {
-            KospWindow_SetSliderRatio(p_kosp_window,
-                                      "switchesByDrfName",
-                                      p_drfName->valuestring,
-                                      "savedRatio",
-                                      !(p_savedRatio->valueint));
+
+            double valueToSet = !(p_savedRatio->valueint);
+            KospWindow_SetSliderRatio(p_savedRatio, valueToSet);
           }
         }
       }
 
-      KospWindow_SetDrfsInt(p_switches, p_kosp_window->switchesRatioDrfsData);
+      KospWindow_SetDrfsfi(p_switches, p_kosp_window->switchesRatioDrfsData);
     }
   }
 

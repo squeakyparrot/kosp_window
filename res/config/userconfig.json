@@ -1,8 +1,8 @@
 {
   "slidersByDrfName": {
-    "KOSP/master_vol_ratio_extrior": {
+    "KOSP/master_vol_ratio_exterior": {
       "displayName": "Exterior",
-      "drfName": "KOSP/master_vol_ratio_extrior",
+      "drfName": "KOSP/master_vol_ratio_exterior",
       "min": 0,
       "max": 1.5,
       "savedRatio": 1,

@@ -41,11 +41,17 @@ void KospWindow_CreateDrfsf(cJSON *p_groupArrayPtr,
   /* Check if json is empty */
   VERIFY(numDrfs > 0);
 
+  /* Loop through the items (switches / sliders)*/
   for (int32_t idx = 0; idx < numDrfs; idx++) {
     cJSON *p_thisDrf = cJSON_GetArrayItem(p_groupArrayPtr, idx);
     VERIFY(p_thisDrf != NULL);
+
+    /* Extract the field named drfName */
     cJSON *p_drfName = cJSON_GetObjectItem(p_thisDrf, "drfName");
-    VERIFY(p_drfName != NULL);
+    VERIFY_MSG(p_drfName != NULL, "%s", "No field named drfName");
+
+    /* For this switch / slider, create the drf and store it in the handles
+     * array in the struct */
     dr_create_f(&(destDrArray[idx]),
                 &(p_floatArray[idx]),
                 B_TRUE,
@@ -54,6 +60,7 @@ void KospWindow_CreateDrfsf(cJSON *p_groupArrayPtr,
   }
 }
 
+/* Refer the header for description */
 void KospWindow_CreateDrfsi(cJSON   *p_groupArrayPtr,
                             dr_t    *destDrArray,
                             int32_t *p_intArray) {
@@ -62,11 +69,17 @@ void KospWindow_CreateDrfsi(cJSON   *p_groupArrayPtr,
   /* Check if json is empty */
   VERIFY(numDrfs > 0);
 
+  /* Loop through the items (switches / sliders)*/
   for (int32_t idx = 0; idx < numDrfs; idx++) {
     cJSON *p_thisDrf = cJSON_GetArrayItem(p_groupArrayPtr, idx);
     VERIFY(p_thisDrf != NULL);
+
+    /* Extract the field named drfName */
     cJSON *p_drfName = cJSON_GetObjectItem(p_thisDrf, "drfName");
-    VERIFY(p_drfName != NULL);
+    VERIFY_MSG(p_drfName != NULL, "%s", "No field named drfName");
+
+    /* For this switch / slider, create the drf and store it in the handles
+     * array in the struct */
     dr_create_i(&(destDrArray[idx]),
                 &(p_intArray[idx]),
                 B_TRUE,
