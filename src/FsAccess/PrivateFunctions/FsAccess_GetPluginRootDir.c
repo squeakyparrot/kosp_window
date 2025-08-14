@@ -31,9 +31,7 @@
 int32_t FsAccess_GetPluginRootDir(char buffer_inout[256]) {
 
   /* Safeguard */
-  if (!buffer_inout) {
-    return B_FALSE;
-  }
+  VERIFY(buffer_inout != NULL);
 
   /* Pre-fill so we can detect "no write" */
   buffer_inout[0] = '\0';

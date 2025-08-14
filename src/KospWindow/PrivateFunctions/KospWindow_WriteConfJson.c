@@ -30,8 +30,8 @@
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
-void KospWindow_WriteConfJson(KospWindow *p_kosp_window_in,
-                              char        config_path[256]) {
+/* Refer the header for description */
+void KospWindow_WriteConfJson(cJSON *p_configJson, char config_path[256]) {
   VERIFY(config_path != NULL);
 
   /* File handle */
@@ -39,7 +39,7 @@ void KospWindow_WriteConfJson(KospWindow *p_kosp_window_in,
   VERIFY(fp != NULL);
 
   /* cJSON object to string */
-  char *json_string = cJSON_Print(p_kosp_window_in->p_configJson);
+  char *json_string = cJSON_Print(p_configJson);
   VERIFY(json_string != NULL);
 
   /* Write string to file */

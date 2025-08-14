@@ -1,9 +1,9 @@
 /**
- * @file KospWindow_DrawCallback.c
+ * @file KospWindow_LoadConfJson.c
  *
  * @brief
  *
- * @date 2025-07-26
+ * @date 2025-08-14
  *
  * @copyright KOSP Project 2025
  */
@@ -30,7 +30,8 @@
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
-void KospWindow_LoadJson(cJSON **pp_destPtr, char config_path[256]) {
+/* Refer the header for description */
+void KospWindow_LoadJson(char config_path[256], cJSON **pp_destPtr) {
   VERIFY(config_path != NULL);
   logMsg("Loading Config Json from %s", config_path);
 
@@ -38,6 +39,8 @@ void KospWindow_LoadJson(cJSON **pp_destPtr, char config_path[256]) {
   long  len;
   char *loadedJsonString = file2str_name(&len, config_path);
   VERIFY_MSG(loadedJsonString != NULL, "Cannot find File %s", config_path);
+
+  /* For user bug reports its better to have a copy of what they loaded */
   logMsg("The Loaded JSON String Is:");
   logMsg("\n%s", loadedJsonString);
 

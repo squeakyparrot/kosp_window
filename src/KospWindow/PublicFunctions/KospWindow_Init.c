@@ -122,8 +122,8 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon) {
           sizeof(p_kosp_window_inout->configPath));
   lacf_free(config_path_tmp);
 
-  KospWindow_LoadJson(&(p_kosp_window_inout->p_configJson),
-                      p_kosp_window_inout->configPath);
+  KospWindow_LoadJson(p_kosp_window_inout->configPath,
+                      &(p_kosp_window_inout->p_configJson));
 
   /* Load Changelog */
   /* Fetch the font file. mkpathname returns a heap allocated string. */
@@ -136,8 +136,8 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon) {
           sizeof(p_kosp_window_inout->changeLogPath));
   lacf_free(changelog_path_tmp);
 
-  KospWindow_LoadJson(&(p_kosp_window_inout->p_changeLogJson),
-                      p_kosp_window_inout->changeLogPath);
+  KospWindow_LoadJson(p_kosp_window_inout->changeLogPath,
+                      &(p_kosp_window_inout->p_changeLogJson));
 
   /* Set Page 1 drfs on Startup */
   cJSON *p_sliders = cJSON_GetObjectItem(p_kosp_window_inout->p_configJson,

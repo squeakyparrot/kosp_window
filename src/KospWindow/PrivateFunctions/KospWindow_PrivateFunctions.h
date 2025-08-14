@@ -50,15 +50,21 @@ extern int KospWindow_ScrollWheelCallback(XPLMWindowID inWindowID,
                                           int          clicks,
                                           void        *inRefcon);
 
-extern void KospWindow_LoadJson(cJSON **pp_destPtr, char config_path[256]);
+/**
+ * @brief Given the path to a json, load it and populate the cJSON pointer.
+ * @param config_path Absolute path to the JSON file to be loaded
+ * @param pp_destPtr Pointer to the cJSON Pointer to be populated.
+ */
+extern void KospWindow_LoadJson(char config_path[256], cJSON **pp_destPtr);
 
 /**
- * @brief
- * @param p_kosp_window_in
- * @param config_path
+ * @brief Given a pointer to the top of the userconfig.json, write it to the
+ *        given path on disk.
+ *
+ * @param p_configJson pointer to the top of the userconfig.json
+ * @param config_path Absolute path of the json to write to
  */
-extern void KospWindow_WriteConfJson(KospWindow *p_kosp_window_in,
-                                     char        config_path[256]);
+void KospWindow_WriteConfJson(cJSON *p_configJson, char config_path[256]);
 
 /**
  * @brief A function that writes the new value to the json file's drf field
@@ -88,6 +94,13 @@ extern void KospWindow_CreateDrfsi(cJSON   *p_groupArrayPtr,
                                    dr_t    *destDrArray,
                                    int32_t *p_intArray);
 
+/**
+ * @brief Deletes datarefs given a cJSON pointer containing groups of buttons /
+ *        switches so on.
+ * @param p_groupArrayPtr cJSON ptr that contains childrens with the field
+ *        "drfName"
+ * @param destDrArray Array of dr_t handles to be deleted in order.
+ */
 extern void KospWindow_DeleteDrfs(cJSON *p_groupArrayPtr, dr_t *destDrArray);
 
 /**
@@ -105,10 +118,29 @@ extern void KospWindow_SetDrfsf(cJSON *p_groupArrayPtr, float *p_floatArray);
  */
 extern void KospWindow_SetDrfsfi(cJSON *p_groupArrayPtr, int32_t *p_intArray);
 
-extern int32_t KospWindow_CreateMenu(KospWindow *p_kosp_window);
+/**
+ * @brief Given a pointer to the KospWindow struct, create a menu in X-Plane
+ *        and append buttons to the plugins menu bar
+ *
+ * @param p_kosp_window A pointer to the KospWindow struct
+ * @return
+ */
+extern void KospWindow_CreateMenu(KospWindow *p_kosp_window);
 
-extern int32_t KospWindow_DestroyMenu(KospWindow *p_kosp_window);
+/**
+ * @brief Wrapper for XPLM stuff that kills the window and removes our entry
+ *        from the plugin menu cleanly.
+ * @param p_kosp_window A pointer to the KospWindow struct
+ * @return
+ */
+extern void KospWindow_DestroyMenu(KospWindow *p_kosp_window);
 
+/**
+ * @brief Callback provided to XPLM for the show/hide button to show or hide
+ *        the Kosp window.
+ * @param inMenuRef The refcon for the menu itself (us)
+ * @param inItemRef The refcon for the menu item (the parent of the button)
+ */
 extern void KospWindow_ToggleIsVisible(void *inMenuRef, void *inItemRef);
 
 #ifdef __cplusplus

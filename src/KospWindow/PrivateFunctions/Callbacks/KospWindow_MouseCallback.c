@@ -221,7 +221,8 @@ int KospWindow_MouseCallback(XPLMWindowID    inWindowID,
 
   /* Write Json on Mouse Up */
   if (inMouse == xplm_MouseUp) {
-    KospWindow_WriteConfJson(p_kosp_window, p_kosp_window->configPath);
+    KospWindow_WriteConfJson(p_kosp_window->p_configJson,
+                             p_kosp_window->configPath);
   }
 
   return B_TRUE;

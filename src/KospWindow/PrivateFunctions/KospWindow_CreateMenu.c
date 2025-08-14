@@ -27,12 +27,14 @@
 #include "KospWindow/PrivateFunctions/KospWindow_PrivateFunctions.h"
 
 /* Refer the header for description */
-int32_t KospWindow_CreateMenu(KospWindow *p_kosp_window) {
+void KospWindow_CreateMenu(KospWindow *p_kosp_window) {
 
+  /* Append ourselves to the plugins menu list */
   p_kosp_window->menuContainerIdx =
       XPLMAppendMenuItem(XPLMFindPluginsMenu(), "KOSP Project", NULL, 0);
   VERIFY(p_kosp_window->menuContainerIdx >= 0);
 
+  /* Create a toggle button inside the menu container and supply our cb */
   p_kosp_window->menuToggleWindowMenuId =
       XPLMCreateMenu("KOSP Project",
                      XPLMFindPluginsMenu(),
@@ -40,8 +42,7 @@ int32_t KospWindow_CreateMenu(KospWindow *p_kosp_window) {
                      KospWindow_ToggleIsVisible,
                      p_kosp_window);
 
+  /* Append the button above to the our own menu's list */
   XPLMAppendMenuItem(
       p_kosp_window->menuToggleWindowMenuId, "Show/Hide", NULL, 0);
-
-  return B_TRUE;
 }

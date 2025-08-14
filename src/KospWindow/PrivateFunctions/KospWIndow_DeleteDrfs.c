@@ -32,14 +32,14 @@
 
 /* Refer the header for description */
 void KospWindow_DeleteDrfs(cJSON *p_groupArrayPtr, dr_t *destDrArray) {
+
+  /* How many drfs we have */
   int32_t numDrfs = cJSON_GetArraySize(p_groupArrayPtr);
 
+  /* Loop through the drfs in this group */
   for (int32_t idx = 0; idx < numDrfs; idx++) {
-    cJSON *p_thisDrf = cJSON_GetArrayItem(p_groupArrayPtr, idx);
-    VERIFY(p_thisDrf != NULL);
-    cJSON *p_drfName = cJSON_GetObjectItem(p_thisDrf, "drfName");
-    VERIFY(p_drfName != NULL);
 
+    /* Call free */
     dr_delete(&(destDrArray[idx]));
   }
 }

@@ -87,7 +87,7 @@ int32_t KospWindow_Deinit(KospWindow *p_kosp_window_inout) {
     FT_Done_Face(p_kosp_window_inout->robotoSemiboldFtFace);
   }
 
-  VERIFY(KospWindow_DestroyMenu(p_kosp_window_inout));
+  KospWindow_DestroyMenu(p_kosp_window_inout);
 
   XPLMDestroyWindow(p_kosp_window_inout->windowId);
 
