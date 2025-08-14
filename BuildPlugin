@@ -92,16 +92,6 @@ else
 	fi
 fi
 
-
-# if [[ $(uname) = "Linux" ]]; then
-# 	"$LIBACFUTILS/tools/mksyms" "$OUTPUT_DIR/win_x64/kosp.xpl" > \
-# 	    "$OUTPUT_DIR/win_x64/syms.txt"
-# else
-# 	mkdir -p "$OUTPUT_DIR/mac_x64" \
-# 	mkdir -p "$OUTPUT_DIR/fonts" \
-# 	mkdir -p "$OUTPUT_DIR/images"
-# fi
-
 echo
 echo $(date +%c)
 echo "┌──────────────────────────────────┐"
