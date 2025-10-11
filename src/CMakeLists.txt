@@ -9,24 +9,14 @@ SET(BASEPATH "${CMAKE_SOURCE_DIR}")
 SET(LIB_BASEPATH "${CMAKE_SOURCE_DIR}/../lib")
 SET(PROJECT_ROOT "${CMAKE_SOURCE_DIR}/..")
 
-# set(SOURCEFILES
-# FsAccess/PublicFunctions/FsAccess.c
-# FsAccess/PrivateFunctions/FsAccess_FlightLoopCB.c.c
-# )
-# set(HEADERS
-# FsAccess/PrivateFunctions/FsAccess_PrivateFunctions.h
-# )
-# set(ALL_SOURCES ${SOURCEFILES} ${HEADERS})
-
 # Recursively grab all .c and .h files under src/
 file(GLOB_RECURSE ALL_SOURCES
   "${BASEPATH}/*.c"
   "${BASEPATH}/*.h"
 )
-
 list(SORT ALL_SOURCES)
 
-# Print a neat message
+# Print a list of files to be compiled
 message(STATUS "Source files to be compiled:")
 
 foreach(file ${SOURCEFILES})
@@ -151,7 +141,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${DEP_CFLAGS}")
 INCLUDE_DIRECTORIES("${BASEPATH}")
 
 # libraries
-include_directories(kosp PUBLIC
+include_directories(kosp PRIVATE
   "${LIBACFUTILS}/SDK/CHeaders/XPLM"
   "${LIBACFUTILS}/SDK/CHeaders/Widgets"
   "${LIBACFUTILS}/SDK/CHeaders/Wrappers"

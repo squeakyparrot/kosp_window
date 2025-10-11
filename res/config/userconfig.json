@@ -93,6 +93,11 @@
       "displayName": "Inhibit PW Howl Midair",
       "drfName": "KOSP/pw_howl_mute_in_air",
       "savedRatio": 1
+    },
+    "KOSP/do_mechanical_sounds": {
+      "displayName": "Enable Switches Sounds",
+      "drfName": "KOSP/do_mechanical_sounds",
+      "savedRatio": 1
     }
   }
 }
