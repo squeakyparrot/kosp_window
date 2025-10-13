@@ -652,13 +652,16 @@ void KospWindow_RenderCallback(cairo_t *cr,
       cairo_set_font_face(cr, p_kosp_window->robotoSemiboldCairoFontFace);
       cairo_set_font_size(cr, 18.0);
       cairo_set_source_rgb(cr, CAIRO_COLOUR_SLIDER_BAR_GREY);
-      char bufferString[10];
+      char bufferString[12];
       for (int i = 0; i < numNumbers; i++) {
         int32_t markingNumber = numberYPosAndNumber[i].x;
         if (markingNumber > -80) {
-          snprintf(bufferString, 10, "%d", (int32_t)(abs(markingNumber)));
+          snprintf(bufferString,
+                   sizeof(bufferString),
+                   "%d",
+                   (int32_t)(abs(markingNumber)));
         } else {
-          snprintf(bufferString, 10, "∞");
+          snprintf(bufferString, sizeof(bufferString), "∞");
         }
         cairo_move_to(
             cr,
