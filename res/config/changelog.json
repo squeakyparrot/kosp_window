@@ -1,7 +1,12 @@
 {
   "changeLog": {
     "Version 1.6": [
-      "- Wrote this C Plugin"
+      "- Wrote this C Plugin",
+      "- Improved CFM56 Whine",
+      "- Improved Overall Balance",
+      "- Added Mute Button Option",
+      "- Fixed Fade In on Sim Start",
+      "- Made PW Howl More Gentle"
     ],
     "Version 1.5": [
       "- TLS Newest Compatibility",
