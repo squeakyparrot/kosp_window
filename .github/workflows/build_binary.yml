@@ -1,0 +1,64 @@
+# @file .github/workflows/build_binary.yml
+#
+# @brief
+#
+# @date 2025-10-14
+#
+# @copyright KOSP Project 2025
+
+name: Build Plugin
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build-binary:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            install_script: ./install-ubuntu-packages
+          - os: macos-15-intel
+            install_script: ./install-macports.sh
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: Setup MacPorts if Mac
+        if: ${{ matrix.os == 'macos-15-intel' }}
+        uses: melusina-org/setup-macports@v1.1.5
+
+      - name: Install packages
+        working-directory: lib/libacfutils
+        run: ${{ matrix.install_script }}
+
+      - name: Cache libacfutils
+        id: cache-libacfutils
+        uses: actions/cache@v4
+        with:
+          path: |
+            lib/libacfutils
+          key: ${{ matrix.os }}-libacfutils-${{ hashFiles( matrix.install_script, 'lib/libacfutils/build_deps', 'lib/libacfutils/build_redist') }}
+          restore-keys: |
+            ${{ matrix.os }}-libacfutils-
+
+      - name: Build libacfutils
+        if: steps.cache-libacfutils.outputs.cache-hit != 'true'
+        working-directory: lib/libacfutils
+        run: |
+          ./build_deps
+          ./build_redist
+
+      - name: Build own code
+        run: ./BuildPlugin
+
+      - name: Upload compiled plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: xpl-binary
+          path: ./kosp
