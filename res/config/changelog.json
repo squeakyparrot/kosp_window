@@ -1,5 +1,8 @@
 {
   "changeLog": {
+    "Version 1.61": [
+      "- Do Audio Ducking Option"
+    ],
     "Version 1.6": [
       "- Wrote this C Plugin",
       "- Improved CFM56 Whine",

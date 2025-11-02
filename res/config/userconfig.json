@@ -98,6 +98,11 @@
       "displayName": "Do Switches Sounds",
       "drfName": "KOSP/do_mechanical_sounds",
       "savedRatio": 1
+    },
+    "KOSP/do_ducking_effect": {
+      "displayName": "Do Ducking Effect",
+      "drfName": "KOSP/do_ducking_effect",
+      "savedRatio": 1
     }
   }
 }
