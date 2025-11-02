@@ -1,12 +1,24 @@
 # @file .github/workflows/build_binary.yml
 #
-# @brief
+# @brief The idea of the script is as follows:
+#        1. We define a job matrix that spins up 2 jobs, one for win/lin and
+#           one for mac.
+#        2. We cache the libacfutils build, using the hash the parent module is
+#           pointing to as the key.
+#        3. We build libacfutils and our own plugin separately, then combine
+#           them with a separate job when both artifacts arrive.
+#
 #
 # @date 2025-10-14
 #
 # @copyright KOSP Project 2025
 
 name: Build Plugin
+
+env:
+  # This is what the name of the final result comes out to be
+  OUTPUT_ARTIFACT_NAME: kosp
+
 on:
   push:
   workflow_dispatch:
@@ -35,6 +47,11 @@ jobs:
         if: ${{ matrix.os == 'macos-15-intel' }}
         uses: melusina-org/setup-macports@v1.1.5
 
+      - name: Get libacfutils commit hash
+        id: get-libacfutils-commit-hash
+        run: |
+          echo "libacfutils_commit_hash=$(git rev-parse HEAD:lib/libacfutils)" >> "$GITHUB_OUTPUT"
+
       - name: Install packages
         working-directory: lib/libacfutils
         run: ${{ matrix.install_script }}
@@ -43,11 +60,9 @@ jobs:
         id: cache-libacfutils
         uses: actions/cache@v4
         with:
-          path: |
-            lib/libacfutils
-          key: ${{ matrix.os }}-libacfutils-${{ hashFiles( matrix.install_script, 'lib/libacfutils/build_deps', 'lib/libacfutils/build_redist') }}
-          restore-keys: |
-            ${{ matrix.os }}-libacfutils-
+          path: lib/libacfutils
+          key: |
+            ${{ matrix.os }}-libacfutils-${{ steps.get-libacfutils-commit-hash.outputs.libacfutils_commit_hash }}
 
       - name: Build libacfutils
         if: steps.cache-libacfutils.outputs.cache-hit != 'true'
@@ -62,7 +77,7 @@ jobs:
       - name: Upload compiled plugin
         uses: actions/upload-artifact@v4
         with:
-          name: matrix.artifact_name
+          name: ${{ matrix.artifact_name }}
           path: ./kosp
 
   merge-artifacts:
@@ -72,5 +87,4 @@ jobs:
       - name: Merge Artifacts
         uses: actions/upload-artifact/merge@v4
         with:
-          name: kosp
-          pattern: xpl_binary_*
+          name: ${{ OUTPUT_ARTIFACT_NAME }}
