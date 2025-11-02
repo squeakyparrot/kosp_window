@@ -87,4 +87,4 @@ jobs:
       - name: Merge Artifacts
         uses: actions/upload-artifact/merge@v4
         with:
-          name: ${{ OUTPUT_ARTIFACT_NAME }}
+          name: ${{ env.OUTPUT_ARTIFACT_NAME }}
