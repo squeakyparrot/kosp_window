@@ -1,0 +1,90 @@
+# @file .github/workflows/build_binary.yml
+#
+# @brief The idea of the script is as follows:
+#        1. We define a job matrix that spins up 2 jobs, one for win/lin and
+#           one for mac.
+#        2. We cache the libacfutils build, using the hash the parent module is
+#           pointing to as the key.
+#        3. We build libacfutils and our own plugin separately, then combine
+#           them with a separate job when both artifacts arrive.
+#
+#
+# @date 2025-10-14
+#
+# @copyright KOSP Project 2025
+
+name: Build Plugin
+
+env:
+  # This is what the name of the final result comes out to be
+  OUTPUT_ARTIFACT_NAME: kosp
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build-binary:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            install_script: ./install-ubuntu-packages
+            artifact_name: xpl_binary_win_lin
+          - os: macos-15-intel
+            install_script: ./install-macports.sh
+            artifact_name: xpl_binary_mac
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: Setup MacPorts if Mac
+        if: ${{ matrix.os == 'macos-15-intel' }}
+        uses: melusina-org/setup-macports@v1.1.5
+
+      - name: Get libacfutils commit hash
+        id: get-libacfutils-commit-hash
+        run: |
+          echo "libacfutils_commit_hash=$(git rev-parse HEAD:lib/libacfutils)" >> "$GITHUB_OUTPUT"
+
+      - name: Install packages
+        working-directory: lib/libacfutils
+        run: ${{ matrix.install_script }}
+
+      - name: Cache libacfutils
+        id: cache-libacfutils
+        uses: actions/cache@v4
+        with:
+          path: lib/libacfutils
+          key: |
+            ${{ matrix.os }}-libacfutils-${{ steps.get-libacfutils-commit-hash.outputs.libacfutils_commit_hash }}
+
+      - name: Build libacfutils
+        if: steps.cache-libacfutils.outputs.cache-hit != 'true'
+        working-directory: lib/libacfutils
+        run: |
+          ./build_deps
+          ./build_redist
+
+      - name: Build own code
+        run: ./BuildPlugin
+
+      - name: Upload compiled plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ./kosp
+
+  merge-artifacts:
+    runs-on: ubuntu-latest
+    needs: build-binary
+    steps:
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: ${{ env.OUTPUT_ARTIFACT_NAME }}

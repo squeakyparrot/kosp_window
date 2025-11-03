@@ -1,21 +1,26 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 OUTPUT_DIR="kosp"
 BUILD_DIR="${SCRIPT_DIR}/build"
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 echo "Sourcing Environment Variables..."
 [ -f .env ] && source .env
 
 echo "Removing all contents from previous builds..."
-rm -rf "${BUILD_DIR:?}"/*
+if [ -d ${BUILD_DIR} ]; then
+  rm -rf "${BUILD_DIR:?}"/*
+fi
 
 echo "Deleting Previous Plugin Binaries..."
 rm -rf ${OUTPUT_DIR}
 
 echo "Creating folder for a new build..."
 mkdir ${OUTPUT_DIR}
+if [ ! -d ${BUILD_DIR} ]; then
+  mkdir ${BUILD_DIR}
+fi
 
 echo "Copying Resources to '${BUILD_DIR}'..."
 cp -r res/* ${OUTPUT_DIR}
@@ -98,8 +103,10 @@ echo "┌───────────────────────�
 echo "│          Build complete          │"
 echo "└──────────────────────────────────┘"
 
-./scripts/MovePluginToFolder $OUTPUT_DIR
+if [ "$GITHUB_ACTIONS" != "true" ]; then
+  ./scripts/MovePluginToFolder $OUTPUT_DIR
 
-echo "┌──────────────────────────────────┐"
-echo "│          Move complete           │"
-echo "└──────────────────────────────────┘"
+  echo "┌──────────────────────────────────┐"
+  echo "│          Move complete           │"
+  echo "└──────────────────────────────────┘"
+fi
