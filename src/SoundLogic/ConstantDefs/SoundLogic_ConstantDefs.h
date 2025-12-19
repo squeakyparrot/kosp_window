@@ -21,6 +21,9 @@ extern "C" {
 /* How long does it take before it stops debounding, s*/
 #define SOUNDLOGIC_GEAR_DEBOUNCE_BUFFER_TIME_S (3)
 
+/* The time constant of the throttle lever high pass filters, s*/
+#define SOUNDLOGIC_THROTTLE_LEVER_HIGH_PASS_TIMECONSTANT (0.3)
+
 #ifdef __cplusplus
 }
 #endif

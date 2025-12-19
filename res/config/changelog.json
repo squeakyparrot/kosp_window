@@ -1,5 +1,11 @@
 {
   "changeLog": {
+    "Version 1.7": [
+      "- Option to Disable Ducking",
+      "- New Korry Recordings",
+      "- New IRS Knob Recordings",
+      "- Fixed Idle Detent Annoying"
+    ],
     "Version 1.6": [
       "- Wrote this C Plugin",
       "- Improved CFM56 Whine",

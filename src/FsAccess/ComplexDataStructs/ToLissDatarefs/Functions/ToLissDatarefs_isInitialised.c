@@ -1,5 +1,5 @@
 /**
- * @file FsAccess_InternalData.h
+ * @file ToLissDatarefs_isInitialised.c
  *
  * @brief
  *
@@ -7,13 +7,6 @@
  *
  * @copyright KOSP Project 2025
  */
-
-#ifndef H_FSACCESS_INTERNALDATA_H_
-#define H_FSACCESS_INTERNALDATA_H_
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /* C Library Includes */
 #include <math.h>
@@ -23,22 +16,22 @@ extern "C" {
 #include <string.h>
 
 /* XPLM Includes */
-#include "XPLMProcessing.h"
 
 /* Acfutils includes */
+#include <acfutils/dr.h>
 
 /* Custom Includes */
-#include "FsAccess/ComplexDataStructs/Datarefs/DataStructDefs/Datarefs_Struct.h"
 #include "FsAccess/ComplexDataStructs/RefCon/DataStructDefs/RefCon_Struct.h"
 #include "FsAccess/ComplexDataStructs/ToLissDatarefs/DataStructDefs/ToLissDatarefs_Struct.h"
+#include "FsAccess/ComplexDataStructs/ToLissDatarefs/Functions/ToLissDatarefs_Publicfunctions.h"
 #include "FsAccess/DataStructDefs/FsAccess_Struct.h"
 
-extern FsAccess       fs_access;
-extern Datarefs       datarefs;
-extern TolissDatarefs tolissDatarefs;
-extern RefCon         refcon;
+/* Refer the header for description */
+int32_t ToLissDatarefs_isInitialised(void *inRefcon) {
+  /* Sanity Check */
+  VERIFY(inRefcon != NULL);
+  VERIFY(((RefCon *)inRefcon)->p_tolissDatarefs != NULL);
 
-#ifdef __cplusplus
+  /* Return the flag contained in the struct */
+  return (((RefCon *)inRefcon)->p_tolissDatarefs->isInitialised);
 }
-#endif
-#endif /* H_FSACCESS_INTERNALDATA_H_ */

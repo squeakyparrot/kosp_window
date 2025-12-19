@@ -21,6 +21,8 @@
 #include "acfutils/log.h"
 
 /* Custom Includes */
+#include "FsAccess/ComplexDataStructs/RefCon/DataStructDefs/RefCon_Struct.h"
+#include "FsAccess/ComplexDataStructs/ToLissDatarefs/Functions/ToLissDatarefs_Publicfunctions.h"
 #include "FsAccess/InternalData/FsAccess_InternalData.h"
 #include "FsAccess/PrivateFunctions/FsAccess_PrivateFunctions.h"
 #include "KospWindow/PublicFunctions/KospWindow_PublicFunctions.h"
@@ -31,6 +33,8 @@ float FsAccess_FlightLoopCallback(float inElapsedSinceLastCall,
                                   float inElapsedTimeSinceLastFlightLoop,
                                   int   inCounter,
                                   void *inRefcon) {
+  /* Things that need lazy init */
+  FsAccess_LazyInitThirdParty(inRefcon);
 
   /* Call callbacks in each module one by one */
   KospWindow_FlightLoopCallback(inElapsedSinceLastCall,

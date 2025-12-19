@@ -26,6 +26,7 @@
 /* Custom Includes */
 #include "SoundLogic/ComplexDataStructs/LandingGear/LandingGear_Struct.h"
 #include "SoundLogic/ConstantDefs/SoundLogic_ConstantDefs.h"
+#include "Utils/Utils_RCFilters.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -62,6 +63,25 @@ typedef struct SoundLogic_Struct {
    */
   dr_t  d_flapStressFactor;
   float d_flapStressFactorData;
+
+  /**
+   * @details     The dataref for throttleLeftHighPass
+   */
+  dr_t  d_throttleLeftHighPass;
+  float d_throttleLeftHighPassData;
+
+  /**
+   * @details     The dataref for throttleRightHighPass
+   */
+  dr_t  d_throttleRightHighPass;
+  float d_throttleRightHighPassData;
+
+  /**
+   * @details  Ptr to high pass filters for the left and right throttle levers
+   *
+   */
+  HighPassFilter throttleLeftHighPassFilter;
+  HighPassFilter throttleRightHighPassFilter;
 
 } SoundLogic;
 

@@ -32,6 +32,8 @@ int32_t SoundLogic_Deinit(SoundLogic *p_sound_logic) {
   dr_delete(&(p_sound_logic->d_liftoffTrigger));
   dr_delete(&(p_sound_logic->d_touchdownTrigger));
   dr_delete(&(p_sound_logic->d_flapStressFactor));
+  dr_delete(&(p_sound_logic->d_throttleLeftHighPass));
+  dr_delete(&(p_sound_logic->d_throttleRightHighPass));
 
   return B_TRUE;
 }

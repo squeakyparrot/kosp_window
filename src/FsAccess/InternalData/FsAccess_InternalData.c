@@ -23,6 +23,7 @@
 /* Custom Includes */
 #include "FsAccess/ComplexDataStructs/Datarefs/DataStructDefs/Datarefs_Struct.h"
 #include "FsAccess/ComplexDataStructs/RefCon/DataStructDefs/RefCon_Struct.h"
+#include "FsAccess/ComplexDataStructs/ToLissDatarefs/DataStructDefs/ToLissDatarefs_Struct.h"
 #include "FsAccess/DataStructDefs/FsAccess_Struct.h"
 
 /**
@@ -38,6 +39,13 @@ FsAccess fs_access;
  *
  */
 Datarefs datarefs;
+
+/**
+ * @brief Instance of the TolissDatarefs struct.
+ *        Refer to the header for description.
+ *
+ */
+TolissDatarefs tolissDatarefs;
 
 /**
  * @brief Instance of the RefCon struct.

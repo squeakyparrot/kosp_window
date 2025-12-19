@@ -40,6 +40,16 @@ extern float FsAccess_FlightLoopCallback(float inElapsedSinceLastCall,
                                          int   inCounter,
                                          void *inRefcon);
 
+/**
+ * @brief Function used for lazy init. Checks for the initialised flag in the
+ *        datarefs struct whether it is initted or not, and if not, initialise
+ *        it. This should be called recursively.
+ *
+ * @param inRefcon void ptr of a refcon to be passed to callbacks
+ * @return * float
+ */
+extern int32_t FsAccess_LazyInitThirdParty(void *inRefcon);
+
 #ifdef __cplusplus
 }
 #endif

@@ -69,16 +69,6 @@
       "drfName": "KOSP/settings_play_2000ra_callout",
       "savedRatio": 1
     },
-    "KOSP/settings_korries_are_new": {
-      "displayName": "Alternative Korry PB",
-      "drfName": "KOSP/settings_korries_are_new",
-      "savedRatio": 1
-    },
-    "KOSP/settings_ir_switch_is_smaller_type": {
-      "displayName": "Alternative IR Switch",
-      "drfName": "KOSP/settings_ir_switch_is_smaller_type",
-      "savedRatio": 1
-    },
     "KOSP/settings_ra_is_bitcrushed": {
       "displayName": "Bitcrush RA Callouts",
       "drfName": "KOSP/settings_ra_is_bitcrushed",
@@ -97,6 +87,11 @@
     "KOSP/do_mechanical_sounds": {
       "displayName": "Do Switches Sounds",
       "drfName": "KOSP/do_mechanical_sounds",
+      "savedRatio": 1
+    },
+    "KOSP/do_ducking_effect": {
+      "displayName": "Do Ducking Effect",
+      "drfName": "KOSP/do_ducking_effect",
       "savedRatio": 1
     }
   }

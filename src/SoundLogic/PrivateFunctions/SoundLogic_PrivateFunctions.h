@@ -42,6 +42,18 @@ extern int32_t SoundLogic_UpdateAirTimes(Datarefs *p_datarefs);
  */
 extern int32_t SoundLogic_UpdateFlapStress(Datarefs *p_datarefs);
 
+/**
+ * @brief Using the ToLiss datarefs, update our own throttle lever movement
+ *        dataref after processing with a highpass filter.
+ *        WARNING! Only call when the datarefs struct is actually initialised!
+ *
+ * @param p_tolissDatarefs Pointer to the toliss datarefs struct
+ * @param dt essentially inElapsedSinceLastCall from the flight loop
+ * @return int32_t
+ */
+int32_t SoundLogic_UpdateThrottleLevers(TolissDatarefs *p_tolissDatarefs,
+                                        double          dt);
+
 #ifdef __cplusplus
 }
 #endif

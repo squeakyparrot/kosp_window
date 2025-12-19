@@ -25,6 +25,7 @@
 
 /* Custom Includes */
 #include "FsAccess/ComplexDataStructs/Datarefs/DataStructDefs/Datarefs_Struct.h"
+#include "FsAccess/ComplexDataStructs/ToLissDatarefs/DataStructDefs/ToLissDatarefs_Struct.h"
 #include "KospWindow/DataStructDefs/KospWindow_Struct.h"
 #include "SoundLogic/DataStructDefs/SoundLogic_Struct.h"
 
@@ -55,6 +56,11 @@ typedef struct RefCon_Struct {
    * @details     A pointer to the Datarefs Struct to pass as the refcon.
    */
   Datarefs *p_datarefs;
+
+  /**
+   * @details     A pointer to the ToLissDatarefs Struct to pass as the refcon.
+   */
+  TolissDatarefs *p_tolissDatarefs;
 
 } RefCon;
 

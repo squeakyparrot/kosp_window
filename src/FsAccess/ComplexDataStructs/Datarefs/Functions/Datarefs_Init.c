@@ -22,6 +22,7 @@
 
 /* Custom Includes */
 #include "FsAccess/ComplexDataStructs/Datarefs/DataStructDefs/Datarefs_Struct.h"
+#include "FsAccess/ComplexDataStructs/Datarefs/Functions/Datarefs_PublicFunctions.h"
 #include "FsAccess/DataStructDefs/FsAccess_Struct.h"
 
 /* Refer the header for description */
