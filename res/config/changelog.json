@@ -4,7 +4,8 @@
       "- Option to Disable Ducking",
       "- New Korry Recordings",
       "- New IRS Knob Recordings",
-      "- Fixed Idle Detent Annoying"
+      "- Fixed Idle Detent Annoying",
+      "- Reworked Ground Roll"
     ],
     "Version 1.6": [
       "- Wrote this C Plugin",
