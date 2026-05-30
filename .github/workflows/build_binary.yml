@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-latest
+          - os: ubuntu-22.04
             install_script: ./install-ubuntu-packages
             artifact_name: xpl_binary_win_lin
           - os: macos-15-intel
