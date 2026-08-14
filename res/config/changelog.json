@@ -1,5 +1,11 @@
 {
   "changeLog": {
+    "Version 1.8": [
+      "- Ducking Disabled by Default",
+      "- Reworked Ground Roll Again",
+      "- More RA Callouts Options",
+      "- Steep Approach Callouts"
+    ],
     "Version 1.7": [
       "- Option to Disable Ducking",
       "- New Korry Recordings",
