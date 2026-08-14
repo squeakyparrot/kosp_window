@@ -69,6 +69,26 @@
       "drfName": "KOSP/settings_play_2000ra_callout",
       "savedRatio": 1
     },
+    "KOSP/settings_play_500ra_callout": {
+      "displayName": "Play 500ft RA Callout",
+      "drfName": "KOSP/settings_play_500ra_callout",
+      "savedRatio": 1
+    },
+    "KOSP/settings_play_300ra_callout": {
+      "displayName": "Play 300ft RA Callout",
+      "drfName": "KOSP/settings_play_300ra_callout",
+      "savedRatio": 1
+    },
+    "KOSP/settings_play_200ra_callout": {
+      "displayName": "Play 200ft RA Callout",
+      "drfName": "KOSP/settings_play_200ra_callout",
+      "savedRatio": 1
+    },
+    "KOSP/settings_play_5ra_callout": {
+      "displayName": "Play 5ft RA Callout",
+      "drfName": "KOSP/settings_play_5ra_callout",
+      "savedRatio": 1
+    },
     "KOSP/settings_ra_is_bitcrushed": {
       "displayName": "Bitcrush RA Callouts",
       "drfName": "KOSP/settings_ra_is_bitcrushed",

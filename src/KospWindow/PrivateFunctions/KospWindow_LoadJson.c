@@ -33,6 +33,7 @@
 /* Refer the header for description */
 void KospWindow_LoadJson(char config_path[256], cJSON **pp_destPtr) {
   VERIFY(config_path != NULL);
+  VERIFY(pp_destPtr != NULL);
   logMsg("Loading Config Json from %s", config_path);
 
   /* Load the content of the json file into a string */
@@ -46,7 +47,7 @@ void KospWindow_LoadJson(char config_path[256], cJSON **pp_destPtr) {
 
   /* Parse the string and store it in our own struct */
   *pp_destPtr = cJSON_Parse(loadedJsonString);
-  VERIFY(pp_destPtr != NULL);
+  VERIFY_MSG(*pp_destPtr != NULL, "Failed to parse JSON file %s", config_path);
 
   free(loadedJsonString);
 }

@@ -149,6 +149,9 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon) {
   /* Set Page 1 drfs on Startup */
   cJSON *p_sliders = cJSON_GetObjectItem(p_kosp_window_inout->p_configJson,
                                          "slidersByDrfName");
+  VERIFY_MSG(p_sliders != NULL,
+             "Missing JSON object slidersByDrfName in %s",
+             p_kosp_window_inout->configPath);
   KospWindow_CreateDrfsf(p_sliders,
                          p_kosp_window_inout->volumeRatioDrfs,
                          p_kosp_window_inout->volumeRatioDrfsData);
@@ -157,6 +160,9 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon) {
   /* Set Page 2 drfs on Startup */
   cJSON *p_mixers = cJSON_GetObjectItem(p_kosp_window_inout->p_configJson,
                                         "mixerSlidersByDrfName");
+  VERIFY_MSG(p_mixers != NULL,
+             "Missing JSON object mixerSlidersByDrfName in %s",
+             p_kosp_window_inout->configPath);
   KospWindow_CreateDrfsf(p_mixers,
                          p_kosp_window_inout->mixerRatioDrfs,
                          p_kosp_window_inout->mixerRatioDrfsData);
@@ -165,6 +171,9 @@ int32_t KospWindow_Init(KospWindow *p_kosp_window_inout, RefCon *refcon) {
   /* Set Page 3 drfs on Startup */
   cJSON *p_switches = cJSON_GetObjectItem(p_kosp_window_inout->p_configJson,
                                           "switchesByDrfName");
+  VERIFY_MSG(p_switches != NULL,
+             "Missing JSON object switchesByDrfName in %s",
+             p_kosp_window_inout->configPath);
   KospWindow_CreateDrfsi(p_switches,
                          p_kosp_window_inout->switchesRatioDrfs,
                          p_kosp_window_inout->switchesRatioDrfsData);

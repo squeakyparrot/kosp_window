@@ -36,10 +36,11 @@
  */
 #define DEFN_KOSPWINDOW_CREATEDRFS(name, type, dr_create_func_name)            \
   void name(cJSON *p_groupArrayPtr, dr_t *destDrArray, type *p_floatArray) {   \
+    VERIFY_MSG(p_groupArrayPtr != NULL, "%s", "JSON group pointer is NULL");   \
     /* Find how many datarefs we have in this catagory */                      \
     int32_t numDrfs = cJSON_GetArraySize(p_groupArrayPtr);                     \
     /* Check if json is empty */                                               \
-    VERIFY(numDrfs > 0);                                                       \
+    VERIFY_MSG(numDrfs > 0, "%s", "JSON group is empty");                      \
     /* Loop through the items (switches / sliders)*/                           \
     for (int32_t idx = 0; idx < numDrfs; idx++) {                              \
       cJSON *p_thisDrf = cJSON_GetArrayItem(p_groupArrayPtr, idx);             \
