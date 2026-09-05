@@ -112,7 +112,7 @@
     "KOSP/do_ducking_effect": {
       "displayName": "Do Ducking Effect",
       "drfName": "KOSP/do_ducking_effect",
-      "savedRatio": 1
+      "savedRatio": 0
     }
   }
 }
